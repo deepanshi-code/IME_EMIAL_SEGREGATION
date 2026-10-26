@@ -13,8 +13,8 @@ EVIDENCE = {
         (r"\bOPEN\s+(?:POSITION|TONNAGE)\b", 2),
     ],
     "CARGO VC": [
-        (r"\b(?:LOAD(?:ING)?\s+PORT|POL)\b", 3),
-        (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|POD)\b", 3),
+        (r"\b(?:LOAD(?:ING)?\s+PORT|(?-i:POL))\b", 3),
+        (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|(?-i:POD))\b", 3),
         (r"^\s*LOAD\s*:", 2),
         (r"\bEX\s+[A-Z]+\s+TO\s+[A-Z]+", 2),
         (r"\bFROM\s+" + NOT_DATE + r"(?-i:[A-Z][\w'\-]*(?:[ \t]+[A-Z][\w'\-]*)*)\s+TO\s+" + NOT_DATE + r"(?-i:[A-Z])", 2),
@@ -26,8 +26,8 @@ EVIDENCE = {
         (r"\b(?:SAFE PORT|SP)\b", 1),
     ],
     "CARGO TC": [
-        (r"^\s*DEL(?:IVERY)?\b", 3),
-        (r"^\s*REDEL(?:IVERY)?\b", 3),
+        (r"^\s*DEL(?:IVERY)?\b", 2),
+        (r"^\s*REDEL(?:IVERY)?\b", 2),
         (r"\b(?:DURATION|PERIOD)\b.*\d+\s*(?:MONTHS?|DAYS)\b", 2),
         (r"\b(?:TCT|TC TRIP|ON PERIOD|PERIOD ENQUIRY)\b", 2),
     ],

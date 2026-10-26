@@ -12,8 +12,8 @@ SAFE_PORT = r"\d(?:-\d)?[ \t]*(?:SAFE[ \t]+PORTS?|SPS?|SBS?)[ \t]+"
 NUMBER = r"(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?[ \t]*K?)"
 TITLE_PLACE = r"(?-i:([A-Z][\w'\-]*(?:[ \t]+(?:of[ \t]+)?[A-Z][\w'\-]*)*))"
 ROUTE_SEP = r"[ \t]*(?:/|-+>|-|(?i:\bto\b))[ \t]*"
-LOAD_LABEL = r"\b(?:LOAD(?:ING)?\s+PORT|POL)\b"
-DISCHARGE_LABEL = r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|POD)\b"
+LOAD_LABEL = r"\b(?:LOAD(?:ING)?\s+PORT|(?-i:POL))\b"
+DISCHARGE_LABEL = r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|(?-i:POD))\b"
 
 
 def to_tonnes(raw):
