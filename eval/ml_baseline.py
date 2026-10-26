@@ -24,6 +24,8 @@ EVAL_SETS = [
     ("ext-test (MaritimEmails, CARGO VC)", "maritimemails_ext-test.json", "ext-test"),
     ("neg-test (non-shipping, UNKNOWN)", "negatives_neg-test.json", "neg-test"),
 ]
+if os.path.exists(os.path.join(EVAL_DIR, "real", "shipbroker_gr.json")):
+    EVAL_SETS.append(("real-test (broker circulars)", os.path.join("real", "shipbroker_gr.json"), "real-test"))
 
 
 def load(name, split):

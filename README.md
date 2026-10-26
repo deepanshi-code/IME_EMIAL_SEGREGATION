@@ -74,6 +74,26 @@ Field values are compared case- and whitespace-insensitively; everything else mu
 | `eval/maritimemails_ext-test.json` | ext-test | 150 | MaritimEmails test split (first email of each thread) |
 | `eval/negatives_neg-dev.json` | neg-dev | 300 | Non-shipping emails: 150 Enron ham + 150 SpamAssassin easy_ham |
 | `eval/negatives_neg-test.json` | neg-test | 300 | Same sources, disjoint emails |
+| `eval/real/shipbroker_gr.json` | real-dev / real-test | 42 / 42 | **Real broker circulars** from shipbroker.gr (see below) |
+
+**Real broker circulars.** [shipbroker.gr](http://www.ship.gr/shipbroker/cargo.html) publishes
+cargo orders and open-vessel positions that brokers submit, as the circulars they email
+("Pls offer firm for… Kandla / Subic Bay… 8k mt bagged rice"). A snapshot taken on 26 Oct 2026
+gave 84 posts (49 cargo, 35 vessel). `eval/build_shipbroker_gr.py parse` splits the saved pages
+and anonymises them (cuts the sign-off and signature, removes emails, URLs, phone numbers and
+contact lines); the site's terms do not restrict reuse, but the posts name real people, so the
+text stays in `eval/real/` (not committed). Every post was labelled **before** the system was
+run on it, using the rules in `eval/shipbroker_gr_labels.json` (committed; port and vessel names
+only): category from what the post is, fields for the first record, Vessel Size only when a DWT
+is stated. Labels were written by one annotator (the AI assistant), not a domain expert; spot-check
+them. Alternate posts form real-dev and real-test. There are no CARGO TC posts: period/TCT
+requests only appear as side items inside cargo posts.
+
+```
+python eval/build_shipbroker_gr.py parse --cargo-html cargo.html --vessel-html vessel.html
+python eval/build_shipbroker_gr.py merge
+python eval/evaluate.py --data eval/real/shipbroker_gr.json --split real-dev --errors
+```
 
 **Non-shipping negatives** measure false positives (normal emails classified as shipping).
 They are real people's emails from two public corpora, so they are **not committed** (see
@@ -97,20 +117,44 @@ The external sets come from **MaritimEmails** (Bruendler & Clematide, LREC 2026)
 (`eval/build_maritimemails.py`, seed 42). Only threads whose first email contains both labelled
 ports were used; each is labelled CARGO VC with the dataset's `load_port` / `discharge_port`.
 
-Tune rules on `dev`, `ext-dev` and `neg-dev` only. `ext-test` and `neg-test` are run once per
-frozen version.
+Tune rules on `dev`, `ext-dev`, `neg-dev` and `real-dev` only. `ext-test`, `neg-test` and
+`real-test` are run once per frozen version.
 
 ### Results
 
-| Version | dev (24) category / fields | test (18) category / fields | ext-dev (150) category / fields | ext-test (150) category / fields | False positives neg-dev / neg-test (300 each) |
-|---------|------|------|------|------|------|
-| v0 keyword rules | 70.6% / 30.6% * | 55.6% / 32.4% | 24.7% / 6.7% | 30.0% / 8.0% | - |
-| v1 weighted scoring | 100% / 36.1% * | 100% / 37.8% | - | - | - |
-| v2 extractor rewrite | 100% / 100% | 100% / 100% | 24.7% / 6.7% | 30.0% / 8.0% | - |
-| v3 prose + subject routes | 100% / 100% | 100% / 100% | 89.3% / 85.0% | 88.7% / 82.7% | 3 (1.0%) / 0 (0%) |
-| v4 false-positive fixes | 100% / 100% | 100% / 100% | 89.3% / 85.0% | **88.7% / 82.7%** | 0 / **0 (0%)** |
+**Headline (held-out real broker circulars, v5): 95.2% category accuracy (40/42), 74.7% field
+accuracy (68/91).**
+
+| Version | dev (24) cat / fields | test (18) cat / fields | ext-dev (150) cat / fields | ext-test (150) cat / fields | False positives neg-dev / neg-test (300 each) | real-dev (42) cat / fields | real-test (42) cat / fields |
+|---------|------|------|------|------|------|------|------|
+| v0 keyword rules | 70.6% / 30.6% * | 55.6% / 32.4% | 24.7% / 6.7% | 30.0% / 8.0% | - | - | - |
+| v1 weighted scoring | 100% / 36.1% * | 100% / 37.8% | - | - | - | - | - |
+| v2 extractor rewrite | 100% / 100% | 100% / 100% | 24.7% / 6.7% | 30.0% / 8.0% | - | - | - |
+| v3 prose + subject routes | 100% / 100% | 100% / 100% | 89.3% / 85.0% | 88.7% / 82.7% | 3 (1.0%) / 0 | - | - |
+| v4 false-positive fixes | 100% / 100% | 100% / 100% | 89.3% / 85.0% | 88.7% / 82.7% | 0 / 0 | 42.9% / 23.9% | 57.1% / 28.6% |
+| v5 broker-circular rules | 100% / 100% | 100% / 100% | 91.3% / 85.7% | 89.3% / 83.3% | 0 / 1 (0.3%) | 95.2% / 92.0% | **95.2% / 74.7%** |
 
 \* measured when dev had 17 emails.
+
+**v4 → v5 (real circulars).** v4 scored 100% on hand-written emails and 89% on MaritimEmails but
+only 43-57% / 24-29% on real circulars: most cargo orders were UNKNOWN. Analysing real-dev showed
+broker conventions the synthetic data never contained, all now handled by general rules:
+a route on its own line ("Kandla / Subic Bay", "Orlivka - Marmara", "Misurata/1 Greece"), with
+vessel-particulars lines such as "GRT / NRT" excluded; laytime terms that only occur in voyage
+charters ("1500x/3000x", SHINC/SHEX, "ttl days"); a required DWT range meaning a cargo order
+("Any Dwt 6-9,000"); vessels asking for cargo ("need named/rated cgo", "propose your firm cargoes",
+"home tonnage", DWCC); European numbers ("7.331,1", "4299,59"), "18K", "SUMMER DEADWEIGHT";
+open-port noise ("OPEN AT X ON 27", "open hatch", "OPEN @MARMARA"); more port labels ("Ld port",
+"Port of Loading", "1SBP Bin Qasim", "Kandla or Mundra").
+
+Real-test fields (74.7%) are well below real-dev (92.0%), so part of the real-dev gain is fitted to
+real-dev's posts; quote the real-test number. Known v5 errors, found on the held-out sets and left
+unfixed so those numbers stay honest (fix in v6, then measure on a fresh shipbroker.gr snapshot):
+"current open **home tonnage**" gives "home tonnage…" as the open port (3 real-test posts); a
+hyphenated prose line ("On Monday - member panel to…") counts as a route line, which caused the
+neg-test false positive; vessel tables with no "open" keyword ("MV FLOKI /09-11 NOV IZMIR") have
+no open port; liner posts ("MV X loading Tianjin / disport Jeddah, need cargo") are read as cargo
+orders; only the first of several vessels or cargoes is extracted.
 
 v4 fixed the three neg-dev false positives (all Enron energy-trading emails) with two general
 rules: a single "Delivery ..." line now scores 2 instead of 3, so a TC needs at least two pieces
@@ -135,12 +179,17 @@ data disjoint from every held-out set: 605 MaritimEmails *train*-split first ema
 python eval/ml_baseline.py --maritimemails-train MaritimEmails/train.jsonl.gz --enron enron_test.jsonl --spamassassin easy_ham.tar.bz2
 ```
 
-| Evaluation set (category accuracy) | n | Rules (v4) | TF-IDF + LR |
+| Evaluation set (category accuracy) | n | Rules (v5) | TF-IDF + LR |
 |------------------------------------|---|------------|-------------|
 | test – hand-written, 4 classes     | 18  | 100%  | 94.4% |
-| ext-test – MaritimEmails           | 150 | 88.7% | 100%  |
-| neg-test – non-shipping            | 300 | 100%  | 100%  |
+| ext-test – MaritimEmails           | 150 | 89.3% | 100%  |
+| neg-test – non-shipping            | 300 | 99.7% | 100%  |
+| **real-test – real broker circulars** | 42 | **95.2%** | **54.8%** |
 | stress – 10 emails that break the training data's style pattern (`eval/stress.json`) | 10 | 10/10 | 4/10 |
+
+On real circulars the ML model recognised only 40% of TONNAGE posts across all sets (it had 8
+TONNAGE training emails). Fairness note: the rules were tuned on real-dev (same source as
+real-test); the ML model saw no real circulars. Both were scored on the same unseen real-test posts.
 
 The ML model wins on ext-test, but that set comes from the same LLM generator as its training
 data. The stress set shows why that number doesn't carry over: the model labelled **every polite,
@@ -153,9 +202,9 @@ enquiry, having seen only 6 CARGO TC examples.
 Caveat: the stress emails were written by the rule designer, so the rules' 10/10 is biased
 upward; the ML failures are on emails with no shipping evidence at all, which is the point.
 
-Conclusion: with no real labelled data, the rules are the safer choice; an ML model needs
-real emails from all four categories, with the same writing style in shipping and non-shipping
-examples, before its scores mean anything.
+Conclusion: with little real labelled data, the rules are the safer choice; an ML model needs
+hundreds of real emails from all four categories, with the same writing style in shipping and
+non-shipping examples, before its scores mean anything.
 
 ### Testing on real emails
 
@@ -174,10 +223,12 @@ Real emails stay on your machine (`eval/real/` and `eval/real.json` are in `.git
 
 ### Limitations
 
-- **No real emails yet.** All data is synthetic: hand-written or LLM-generated. MaritimEmails
-  is prose-heavy, more polite and longer than real broker circulars. Scores on real inboxes will differ.
-- **External positive sets only test CARGO VC.** TONNAGE and CARGO TC are measured only on the
-  hand-written emails.
+- **Small real sample, one source.** 84 real circulars from one public board, one day's snapshot,
+  mostly small general-cargo/bulk trades in the Med, Black Sea and Asia, labelled by one non-expert
+  annotator. A broker's own inbox (larger ships, replies, forwarded threads) may differ. Real-test
+  has 42 posts, so one error moves accuracy by about 2.4 points.
+- **CARGO TC is barely tested.** No real post is a time-charter enquiry; CARGO TC is measured only
+  on 10 hand-written emails.
 - **Negatives are old and narrow.** Enron (2000-2002) and SpamAssassin (2002-2003) ham;
   no spam, newsletters from shipping companies, or non-chartering logistics email (courier,
   container booking), which are the likeliest real false positives in a broker's inbox.

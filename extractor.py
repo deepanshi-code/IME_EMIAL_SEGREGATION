@@ -1,26 +1,37 @@
 import re
 
-from classifier import NOT_DATE, normalize_newlines
+from classifier import NOT_DATE, find_route_line, normalize_newlines
 
 FLAGS = re.IGNORECASE | re.MULTILINE
 
-SEP = r"[ \t]*[:\-]?[ \t]*"
+SEP = r"[ \t]*[:@\-]?[ \t]*"
 PLACE = r"([A-Z][A-Z' \-]*?[A-Z])"
-PLACE_END = r"(?=[ \t]*(?:\d|[/,;:.()]|\b(?:PPT|SPOT|POL|POD|LAYCAN|LAYDAYS|CARGO|FRT|FREIGHT)\b|$))"
+PLACE_END = (r"(?=[ \t]*(?:\d|[/,;:.()|—]|[-–][ \t]|\b(?:PPT|SPOT|POL|POD|LAYCAN|LAYDAYS|CARGO|FRT|FREIGHT|OR|ON)\b"
+             r"|\bPORT\b(?![ \t]+[A-Z])|$))")
 QUALIFIER = r"(?:(?:DOP|APS|PASSING|ON ARRIVAL|AT|IN)\s+)?"
 SAFE_PORT = r"\d(?:-\d)?[ \t]*(?:SAFE[ \t]+PORTS?|SPS?|SBS?)[ \t]+"
-NUMBER = r"(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?[ \t]*K?)"
+PORT_COUNT = r"(?:\d(?:-\d)?[ \t]*S[BP]{1,3}P?[ \t]+)?"
+NUMBER = r"(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?[ \t]*K?)"
 TITLE_PLACE = r"(?-i:([A-Z][\w'\-]*(?:[ \t]+(?:of[ \t]+)?[A-Z][\w'\-]*)*))"
 ROUTE_SEP = r"[ \t]*(?:/|-+>|-|(?i:\bto\b))[ \t]*"
-LOAD_LABEL = r"\b(?:LOAD(?:ING)?\s+PORT|(?-i:POL))\b"
-DISCHARGE_LABEL = r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|(?-i:POD))\b"
+LOAD_LABEL = r"\b(?:LOAD(?:ING)?\s+PORT|LD\.?\s+PORT|PORT\s+OF\s+LOADING|(?-i:POL))\b"
+DISCHARGE_LABEL = r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISCH\.?\s+PORT|PORT\s+OF\s+DISCHARGE|DISPORT|(?-i:POD))\b"
+NOT_OPEN_PORT = r"(?!(?:HATCH|HA|VESSEL|VSL|POSITIONS?|TONNAGES?|CARGO|CARGOES|TO|FOR|AROUND|ABOUT)\b)"
 
 
 def to_tonnes(raw):
-    raw = raw.replace(",", "").replace(" ", "").upper()
-    if raw.endswith("K"):
-        return str(int(float(raw[:-1]) * 1000))
-    return str(int(float(raw)))
+    raw = raw.replace(" ", "").upper()
+    thousands = 1000 if raw.endswith("K") else 1
+    raw = raw.rstrip("K")
+    # The last "," or "." is a decimal mark unless exactly three digits follow it
+    # ("7.331,1" -> 7331.1, "4299,59" -> 4299.59, "58,000" -> 58000, "63.5k" -> 63500).
+    last = max(raw.rfind(","), raw.rfind("."))
+    if last != -1 and len(raw) - last - 1 != 3:
+        whole, fraction = raw[:last], raw[last + 1:]
+    else:
+        whole, fraction = raw, ""
+    whole = whole.replace(",", "").replace(".", "")
+    return str(int(float(f"{whole}.{fraction or 0}") * thousands))
 
 
 def search(pattern, text):
@@ -29,10 +40,11 @@ def search(pattern, text):
 
 
 def find_open_port(text):
-    candidates = list(re.finditer(r"\bOPEN\b" + SEP + r"(?:AT\s+)?" + PLACE + PLACE_END, text, FLAGS))
+    pattern = r"\bOPEN\b" + SEP + r"(?:(?:AT|IN)\s+)?" + NOT_OPEN_PORT + PLACE + PLACE_END
+    candidates = list(re.finditer(pattern, text, FLAGS))
     for match in candidates:
         rest = text[match.end():]
-        if re.match(r"[ \t]+(?:\d|PPT\b|SPOT\b|PROMPT\b)", rest, re.IGNORECASE):
+        if re.match(r"[ \t]*(?:,|\bON\b)?[ \t]*(?:\d|PPT\b|SPOT\b|PROMPT\b)", rest, re.IGNORECASE):
             return match.group(1)
     return candidates[0].group(1) if candidates else None
 
@@ -40,8 +52,8 @@ def find_open_port(text):
 def find_labelled(label, text):
     # With a ":" or "-" separator any case is accepted; without one the place must be capitalised,
     # so prose like "expected load is around" is not read as a port.
-    return (search(label + r"[ \t]*[:\-][ \t]*" + PLACE + PLACE_END, text)
-            or search(label + r"[ \t]+(?=(?-i:[A-Z]))" + PLACE + PLACE_END, text))
+    return (search(label + r"[ \t]*[:\-][ \t]*" + PORT_COUNT + PLACE + PLACE_END, text)
+            or search(label + r"[ \t]+" + PORT_COUNT + r"(?=(?-i:[A-Z]))" + PLACE + PLACE_END, text))
 
 
 def trim_to_body(place, body):
@@ -87,8 +99,11 @@ def extract_data(text, category):
     result = {}
 
     if category == "TONNAGE":
-        vessel = search(r"\bM[./]?V\b\.?\s+" + PLACE + r"(?=\s*(?:[/,(]|\d|\bDWT\b|\bOPEN\b|$))", text)
-        size = re.search(NUMBER + r"[ \t]*(?:MT[ \t]*)?DWT\b|\bDWT" + SEP + NUMBER, text, FLAGS)
+        # A short trailing number is part of the name ("YONGSHENG 151", "TBN 1"); a long one is the size.
+        vessel = search(r"\bM[./]?V\b\.?\s+(" + PLACE[1:-1] + r"(?:[ \t]+\d{1,3}\b(?![\d,.]|[ \t]*K\b))?)"
+                        r"(?=\s*(?:[/,(:;|]|[-–—]|\d|\bDWT\b|\bDWCC\b|\bOPEN\b|\bSPOT\b|\bBLT\b|$))", text)
+        size = re.search(NUMBER + r"[ \t]*(?:MTS?[ \t]*)?DWT\b|\b(?:DWT|DEADWEIGHT)\b[^\d\n]{0,20}?" + NUMBER,
+                         text, FLAGS)
         port = find_open_port(text)
 
         if vessel:
@@ -102,7 +117,8 @@ def extract_data(text, category):
         load = find_labelled(LOAD_LABEL, text) or search(r"^[ \t]*LOAD[ \t]*:[ \t]*" + PLACE + PLACE_END, text)
         discharge = find_labelled(DISCHARGE_LABEL, text)
         body = re.sub(r"^SUBJECT:.*$", "", text, count=1, flags=FLAGS)
-        for find, source in ((find_route, body), (find_route, text), (find_subject_route, text)):
+        routes = ((find_route_line, body), (find_route, body), (find_route, text), (find_subject_route, text))
+        for find, source in routes:
             if load and discharge:
                 break
             route_load, route_discharge = find(source)
