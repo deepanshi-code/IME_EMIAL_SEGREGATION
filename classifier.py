@@ -44,42 +44,42 @@ def find_route_line(text):
 
 EVIDENCE = {
     "TONNAGE": [
-        (r"\b(?:DWT|DEADWEIGHT)\b", 3),
-        (r"\bM[./]?V\b\.?\s+[A-Z]", 2),
-        (r"\bOPEN\s*(?:AT\s+|:\s*)?[A-Z][A-Z ,'-]*?\s+\d{1,2}\b", 2),
-        (r"\b(?:OPEN|HOME|EXCLUSIVE|INHOUSE|OWNERS)\s+TONNAGES?\b|\b(?:OPEN|VESSEL)\s+POSITIONS?\b", 2),
-        (r"\bDWCC\b", 2),
+        (r"\b(?:DWT|DEADWEIGHT)\b", 3, "DWT / deadweight"),
+        (r"\bM[./]?V\b\.?\s+[A-Z]", 2, "vessel name (MV ...)"),
+        (r"\bOPEN\s*(?:AT\s+|:\s*)?[A-Z][A-Z ,'-]*?\s+\d{1,2}\b", 2, "open port with a date"),
+        (r"\b(?:OPEN|HOME|EXCLUSIVE|INHOUSE|OWNERS)\s+TONNAGES?\b|\b(?:OPEN|VESSEL)\s+POSITIONS?\b", 2, "open tonnage / vessel positions"),
+        (r"\bDWCC\b", 2, "DWCC (cargo capacity)"),
         # A vessel looking for cargo: "need named/rated cgo", "propose your firm cargoes", "pls pps suitable cargo".
         (r"\b(?:NEEDS?|SEEKING|PROPOSE|PPS)\b(?:(?!VESSEL|VSL|TONNAGE)[^\n]){0,30}?\b(?:CARGO|CARGOES|CGO)\b"
-         r"|\b(?:RATED|NAMED)\b[ /&\w]{0,12}\b(?:CARGO|CARGOES|CGO)\b", 3),
+         r"|\b(?:RATED|NAMED)\b[ /&\w]{0,12}\b(?:CARGO|CARGOES|CGO)\b", 3, "asks for cargo"),
     ],
     "CARGO VC": [
-        (find_route_line, 2),
+        (find_route_line, 2, "route line (X / Y)"),
         # A cargo looking for a vessel: "looking vessel for", "need suitable vessel", "offer firm tonnage for".
         (r"\b(?:LOOKING|NEEDS?|REQUIRED?|PROVIDE)\b[^\n]{0,25}?\b(?:VESSEL|VSL|TONNAGE)\b"
-         r"|\bOFFER\s+(?:FIRM\s+)?(?:VESSEL|VSL|TONNAGE)\b", 2),
+         r"|\bOFFER\s+(?:FIRM\s+)?(?:VESSEL|VSL|TONNAGE)\b", 2, "asks for a vessel"),
         # A required size range is a cargo order ("Any Dwt 6-9,000", "12,000 - 17,000 dwt").
-        (r"\bANY\s+DWT\b|\d[ \t]*[-–][ \t]*\d[\d,.]*[ \t]*K?[ \t]*(?:MT[ \t]*)?DWT\b", 2),
+        (r"\bANY\s+DWT\b|\d[ \t]*[-–][ \t]*\d[\d,.]*[ \t]*K?[ \t]*(?:MT[ \t]*)?DWT\b", 2, "required vessel size range"),
         # Laytime terms only appear in voyage charters.
         (r"\b(?:S?SHINC|S?SHEX|FSHEX|FHEX|SATSHEX|FSATHEX|PWWD|WWDS?|TTL[ \t]*DAYS|TTDAYS)\b"
-         r"|\b\d[\d,.]*[ \t]*[XC][ \t]*/[ \t]*\d[\d,.]*[ \t]*[XC]\b", 2),
-        (r"\b(?:LOAD(?:ING)?\s+PORT|(?-i:POL))\b", 3),
-        (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|(?-i:POD))\b", 3),
-        (r"^\s*LOAD\s*:", 2),
-        (r"\bEX\s+[A-Z]+\s+TO\s+[A-Z]+", 2),
-        (r"\bFROM\s+" + NOT_DATE + r"(?-i:[A-Z][\w'\-]*(?:[ \t]+[A-Z][\w'\-]*)*)\s+TO\s+" + NOT_DATE + r"(?-i:[A-Z])", 2),
-        (r"\d[\d,]*\s*K?\s*(?:MT|MTS|METRIC\s+TON(?:NE)?S|TONNES|TONS)\b", 2),
-        (r"(?:\bPER\s+(?:MT|METRIC\s+TON(?:NE)?|TON(?:NE)?)\b|\bPMT\b|/\s*MT\b)", 2),
-        (r"\b(?:FOB|CIF|CFR|FAS|DAP|DDP)\b", 1),
-        (r"\b(?:FREIGHT|LUMP\s*SUM)\b", 1),
-        (r"\bLAYCAN\b", 1),
-        (r"\b(?:SAFE PORT|SP)\b", 1),
+         r"|\b\d[\d,.]*[ \t]*[XC][ \t]*/[ \t]*\d[\d,.]*[ \t]*[XC]\b", 2, "laytime terms (SHINC, 1000x/1000x)"),
+        (r"\b(?:LOAD(?:ING)?\s+PORT|(?-i:POL))\b", 3, "load port"),
+        (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|(?-i:POD))\b", 3, "discharge port"),
+        (r"^\s*LOAD\s*:", 2, "'Load:' label"),
+        (r"\bEX\s+[A-Z][A-Z ]*?\s+TO\s+[A-Z]+", 2, "'ex X to Y' route"),
+        (r"\bFROM\s+" + NOT_DATE + r"(?-i:[A-Z][\w'\-]*(?:[ \t]+[A-Z][\w'\-]*)*)\s+TO\s+" + NOT_DATE + r"(?-i:[A-Z])", 2, "'from X to Y' route"),
+        (r"\d[\d,]*\s*K?\s*(?:MT|MTS|METRIC\s+TON(?:NE)?S|TONNES|TONS)\b", 2, "cargo quantity (MT)"),
+        (r"(?:\bPER\s+(?:MT|METRIC\s+TON(?:NE)?|TON(?:NE)?)\b|\bPMT\b|/\s*MT\b)", 2, "freight per tonne"),
+        (r"\b(?:FOB|CIF|CFR|FAS|DAP|DDP)\b", 1, "Incoterm (FOB, CIF...)"),
+        (r"\b(?:FREIGHT|LUMP\s*SUM)\b", 1, "freight / lumpsum"),
+        (r"\bLAYCAN\b", 1, "laycan"),
+        (r"\b(?:SAFE PORT|SP)\b", 1, "safe port"),
     ],
     "CARGO TC": [
-        (r"^\s*DEL(?:IVERY)?\b", 2),
-        (r"^\s*REDEL(?:IVERY)?\b", 2),
-        (r"\b(?:DURATION|PERIOD)\b.*\d+\s*(?:MONTHS?|DAYS)\b", 2),
-        (r"\b(?:TCT|TC TRIP|ON PERIOD|PERIOD ENQUIRY)\b", 2),
+        (r"^\s*DEL(?:IVERY)?\b", 2, "delivery"),
+        (r"^\s*REDEL(?:IVERY)?\b", 2, "redelivery"),
+        (r"\b(?:DURATION|PERIOD)\b.*\d+\s*(?:MONTHS?|DAYS)\b", 2, "duration / period"),
+        (r"\b(?:TCT|TC TRIP|ON PERIOD|PERIOD ENQUIRY)\b", 2, "TCT / period enquiry"),
     ],
 }
 
@@ -92,11 +92,20 @@ def score_email(text):
     text = normalize_newlines(text)
     scores = {}
     for category, rules in EVIDENCE.items():
-        scores[category] = sum(
-            weight for pattern, weight in rules
-            if (any(pattern(text)) if callable(pattern) else re.search(pattern, text, FLAGS))
-        )
+        scores[category] = sum(weight for _, weight, _ in matched_rules(rules, text))
     return scores
+
+
+def matched_rules(rules, text):
+    return [rule for rule in rules
+            if (any(rule[0](text)) if callable(rule[0]) else re.search(rule[0], text, FLAGS))]
+
+
+def evidence(text, category):
+    # The plain-language labels of the rules that fired for one category, strongest first.
+    text = normalize_newlines(text)
+    rules = sorted(matched_rules(EVIDENCE.get(category, []), text), key=lambda rule: -rule[1])
+    return [label for _, _, label in rules]
 
 
 def classify_email(text):

@@ -17,14 +17,21 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The app has two tabs:
+The app has two tabs and an About sidebar (what the four types mean, how to read confidence,
+measured accuracy):
 
-- **Single email** – paste one email; shows category, confidence, the score behind each
-  category, and the extracted fields, with a JSON download.
+- **Single email** – five "Try a sample" buttons (vessel position, cargo order, time charter, a
+  tricky vessel-for-cargo email, a normal email) load and process an example in one click, or paste
+  your own. The result card shows the type and confidence as coloured badges, a plain-language
+  reason ("Close call: looks like a voyage cargo order (6 points) but also a vessel position
+  (5 points). Please check."), and the extracted details in large print. Scores and JSON download
+  are under "Technical details".
 - **Batch upload** – upload several `.txt` / `.eml` files (one email each) and/or `.csv` files
   (one email per row; the text column is guessed and can be changed, a subject column is
-  optional). Shows counts per category, a filterable results table, and a CSV download with
-  every field and score. Try it with the files in `samples/`.
+  optional), or switch on the 42 demo emails from `samples/`. Shows counts per type, and a table
+  with one readable "Key Details" line and a "Why" reason per email; emails needing review come
+  first. Click a row to see the email beside its result card. "All columns" shows every field and
+  score; the CSV download always includes everything.
 
 **Confidence** comes from the category scores in `classifier.score_email()`:
 
@@ -34,9 +41,12 @@ The app has two tabs:
 | Medium | anything between |
 | Low    | top two scores within 1 point, top score exactly at the threshold (3), or UNKNOWN with 1-2 points of evidence. Flagged **Needs Review** |
 
-Checked on the tuning splits only (dev, ext-dev, neg-dev; 474 emails): High was correct
-381/382 (99.7%), Medium 55/55, Low 22/37 (59.5%). 15 of the 16 errors were flagged Low, so
-reviewing only the Low emails (8% of the batch) catches most mistakes.
+Checked on the tuning splits only (dev, ext-dev, neg-dev, real-dev; 516 emails, v5 rules): High was
+correct 391/392 (99.7%), Medium 57/57, Low 53/67 (79.1%). 14 of the 15 category errors were
+flagged Low, so reviewing only the Low emails (13% of the batch) catches almost all mistakes.
+
+The reason text lists the rules that fired, using the plain-language label each rule carries in
+`classifier.EVIDENCE` (`classifier.evidence()` returns them).
 
 ## How it works
 

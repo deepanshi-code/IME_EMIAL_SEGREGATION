@@ -6,7 +6,7 @@ import re
 
 import pandas as pd
 
-from classifier import MIN_SCORE, classify_email, score_email
+from classifier import MIN_SCORE, classify_email, evidence, score_email
 from extractor import extract_data
 
 FIELD_NAMES = [
@@ -30,6 +30,53 @@ def confidence(category, scores):
     return "Medium"
 
 
+CATEGORY_NAMES = {
+    "TONNAGE": "vessel position",
+    "CARGO VC": "voyage cargo order",
+    "CARGO TC": "time-charter enquiry",
+    "UNKNOWN": "not chartering",
+}
+
+
+def explain(text, category, level, scores):
+    ranked = sorted(scores, key=scores.get, reverse=True)
+    top, second = ranked[0], ranked[1]
+    if category == "UNKNOWN":
+        if level == "High":
+            return "No chartering terms found. This looks like a normal email."
+        clues = ", ".join(evidence(text, top))
+        return f"Some chartering terms found ({clues}), but not enough to decide. Please check."
+    clues = ", ".join(evidence(text, category)[:4])
+    name = CATEGORY_NAMES[category]
+    if level == "Low" and scores[second] >= scores[top] - 1 and scores[second] > 0:
+        return (f"Close call: looks like a {name} ({scores[top]} points) but also a "
+                f"{CATEGORY_NAMES[second]} ({scores[second]} points). Please check.")
+    if level == "Low":
+        return f"Only weak evidence for a {name}: {clues}. Please check."
+    prefix = "Clearly" if level == "High" else "Probably"
+    return f"{prefix} a {name}, based on: {clues}."
+
+
+def summary(fields):
+    # One readable line per email for the batch table: "SEA HAWK · 58,000 DWT · open Tianjin".
+    parts = []
+    if fields["Vessel Name"]:
+        parts.append(fields["Vessel Name"])
+    if fields["Vessel Size"]:
+        parts.append(f"{int(fields['Vessel Size']):,} DWT")
+    if fields["Open Port"]:
+        parts.append(f"open {fields['Open Port']}")
+    if fields["Loading Port"] or fields["Discharge Port"]:
+        parts.append(f"{fields['Loading Port'] or '?'} → {fields['Discharge Port'] or '?'}")
+    if fields["Delivery Port"]:
+        parts.append(f"del {fields['Delivery Port']}")
+    if fields["Redelivery Port"]:
+        parts.append(f"redel {fields['Redelivery Port']}")
+    if fields["Duration"]:
+        parts.append(fields["Duration"])
+    return " · ".join(parts)
+
+
 def process_email(text):
     scores = score_email(text)
     category = classify_email(text)
@@ -39,6 +86,7 @@ def process_email(text):
         "category": category,
         "confidence": level,
         "needs_review": level == "Low",
+        "reason": explain(text, category, level, scores),
         "scores": scores,
         "fields": {name: found.get(name) for name in FIELD_NAMES},
     }
@@ -86,6 +134,8 @@ def results_table(sources, results):
             "Category": result["category"],
             "Confidence": result["confidence"],
             "Needs Review": result["needs_review"],
+            "Key Details": summary(result["fields"]),
+            "Why": result["reason"],
         }
         row.update(result["fields"])
         row.update({f"Score {name}": value for name, value in result["scores"].items()})
