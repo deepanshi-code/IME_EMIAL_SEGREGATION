@@ -124,6 +124,54 @@ emails written by someone else. v3 adds general rules found by analysing ext-dev
 ("from X to Y" routes, subject-line routes, freight per MT, Incoterms, "freight"/"lumpsum",
 excluding date ranges such as "from Monday to Friday"), and the ext-test score matches ext-dev.
 
+### Comparison with an ML baseline
+
+`eval/ml_baseline.py` trains TF-IDF (word 1-2 grams) + logistic regression (class-balanced) on
+data disjoint from every held-out set: 605 MaritimEmails *train*-split first emails (CARGO VC),
+603 Enron/SpamAssassin ham not used in the negatives sets (UNKNOWN), and the 24 dev emails
+(the only TONNAGE/CARGO TC examples: 8 and 6). Exact duplicates of evaluation emails are dropped.
+
+```
+python eval/ml_baseline.py --maritimemails-train MaritimEmails/train.jsonl.gz --enron enron_test.jsonl --spamassassin easy_ham.tar.bz2
+```
+
+| Evaluation set (category accuracy) | n | Rules (v4) | TF-IDF + LR |
+|------------------------------------|---|------------|-------------|
+| test – hand-written, 4 classes     | 18  | 100%  | 94.4% |
+| ext-test – MaritimEmails           | 150 | 88.7% | 100%  |
+| neg-test – non-shipping            | 300 | 100%  | 100%  |
+| stress – 10 emails that break the training data's style pattern (`eval/stress.json`) | 10 | 10/10 | 4/10 |
+
+The ML model wins on ext-test, but that set comes from the same LLM generator as its training
+data. The stress set shows why that number doesn't carry over: the model labelled **every polite,
+modern non-shipping email** (a budget meeting, a flight booking, an order notice, a webinar
+invite, a container booking) as CARGO VC. In training, all shipping emails were polished
+LLM prose and all non-shipping emails were 2000-2003 Enron/mailing-list text, so it learned
+*writing style* instead of *shipping content* (shortcut learning). It also missed a terse period
+enquiry, having seen only 6 CARGO TC examples.
+
+Caveat: the stress emails were written by the rule designer, so the rules' 10/10 is biased
+upward; the ML failures are on emails with no shipping evidence at all, which is the point.
+
+Conclusion: with no real labelled data, the rules are the safer choice; an ML model needs
+real emails from all four categories, with the same writing style in shipping and non-shipping
+examples, before its scores mean anything.
+
+### Testing on real emails
+
+Real emails stay on your machine (`eval/real/` and `eval/real.json` are in `.gitignore`).
+
+1. Put each email in `eval/real/emails/` as `.txt` or `.eml`, with names, phone numbers and
+   email addresses removed.
+2. Copy `eval/real_labels_template.csv` to `eval/real/labels.csv` and fill one row per email
+   (category and expected fields) **before** running the app on them, so the labels are not
+   influenced by the output.
+3. Run `python eval/build_real.py` (it warns about labels that don't appear in the text and
+   leftover email addresses or phone numbers), then
+   `python eval/evaluate.py --data eval/real.json --split real --errors`.
+
+`docs/user_interview.md` is a 15-minute question sheet for talking to a broker or operator.
+
 ### Limitations
 
 - **No real emails yet.** All data is synthetic: hand-written or LLM-generated. MaritimEmails
