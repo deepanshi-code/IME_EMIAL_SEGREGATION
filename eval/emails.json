@@ -1,0 +1,257 @@
+[
+  {
+    "id": "t01", "split": "dev", "category": "TONNAGE",
+    "text": "MV PACIFIC GLORY\nDWT 63500\nOPEN QINGDAO 5 DEC",
+    "fields": {"Vessel Name": "PACIFIC GLORY", "Vessel Size": "63500", "Open Port": "QINGDAO"},
+    "note": "clean line-per-field format"
+  },
+  {
+    "id": "t02", "split": "dev", "category": "TONNAGE",
+    "text": "Subject: Tonnage list\n\nMV Ocean Star 58000 DWT open Singapore 10-12 Nov\nPls advise any suitable cargo.",
+    "fields": {"Vessel Name": "OCEAN STAR", "Vessel Size": "58000", "Open Port": "SINGAPORE"},
+    "note": "size written before DWT"
+  },
+  {
+    "id": "t03", "split": "dev", "category": "TONNAGE",
+    "text": "MV SEA LION DWT 58,000 OPEN SINGAPORE",
+    "fields": {"Vessel Name": "SEA LION", "Vessel Size": "58000", "Open Port": "SINGAPORE"},
+    "note": "thousands separator in size"
+  },
+  {
+    "id": "t04", "split": "dev", "category": "TONNAGE",
+    "text": "Dear All,\nPlease find our open position below:\nM/V KAPTAN AHMET / 37,200 dwt / Built 2012 / open Chittagong 18-20 Nov\nRgds",
+    "fields": {"Vessel Name": "KAPTAN AHMET", "Vessel Size": "37200", "Open Port": "CHITTAGONG"},
+    "note": "M/V prefix, slash-separated, 'open' appears twice"
+  },
+  {
+    "id": "t05", "split": "test", "category": "TONNAGE",
+    "text": "MV Blue Horizon\n81,500 DWT Kamsarmax\nOpen: Paradip 1-3 Dec\nOwners looking for Indo coal or grains.",
+    "fields": {"Vessel Name": "BLUE HORIZON", "Vessel Size": "81500", "Open Port": "PARADIP"},
+    "note": "colon after Open"
+  },
+  {
+    "id": "t06", "split": "test", "category": "TONNAGE",
+    "text": "Vessel: MV AEGEAN PEARL\nDWT: 56,700\nOpen at Durban 25 Nov\nGeared 4x30t",
+    "fields": {"Vessel Name": "AEGEAN PEARL", "Vessel Size": "56700", "Open Port": "DURBAN"},
+    "note": "'Open at' phrasing, colon after DWT"
+  },
+  {
+    "id": "t07", "split": "test", "category": "TONNAGE",
+    "text": "MV ORIENT BRIDGE 63,800 DWT SDBC open Kandla 2/5 Dec",
+    "fields": {"Vessel Name": "ORIENT BRIDGE", "Vessel Size": "63800", "Open Port": "KANDLA"},
+    "note": "one-line position"
+  },
+  {
+    "id": "t08", "split": "test", "category": "TONNAGE",
+    "text": "Owners' Supramax MV STELLA MARIS dwt 55000 open Haldia ppt",
+    "fields": {"Vessel Name": "STELLA MARIS", "Vessel Size": "55000", "Open Port": "HALDIA"},
+    "note": "'ppt' (prompt) follows the port"
+  },
+  {
+    "id": "t09", "split": "dev", "category": "TONNAGE",
+    "text": "mv golden eagle, 75k dwt, open Santos 20 Nov",
+    "fields": {"Vessel Name": "GOLDEN EAGLE", "Vessel Size": "75000", "Open Port": "SANTOS"},
+    "note": "lower case, '75k' shorthand should normalise to 75000"
+  },
+  {
+    "id": "t10", "split": "test", "category": "TONNAGE",
+    "text": "Open tonnage:\n1) MV ASTRA 58,000 DWT open Singapore 12 Nov\n2) MV BOREAS 82,000 DWT open Busan 15 Nov",
+    "fields": {"Vessel Name": "ASTRA", "Vessel Size": "58000", "Open Port": "SINGAPORE"},
+    "note": "two vessels; current output schema holds one record, so gold is the first vessel"
+  },
+
+  {
+    "id": "v01", "split": "dev", "category": "CARGO VC",
+    "text": "Cargo: 50,000 MT Coal 10% MOLOO\nLoad Port: Richards Bay\nDischarge Port: Paradip\nLaycan: 10-20 Dec",
+    "fields": {"Loading Port": "RICHARDS BAY", "Discharge Port": "PARADIP"},
+    "note": "clean labelled format"
+  },
+  {
+    "id": "v02", "split": "dev", "category": "CARGO VC",
+    "text": "POL: Santos\nPOD: Qingdao\nCargo: 60,000 MT soybeans\nLaycan 1-10 Jan",
+    "fields": {"Loading Port": "SANTOS", "Discharge Port": "QINGDAO"},
+    "note": "POL/POD abbreviations with colons"
+  },
+  {
+    "id": "v03", "split": "dev", "category": "CARGO VC",
+    "text": "POL Santos POD Qingdao 55000 mt corn",
+    "fields": {"Loading Port": "SANTOS", "Discharge Port": "QINGDAO"},
+    "note": "POL/POD inline without colons"
+  },
+  {
+    "id": "v04", "split": "dev", "category": "CARGO VC",
+    "text": "Cargo: 50,000 MT coal\nLoad Port: Richards Bay\nDischarge Port: Paradip\nVessel to be open hatch, gearless",
+    "fields": {"Loading Port": "RICHARDS BAY", "Discharge Port": "PARADIP"},
+    "note": "'open hatch' + 'vessel' must not trigger TONNAGE"
+  },
+  {
+    "id": "v05", "split": "test", "category": "CARGO VC",
+    "text": "Firm cargo order\n30,000 MT steel coils\nLoading port: Tianjin\nDischarging port: Mundra\nLaycan 5-15 Dec\nFrt idea USD 28 pmt",
+    "fields": {"Loading Port": "TIANJIN", "Discharge Port": "MUNDRA"},
+    "note": "'Loading port' / 'Discharging port' wording"
+  },
+  {
+    "id": "v06", "split": "test", "category": "CARGO VC",
+    "text": "Charterers have 45,000 mt clinker ex Kandla to Chittagong, laycan 20-30 Nov, pls offer suitable tonnage.",
+    "fields": {"Loading Port": "KANDLA", "Discharge Port": "CHITTAGONG"},
+    "note": "'ex X to Y' route phrasing"
+  },
+  {
+    "id": "v07", "split": "test", "category": "CARGO VC",
+    "text": "Cargo: 25,000 MT urea\nLoad: Ruwais\nDisport: Visakhapatnam\nLaycan 1-7 Dec",
+    "fields": {"Loading Port": "RUWAIS", "Discharge Port": "VISAKHAPATNAM"},
+    "note": "'Load' / 'Disport' abbreviations"
+  },
+  {
+    "id": "v08", "split": "test", "category": "CARGO VC",
+    "text": "Load Port: Port Hedland\nDischarge Port: Caofeidian\nCargo: 170,000 MT iron ore\nPls advise open vessels",
+    "fields": {"Loading Port": "PORT HEDLAND", "Discharge Port": "CAOFEIDIAN"},
+    "note": "'open vessels' must not trigger TONNAGE"
+  },
+  {
+    "id": "v09", "split": "dev", "category": "CARGO VC",
+    "text": "1 SAFE PORT VANCOUVER TO 1-2 SP JAPAN\n40,000 MT wheat\nLaycan 15-25 Dec",
+    "fields": {"Loading Port": "VANCOUVER", "Discharge Port": "JAPAN"},
+    "note": "safe-port shorthand, no explicit labels"
+  },
+  {
+    "id": "v10", "split": "test", "category": "CARGO VC",
+    "text": "Load Port: Novorossiysk\nDischarge Port: Alexandria\nCargo: 30,000 MT wheat\nRedelivery of samples to be arranged by shippers",
+    "fields": {"Loading Port": "NOVOROSSIYSK", "Discharge Port": "ALEXANDRIA"},
+    "note": "word 'Redelivery' used in a non-TC sense"
+  },
+
+  {
+    "id": "c01", "split": "dev", "category": "CARGO TC",
+    "text": "Delivery: Singapore\nRedelivery: Japan\nDuration: 3-5 months",
+    "fields": {"Delivery Port": "SINGAPORE", "Redelivery Port": "JAPAN", "Duration": "3-5 MONTHS"},
+    "note": "clean labelled format"
+  },
+  {
+    "id": "c02", "split": "dev", "category": "CARGO TC",
+    "text": "Redelivery: Japan\nDelivery: Singapore\nDuration: 4-6 months",
+    "fields": {"Delivery Port": "SINGAPORE", "Redelivery Port": "JAPAN", "Duration": "4-6 MONTHS"},
+    "note": "Redelivery listed before Delivery"
+  },
+  {
+    "id": "c03", "split": "dev", "category": "CARGO TC",
+    "text": "Charterers require Supramax for TCT\nDelivery DOP Singapore\nRedelivery passing Muscat\nCargo: steel",
+    "fields": {"Delivery Port": "SINGAPORE", "Redelivery Port": "MUSCAT"},
+    "note": "DOP / 'passing' qualifiers before port names"
+  },
+  {
+    "id": "c04", "split": "test", "category": "CARGO TC",
+    "text": "Period enquiry\nDel: Haldia\nRedel: Far East\nPeriod: 11-13 months\nKamsarmax required",
+    "fields": {"Delivery Port": "HALDIA", "Redelivery Port": "FAR EAST", "Duration": "11-13 MONTHS"},
+    "note": "Del/Redel/Period abbreviations"
+  },
+  {
+    "id": "c05", "split": "test", "category": "CARGO TC",
+    "text": "TC trip via ECSA\nDelivery aps Recalada\nRedelivery Skaw-Gibraltar\nDuration about 60 days",
+    "fields": {"Delivery Port": "RECALADA", "Redelivery Port": "SKAW-GIBRALTAR", "Duration": "ABOUT 60 DAYS"},
+    "note": "'aps' qualifier before port"
+  },
+  {
+    "id": "c06", "split": "test", "category": "CARGO TC",
+    "text": "Delivery: Port Said\nRedelivery: Singapore-Japan range\nDuration: 1 TCT abt 45 days\nVessel: Ultramax, open to 2015 built or younger",
+    "fields": {"Delivery Port": "PORT SAID", "Redelivery Port": "SINGAPORE-JAPAN RANGE", "Duration": "1 TCT ABT 45 DAYS"},
+    "note": "'Vessel' + 'open' must not trigger TONNAGE"
+  },
+  {
+    "id": "c07", "split": "test", "category": "CARGO TC",
+    "text": "Charterers looking for Panamax on period\nDelivery Paradip\nRedelivery worldwide\nDuration 6 months",
+    "fields": {"Delivery Port": "PARADIP", "Redelivery Port": "WORLDWIDE", "Duration": "6 MONTHS"},
+    "note": "no colons"
+  },
+  {
+    "id": "c08", "split": "dev", "category": "CARGO TC",
+    "text": "Delivery - Busan\nRedelivery - China\nDuration - 2-3 months",
+    "fields": {"Delivery Port": "BUSAN", "Redelivery Port": "CHINA", "Duration": "2-3 MONTHS"},
+    "note": "dash separators"
+  },
+  {
+    "id": "t11", "split": "dev", "category": "TONNAGE",
+    "text": "MV Iron Duke 63.5k dwt open Port Kelang 3 Dec",
+    "fields": {"Vessel Name": "IRON DUKE", "Vessel Size": "63500", "Open Port": "PORT KELANG"},
+    "note": "decimal k size, two-word port"
+  },
+  {
+    "id": "t12", "split": "dev", "category": "TONNAGE",
+    "text": "M.V. NORTHERN STAR / 82,000 DWT / open Rotterdam spot",
+    "fields": {"Vessel Name": "NORTHERN STAR", "Vessel Size": "82000", "Open Port": "ROTTERDAM"},
+    "note": "M.V. prefix with dots, 'spot' after port"
+  },
+  {
+    "id": "t13", "split": "dev", "category": "TONNAGE",
+    "text": "MV CAPE TOWN SPIRIT 180,000 DWT open Qingdao 1 Jan",
+    "fields": {"Vessel Name": "CAPE TOWN SPIRIT", "Vessel Size": "180000", "Open Port": "QINGDAO"},
+    "note": "three-word vessel name"
+  },
+  {
+    "id": "v11", "split": "dev", "category": "CARGO VC",
+    "text": "Load Port: Kamsar, Guinea\nDischarge Port: Tarragona\n75,000 MT bauxite",
+    "fields": {"Loading Port": "KAMSAR", "Discharge Port": "TARRAGONA"},
+    "note": "port followed by country"
+  },
+  {
+    "id": "v12", "split": "dev", "category": "CARGO VC",
+    "text": "50,000 MT coal ex Richards Bay to Krishnapatnam laycan 1-10 Dec",
+    "fields": {"Loading Port": "RICHARDS BAY", "Discharge Port": "KRISHNAPATNAM"},
+    "note": "route followed directly by 'laycan'"
+  },
+  {
+    "id": "c09", "split": "dev", "category": "CARGO TC",
+    "text": "Delivery: on arrival Singapore\nRedelivery: Japan\nDuration: about 50 days without guarantee",
+    "fields": {"Delivery Port": "SINGAPORE", "Redelivery Port": "JAPAN", "Duration": "ABOUT 50 DAYS WITHOUT GUARANTEE"},
+    "note": "'on arrival' qualifier"
+  },
+  {
+    "id": "c10", "split": "dev", "category": "CARGO TC",
+    "text": "Delivery: Port Said\nRedelivery: Singapore\nPeriod: 1 year",
+    "fields": {"Delivery Port": "PORT SAID", "Redelivery Port": "SINGAPORE", "Duration": "1 YEAR"},
+    "note": "duration in years"
+  },
+
+  {
+    "id": "u01", "split": "dev", "category": "UNKNOWN",
+    "text": "Hi, are you open for a meeting about the vessel insurance renewal?",
+    "fields": {},
+    "note": "'open' + 'vessel' in an unrelated email"
+  },
+  {
+    "id": "u02", "split": "dev", "category": "UNKNOWN",
+    "text": "Dear team, please confirm delivery of the invoice by Friday.",
+    "fields": {},
+    "note": "'delivery' in an unrelated email"
+  },
+  {
+    "id": "u03", "split": "dev", "category": "UNKNOWN",
+    "text": "Please find attached our updated contact details. Kind regards.",
+    "fields": {},
+    "note": "plain admin email"
+  },
+  {
+    "id": "u04", "split": "test", "category": "UNKNOWN",
+    "text": "Reminder: the office will be closed on Monday for Diwali. Open again Tuesday.",
+    "fields": {},
+    "note": "'open' without shipping context"
+  },
+  {
+    "id": "u05", "split": "test", "category": "UNKNOWN",
+    "text": "Your DHL shipment has been dispatched. Expected delivery: 28 Oct.",
+    "fields": {},
+    "note": "courier notification with 'delivery:'"
+  },
+  {
+    "id": "u06", "split": "test", "category": "UNKNOWN",
+    "text": "Webinar invite: Digitalisation in dry bulk shipping - join us to learn how owners manage vessel performance data. Registration open now.",
+    "fields": {},
+    "note": "shipping newsletter with 'vessel' + 'open'"
+  },
+  {
+    "id": "u07", "split": "test", "category": "UNKNOWN",
+    "text": "Re: hire payment\nPlease note the 3rd hire instalment has been remitted. Kindly acknowledge.",
+    "fields": {},
+    "note": "shipping-related but not a position or order"
+  }
+]
