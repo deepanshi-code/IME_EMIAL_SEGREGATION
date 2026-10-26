@@ -19,8 +19,8 @@ def normalize(value):
     return " ".join(str(value).upper().split())
 
 
-def load_examples(split):
-    with open(DATA_PATH, encoding="utf-8") as f:
+def load_examples(split, path=DATA_PATH):
+    with open(path, encoding="utf-8") as f:
         examples = json.load(f)
     if split != "all":
         examples = [e for e in examples if e["split"] == split]
@@ -119,12 +119,15 @@ def report(examples, confusion, field_stats, spurious, fully_correct, errors, sh
 
 def main():
     parser = argparse.ArgumentParser(description="Evaluate the email classifier and extractor.")
-    parser.add_argument("--split", choices=["dev", "test", "all"], default="dev")
+    parser.add_argument("--split", default="dev", help="dev, test, external, or all")
+    parser.add_argument("--data", default=DATA_PATH, help="labeled JSON file (default: eval/emails.json)")
     parser.add_argument("--errors", action="store_true", help="list every failing example")
     args = parser.parse_args()
 
-    examples = load_examples(args.split)
-    print(f"Split: {args.split}")
+    examples = load_examples(args.split, args.data)
+    if not examples:
+        parser.error(f"no examples with split {args.split!r} in {args.data}")
+    print(f"Data: {os.path.basename(args.data)}  Split: {args.split}")
     report(examples, *evaluate(examples), args.errors)
 
 

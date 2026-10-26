@@ -1,0 +1,1652 @@
+[
+  {
+    "id": "ZERO-GPT-008067",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Proposal for Crude Oil Shipment via MV Oceanic\n\nDear John,\n\nI hope this email finds you well. I'm reaching out to discuss a potential opportunity to transport a cargo of crude oil. We have the MV Oceanic ready and available, with a capacity of 100,000 MT. The vessel can load at the Port of Rotterdam and discharge at Houston. We propose a starting freight rate of USD 52 per MT.\n\nPlease let me know your thoughts or if another vessel might better suit your needs.\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Port of Rotterdam",
+      "Discharge Port": "Houston"
+    },
+    "note": "Zero-Shot / GPT-4"
+  },
+  {
+    "id": "ATTR-GPT-002538",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote for Iron Ore Shipment from Vigo to Prince Rupert\n\nHi Carlos,\n\nHope this email finds you well. I've got a vessel, MINERAL HIROSHIGE, ready to load 4550MT of Iron Ore at Vigo headed for Prince Rupert. Freight stands at $78 per mt, FOB terms. We can set laycan for the forthcoming week. Let me know if this aligns with your ops schedule and if any tweaks are needed.\n\nBest,\nMartin Woods\nGlobal Maritime Brokers",
+    "fields": {
+      "Loading Port": "Vigo",
+      "Discharge Port": "Prince Rupert"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "ATTR-GPT-002459",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry: Vessel Availability for Iron Ore Shipment - New Orleans to False Creek\n\nDear Mr. Santiago,\n\nWe are looking to ship approximately 2094MT of iron ore CIF from New Orleans to False Creek. Our intended loading window is between the 10th and 15th of this month. Could you please provide a suitable vessel option and a freight quote?\n\nBest regards,\nJasmine Campbell",
+    "fields": {
+      "Loading Port": "New Orleans",
+      "Discharge Port": "False Creek"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "FEW--CLA-004534",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Iron Ore Shipment - MV STELLAR WIND\n\nDear Robert,\n\nWe have MV STELLAR WIND (DWT 182,500, LOA 292m) open for your iron ore shipment from Port Hedland to Qingdao. Can offer USD 28.50/MT on CIF terms for 150,000 MT cargo. Laycan 05-10 March 2024.\n\nPlease let me know if you'd like to pursue.\n\nBest regards,\nMaria",
+    "fields": {
+      "Loading Port": "Port Hedland",
+      "Discharge Port": "Qingdao"
+    },
+    "note": "Few-Shot / Claude"
+  },
+  {
+    "id": "FEW--DEE-005052",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Offer for Coal from Newcastle to Shanghai\n\nDear John,\n\nI hope this message finds you well. I am reaching out from Maritime Trade Services to offer a shipment of 12,000MT of coal from Newcastle to Shanghai on CIF terms.\n\nWe have the vessel SEA HORIZON available for this route, with a DWT of 75,000 and LOA of 225m. The laycan is set for 2023-11-01 to 2023-11-05. The initial freight quote is USD 25.50 per MT.\n\nPlease let me know if you have any questions or need further details.\n\nBest regards,\nLaura Smith\nMaritime Trade Services",
+    "fields": {
+      "Loading Port": "Newcastle",
+      "Discharge Port": "Shanghai"
+    },
+    "note": "Few-Shot / DeepSeek"
+  },
+  {
+    "id": "ATTR-GEM-000169",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Iron Ore - Sakai to Scheveningen\n\nG'day Johnny,\n\nGot an inquiry for 6287MT Iron Ore, Sakai to Scheveningen, CFR.\n\nMy best offer is AUD63.79, sp.\n\nLet me know asap.\n\nCheers,\nDiego Pérez\nAnderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Sakai",
+      "Discharge Port": "Scheveningen"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "ATTR-MIS-003391",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Coal Shipment Inquiry - Jeddah to Changshu Anch\n\nHi Corey,\n\nHope this message finds you well. I'm writing to discuss a potential shipment of coal from Jeddah to Changshu Anch. The cargo size is 2891MT on FOB terms. We are considering the MSC DIANA for this voyage. Our initial freight quote is $84.77.\n\nPlease let me know if you have any questions or need further details.\n\nBest regards,\nRocio Ramos\nOceanic Trade Services\n\nDisclaimer: This email is intended solely for the addressee.",
+    "fields": {
+      "Loading Port": "Jeddah",
+      "Discharge Port": "Changshu Anch"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "FEW--GPT-005685",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Offer for Iron Ore Shipment - Port Hedland to Rotterdam\n\nDear Simon,\n\nI hope this email finds you well. We are tendering an offer for the transportation of iron ore from Port Hedland to Rotterdam. Our vessel, the Oceanic Star, can load 75000 MT with a laycan from 2023-09-25 to 2023-09-30. We are initially quoting a rate of USD 18 per MT under FOB terms.\n\nPlease let us know if you are interested or if you need further details.\n\nBest regards,\nLena Jackson\nMaritime Brokers",
+    "fields": {
+      "Loading Port": "Port Hedland",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Few-Shot / GPT-4"
+  },
+  {
+    "id": "ATTR-GEM-000820",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Spot Fixture - Muiderzand/Mokpo\n\nMatthew,\n\nPlsd find below details for Crude Oil spot fixture:\n\nLoad: Muiderzand\nDisc: Mokpo\nCargo: 11756MT\nIncoterm: CIF\n\nWe can offer MSC FEBE. Freight AUD70 wpd pdpr aaaa.\n\nRgds,\nEdgar Roman\nGlobal Maritime Brokers",
+    "fields": {
+      "Loading Port": "Muiderzand",
+      "Discharge Port": "Mokpo"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "ZERO-CLA-007226",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry - Crude Oil Shipment USGC/Rotterdam\n\nHi Sarah,\n\nHope you're well. Looking for a vessel to move 80,000MT crude oil from USGC to Rotterdam. Laycan 25-28 Feb. Can you check what's available?\n\nBest regards,\nMichael",
+    "fields": {
+      "Loading Port": "USGC",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / Claude"
+  },
+  {
+    "id": "FEW--GEM-004318",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Petroleum Coke Shipment - Richards Bay to Rotterdam\n\nDear Brian,\n\nFairseas Shipping has a vessel open for a Petroleum Coke shipment from Richards Bay to Rotterdam. We can offer the 'OCEAN BREEZE', DWT 178500, LOA 289m. \n\nOur initial lumpsum offer is USD 850,000, Fixture type 'GENCON 94'. Laycan is September 10-15. Cargo size: 65000 MT +/- 10% at Charterer's option.\n\nPlease let me know your thoughts.\n\nBest regards,\nOlivia Santos\nFairseas Shipping",
+    "fields": {
+      "Loading Port": "Richards Bay",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Few-Shot / Gemini"
+  },
+  {
+    "id": "ATTR-MIS-003591",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: CFR Aluminum Shipment from Iskenderun to Muiderzand\n\nDear Troy, \n\nHope this message finds you well. \n\nWe have a pending shipment of 5648MT Aluminum from Iskenderun to Muiderzand under CFR terms. We propose the vessel PAROS for this journey. \n\nOur current freight quote is $40. Please let us know your thoughts. \n\nBest regards, \nRicky Woods \nGlobal Maritime Brokers",
+    "fields": {
+      "Loading Port": "Iskenderun",
+      "Discharge Port": "Muiderzand"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "BARE-DEE-014355",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for Laycan Slots and Freight Charges\n\nGood Morning Captain Schuppe,\n\nWe’re planning to ship 6,000MT of raw material from Rotterdam to Algeciras. Could you please advise on any available laycan slots, as well as any additional freight charges?\n\nRegards,\nRyan",
+    "fields": {
+      "Loading Port": "Rotterdam",
+      "Discharge Port": "Algeciras"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-MIS-011881",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Vessel Availability\n\nDear Peter,\n\nWould your vessel be able to lift 8,000MT of clinker from Dubai to Dar es Salaam in early August? How much time in advance will you need to book it?\n\nRegards,\nCarina",
+    "fields": {
+      "Loading Port": "Dubai",
+      "Discharge Port": "Dar es Salaam"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "BARE-CLA-013141",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Shipment Inquiries - US Gulf and Middle East Routes\n\nIn London we have a 200,000mt of crude shipment out of the US Gulf of Mexico to China via Suez. Would you confirm if your vessel can load by week 16 and laycan by week 17?\n\nWe have also a 100,000MT shipment of crude from the Middle East to the US Gulf of Mexico via Suez, and would like to confirm if your vessel can load by week 15 and laycan by week 16.\n\nKindly,\nMarius",
+    "fields": {
+      "Loading Port": "US Gulf of Mexico",
+      "Discharge Port": "China"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "ZERO-GEM-006901",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Inquiry - Basrah to Rotterdam\n\nDear John,\n\nHope you're having a good week.\n\nI have a 130,000 MT cargo of crude oil, Basrah to Rotterdam, looking for a suitable vessel. Laycan is Feb 10-20. Can you give me an idea on rates?\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Basrah",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / Gemini"
+  },
+  {
+    "id": "FEW--GPT-005554",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Initial Freight Quote - Wheat Shipment from Galveston to Rotterdam\n\nDear Alex,\n\nHope this email finds you well. We are ready to arrange the shipment of 5000MT Wheat from Galveston to Rotterdam. Our vessel, the OCEAN PIONEER, is currently available with a DWT of 80000 and LOA of 250m.\nThe starting freight quote is USD 45 per metric ton under CIF terms. We propose a laycan window from 2023-04-05 to 2023-04-10.\n\nLooking forward to your response.\n\nBest,\nSarah Jones\nMaritime Brokers",
+    "fields": {
+      "Loading Port": "Galveston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Few-Shot / GPT-4"
+  },
+  {
+    "id": "ZERO-GPT-007972",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Offer for Crude Oil Shipment\n\nDear John,\n\nI hope this message finds you well. I am reaching out to propose terms for the shipment of crude oil from the Port of Galveston to Rotterdam. We can offer the MT Liberty (DWT of 157,000 tonnes and LOA of 274 meters) for this trade. Our starting freight rate for this is in the mid 50s per ton. We expect the laycan dates to be from November 5th to November 10th.\n\nLooking forward to your response and any further discussion you might wish to add.\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Galveston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / GPT-4"
+  },
+  {
+    "id": "ATTR-MIS-003168",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Sugar Shipment from Fuzhou to Bayuquan\n\nHi Jacqueline,\n\nWe have a vessel, ZIM YANTIAN, available for your sugar shipment from Fuzhou to Bayuquan. Cargo size is 10258MT, and we can offer a freight rate of EUR36.43. Incoterm is DAP.\n\nLet me know your thoughts.\n\nBest,\nTeresa",
+    "fields": {
+      "Loading Port": "Fuzhou",
+      "Discharge Port": "Bayuquan"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "FEW--CLA-004948",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Iron Ore Shipment Inquiry - MV PACIFIC VOYAGER\n\nDear Mr. Mueller,\n\nI hope this email finds you well. We understand you are looking to transport 65,000MT of Iron Ore from Port Hedland to Hamburg. We can offer the MV PACIFIC VOYAGER for this shipment.\n\nInitial quote: USD 42.75 per MT FOB terms\nLaycan: March 15-20, 2024\n\nVessel particulars:\n- DWT: 82,500MT\n- LOA: 229m\n- Draft: 14.2m\n\nPlease let me know if you would like to proceed with negotiations.\n\nBest regards,\nSarah Chen\nPacific Shipping Services",
+    "fields": {
+      "Loading Port": "Port Hedland",
+      "Discharge Port": "Hamburg"
+    },
+    "note": "Few-Shot / Claude"
+  },
+  {
+    "id": "BARE-MIS-011724",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Shipping Inquiry for 200CTNs of T-shirts\n\nHello Yue,\n\nWe are shipping 200CTNs of T-shirts from Shanghai to Paris. Do you have space this month and how soon can we get a price?\n\nRegards,\nJean",
+    "fields": {
+      "Loading Port": "Shanghai",
+      "Discharge Port": "Paris"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "BARE-MIS-015605",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Diesel Shipment from London to Hamburg\n\nPlease confirm your rate for 15,000MT of diesel from London to Hamburg. Will your vessel be available next week for loading? Could you confirm your suggested laycan? What is your average daily demurrage rate and can this be lowered if loading is expedited? Thank you, Saul",
+    "fields": {
+      "Loading Port": "London",
+      "Discharge Port": "Hamburg"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "ATTR-CLA-001489",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: MINERAL YANGFAN - Wheat Fixture Abidjan/Norfolk\n\nDear Kayla,\n\nFollowing our earlier discussion, pleased to offer MINERAL YANGFAN for your wheat cargo:\n\n- 6991MT wheat\n- Load: Abidjan\n- Disch: Norfolk\n- Laycan: Dec 15-20\n- Rate: Low 70s pmт basis DDP\n- Demurrage: USD 15,000 pd pro rata\n\nVessel fully grain fitted, all holds cleaned and ready.\n\nPls advise if interested.\n\nBest regards,\nJim Wu\nSeaway Commercial Brokers",
+    "fields": {
+      "Loading Port": "Abidjan",
+      "Discharge Port": "Norfolk"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "ZERO-MIS-008743",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Shipment from Houston to Singapore\n\nHi John, Hope you are well. I understand you are looking to ship crude oil from Houston to Singapore. I have a vessel available, MV Ocean Star, DWT 80,000 MT, LOA 229m. The starting freight rate is in the low 50s per MT. Let me know your thoughts. Best, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Singapore"
+    },
+    "note": "Zero-Shot / Mistral"
+  },
+  {
+    "id": "BARE-DEE-010678",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Urea Shipment from Dubai to Batam\n\nGreetings Ms. Abukar,\n\nCould your vessel accommodate 7,500MT of urea for shipment from Dubai to Batam on the 20th of next month?\n\nAdditionally, could you provide your interest rate and any freight cap for charters longer than 3 months?\n\nRegards,\nJudy",
+    "fields": {
+      "Loading Port": "Dubai",
+      "Discharge Port": "Batam"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-DEE-013595",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry About Repair Rates for Delayed Shipment\n\nHello Mr. Roy,\n\nOur customer is on a week-long strike, and we have a shipment of new boilers to ship from Fujairah to Liverpool. Do you charge a repair rate for delays caused by any issues on the orderer’s end?\n\nThanks,\nRory",
+    "fields": {
+      "Loading Port": "Fujairah",
+      "Discharge Port": "Liverpool"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "ATTR-GEM-000620",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Shanghai/Vlissingen - Corn - Offer\n\nDear Ms. Foster,\n\nGood morning,\n\nWe have a firm offer for your consideration.\n\nCommodity: Corn\nLoad Port: Shanghai\nDischarge Port: Vlissingen\nCargo Size: 3357MT\nIncoterm: FOB\nVessel: YM WHOLESOME (DWT: 145502, LOA: 368m)\nFreight: €63/MT\nLaycan: Nov 15-25\n\nPlease advise if this is of interest.\n\nBest regards,\nJorge Rocha\nAnderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Shanghai",
+      "Discharge Port": "Vlissingen"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "FEW--DEE-005424",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Offer for Steel Coils from Busan to Los Angeles\n\nDear Sophia,\n\nI hope this message finds you well. I am pleased to present you with a freight offer for 5000MT of Steel Coils from Busan to Los Angeles on FOB terms.\n\nThe vessel we propose is the PACIFIC STAR, with a DWT of 85000 and LOA of 290m. The laycan is set for 1st to 5th October, and the loading window is 48 hours. The initial freight quote is USD65 per MT.\n\nPlease let me know if this works for you or if you need any further details.\n\nBest regards,\nLiam Carter\nMaritime Traders",
+    "fields": {
+      "Loading Port": "Busan",
+      "Discharge Port": "Los Angeles"
+    },
+    "note": "Few-Shot / DeepSeek"
+  },
+  {
+    "id": "BARE-GPT-014888",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Receipt of Dry Fruits Shipment and Documentation\n\nDear Mrs. Mawby, I am writing to inform you that I have received the shipment of dry fruits from Alexandria to Gioia Tauro. Could you please accept the documents and make sure the transaction is properly documented? Thank you, Abdul",
+    "fields": {
+      "Loading Port": "Alexandria",
+      "Discharge Port": "Gioia Tauro"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-DEE-009922",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Preliminary Quote for Potassium Hydroxide Shipment\n\nDear Mr. Lo,\n\nWe are planning to ship 3,500MT of potassium hydroxide from Yantai to Tianjin before the end of next month. Could you please provide a preliminary quote and confirm if you handle port dues under FOB terms?\n\nBest regards,\nElaine\nElegant Trading Co., Ltd.",
+    "fields": {
+      "Loading Port": "Yantai",
+      "Discharge Port": "Tianjin"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-GPT-014902",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Urgent Request for Polypropylene Powder Shipment\n\nDear Christopher,\n\nCould you expedite the shipping of 1,000MT of polypropylene powder from Antwerp to Abu Dhabi within the next 72 hours? Additionally, could you also provide the export rates from Antwerp?\n\nWarm regards,\nEva",
+    "fields": {
+      "Loading Port": "Antwerp",
+      "Discharge Port": "Abu Dhabi"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "ATTR-GEM-000170",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Inquiry - Vlissingen to Cuxhaven\n\nDear Vicky,\n\nGood morning.\n\nWe have a vessel available for Crude Oil from Vlissingen to Cuxhaven, cargo size 3845MT, CFR terms.\n\nOur initial quote is USD32 per metric ton. \n\nPlease advise if this is of interest.\n\nBest regards,\nTeresa Moran\nMaritime Exchange Ltd.",
+    "fields": {
+      "Loading Port": "Vlissingen",
+      "Discharge Port": "Cuxhaven"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "ATTR-GEM-000087",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry: Aluminum Manila to Petropavlovsk\n\nDear Gloria,\n\nGood morning.\n\nFollowing your inquiry for Aluminum shipment of around 3265MT DDP Manila Anch to Petropavlovsk, we can offer MV BARZAN. Indication in the mid EUR 60s. I'll need to check firm availability and stem window with owners.\n\nBR,\nTony Ayala\nAnderson Shipping Brokers\n",
+    "fields": {
+      "Loading Port": "Manila Anch",
+      "Discharge Port": "Petropavlovsk"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "ZERO-MIS-008884",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Shipment Inquiry\n\nHi John, Hope you're doing well. I have a client looking to ship 500,000 barrels of crude oil from Houston to Rotterdam. Could you provide a quote for a suitable vessel? Let me know your availability. Best, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / Mistral"
+  },
+  {
+    "id": "FEW--DEE-005146",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Offer: Steel Coils - Shanghai to Long Beach\n\nDear Emily,\n\nI hope this email finds you well. We are pleased to offer you a freight rate for the shipment of steel coils from Shanghai to Long Beach.\n\nDetails:\n- Commodity: Steel Coils\n- Quantity: 12,000 MT\n- Load Port: Shanghai\n- Discharge Port: Long Beach\n- Incoterm: CFR\n- Vessel: PACIFIC STAR\n- Freight Rate: USD 85/MT\n- Laycan: 25-30 March 2023\n\nPlease let us know your thoughts.\n\nBest regards,\nLucas Martin\nOcean Cargo Brokers",
+    "fields": {
+      "Loading Port": "Shanghai",
+      "Discharge Port": "Long Beach"
+    },
+    "note": "Few-Shot / DeepSeek"
+  },
+  {
+    "id": "ZERO-GPT-008110",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Initial Freight Proposal for Crude Oil Shipment\n\nDear John,\n\nI hope this email finds you well. I'm reaching out to discuss a potential crude oil shipment from Port Harcourt to Amsterdam. We have a suitable vessel, MV Oceanic, ready to load approximately 60000 tonnes around the end of September. Initial freight rate stands at USD 53.00 per tonne. Please review and let me know if this aligns with your operations.\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Port Harcourt",
+      "Discharge Port": "Amsterdam"
+    },
+    "note": "Zero-Shot / GPT-4"
+  },
+  {
+    "id": "ZERO-DEE-007743",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Crude Oil Shipment\n\nHi John, I hope this email finds you well. I’m reaching out regarding your inquiry for a crude oil shipment from Houston to Rotterdam. We have a suitable vessel, the MV Ocean Star, with a DWT of 150,000 and LOA of 280m. The laycan is 15-20 October. Our starting freight quote is in the low 50s, say $50.75 per metric ton. Let me know your thoughts. Best regards, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / DeepSeek"
+  },
+  {
+    "id": "BARE-GPT-014957",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for Cargo Estimate\n\nHi Jane,\n\nI hope this email finds you well. I'm writing with a request for a cargo estimate for 4,600MT of corn from Chicago to Oslo. The cargo is scheduled to depart on the 6th of September with an ETA of 20 days. I'm interested in receiving prices for a consolidated letter of credit (L/C).\n\nYour assistance is greatly appreciated.\n\nRegards,\nEmma",
+    "fields": {
+      "Loading Port": "Chicago",
+      "Discharge Port": "Oslo"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "ATTR-GEM-000200",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Rice Inquiry - La Spezia to Nghi Son\n\nHi Esther,\n\nGot your request for 2204MT rice from La Spezia to Nghi Son. FOB terms.\n\nCan offer you €66.94. Let me know. Vessel MSC MERAVIGLIA.\n\nRegards,\nBilly\nMaritime Exchange Ltd.",
+    "fields": {
+      "Loading Port": "La Spezia",
+      "Discharge Port": "Nghi Son"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "BARE-GPT-015162",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry about Shipping 4000MT of Steel Ingots\n\nHello Mr. Hernandez,\nOur group needs to ship 4,000MT of steel ingots from Caracas to Acapulco. Could you confirm if there is space available on your latest vessel and inform us about any potential port congestion?\nYours,\nPatrick",
+    "fields": {
+      "Loading Port": "Caracas",
+      "Discharge Port": "Acapulco"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-DEE-013615",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Vessel Availability for Bunker Fuel Shipment\n\nKerry, Good morning. Please let me know if your vessel can ship 8,200MT of bunker fuel from Vancouver to Fremantle? Is it still in port? Does it have the right bollard pull? Best, Grant",
+    "fields": {
+      "Loading Port": "Vancouver",
+      "Discharge Port": "Fremantle"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-GPT-015315",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Proposal for Durkulp Cargo Transport\n\nDear Mr. Liu,\n\nThanks for reaching out, and sorry for the delay. I will be traveling out of the country next week and may not be able to reply promptly. In the meantime, let's initiate preparations for a 70,000MT shipment of Durkulp from San Francisco to Tianjin. I have attached the charter party for your review. If the terms are agreeable, I can ensure the charter party is signed today.\n\nI look forward to your prompt response.\n\nBest regards,\nMaura",
+    "fields": {
+      "Loading Port": "San Francisco",
+      "Discharge Port": "Tianjin"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-DEE-010554",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Shipping Capacity - Copper from Barcelona to Jubail\n\nHello Ms. Thompson,\n\nWe are looking to ship 2,300MT of copper from Barcelona to Jubail. Do you have available capacity? Additionally, could you please confirm if there will be any extra fees for failing to deliver within the laycan window?\n\nThanks,\nLuís",
+    "fields": {
+      "Loading Port": "Barcelona",
+      "Discharge Port": "Jubail"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-GPT-010827",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry on Shipping Rates: Guangzhou to Hamburg\n\nHi Tom,\n\nWe have a cargo of 4,500 MT of lithium that needs to be shipped from Guangzhou to Hamburg. Could you please provide your current shipping rates for this route? Thank you.\n\nBest regards,\nJames",
+    "fields": {
+      "Loading Port": "Guangzhou",
+      "Discharge Port": "Hamburg"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-GPT-015296",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Mica Ore Shipment from Murmansk to Japan/China\n\nGood day, I am inquiring about shipping 1,000MT of mica ore from Murmansk to Japan or China, with a preferred shipping date around June 25 and expected to arrive by the end of July. Please provide the best lump sum rate including demurrage and a reefer rate at your earliest convenience. Thank you, Osvaldo",
+    "fields": {
+      "Loading Port": "Murmansk",
+      "Discharge Port": "Japan or China"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-CLA-012707",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Polyethylene Cargo Quote Request - Mobile to Baltimore\n\nHi Diego,\n\nA cargo of 24,000MT of polyethylene from Mobile to Baltimore, please? Can you quote a vessel with laycan after 7/5?\n\nThanks,\nMiranda",
+    "fields": {
+      "Loading Port": "Mobile",
+      "Discharge Port": "Baltimore"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "FEW--GPT-005737",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry: CIF Houston to Hamburg, Phosphate Fertilizer 5000MT - MV ATLANTIC NAVIGATOR\n\nDear Simon,\n\nI hope this email finds you well. We are seeking transportation for a cargo of 5000MT of phosphate fertilizer from Houston to Hamburg under CIF terms. We would like to inquire if the MV ATLANTIC NAVIGATOR is available for this route. Please provide us with your best freight quote and possible laycan dates.\n\nBest regards,\nHannah Smith",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Hamburg"
+    },
+    "note": "Few-Shot / GPT-4"
+  },
+  {
+    "id": "BARE-MIS-011884",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Shipping Inquiry for Turpentine\n\nHi Daniel,\nCould you let us know what the earliest possible dates are for shipping 3000MT of turpentine from Durban to Alexandria? We don’t need FOB, but we’d like to fix rates asap.\nBest,\nAndre",
+    "fields": {
+      "Loading Port": "Durban",
+      "Discharge Port": "Alexandria"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "BARE-GPT-014857",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Rate Inquiry for Copper Cathode Shipment\n\nWe have a 12,000MT copper cathode shipment ready from Fujian to Rotterdam, ready in 6 days. Could you advise your best freight rate and let me know if weekend loadings are acceptable? Thank you, Alex",
+    "fields": {
+      "Loading Port": "Fujian",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-CLA-008956",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: HFO Cargo Inquiry - Panama to Port Qasim\n\nGood morning Mr. Habib,\n\nWould you please help arrange for a 100,000MT parcel of HFO to be delivered from the Panama Canal to Port Qasim. What is your LFG rate and expected transit time?\n\nRegards,\nSimon",
+    "fields": {
+      "Loading Port": "Panama Canal",
+      "Discharge Port": "Port Qasim"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "ZERO-DEE-007786",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Crude Oil Shipment\n\nHi John, I hope this email finds you well. I’m reaching out regarding your inquiry for a crude oil shipment from Houston to Rotterdam. We have a suitable vessel, the MV Ocean Star, with a DWT of 150,000 and LOA of 280m. The laycan is 15-20 October. Our starting freight quote is $52.50 per metric ton. Let me know if this works for you or if you’d like to discuss further. Best regards, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / DeepSeek"
+  },
+  {
+    "id": "BARE-GPT-010886",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Bulk Booking Availability Request for Iron Ore Fines\n\nDear Ms. Wang,\nWe have an 11,200MT bulk booking of iron ore fines originating from Lianyungang, bound for Qingdao. Could you check your earliest slot availability and share a ballpark freight rate, based on NCB’s guidance? Looking forward to your advice.\nBest regards,\nLawrence",
+    "fields": {
+      "Loading Port": "Lianyungang",
+      "Discharge Port": "Qingdao"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "ZERO-DEE-007874",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote for Crude Oil Shipment\n\nHi John, I hope this email finds you well. Following up on our call earlier, I’m pleased to offer a freight rate of $50.75 per ton for the crude oil shipment from Houston to Rotterdam. The vessel I have in mind is the MV Ocean Star, a 150,000 DWT tanker with an LOA of 280 meters. Laycan is 15-20 October. Let me know your thoughts. Best, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / DeepSeek"
+  },
+  {
+    "id": "ATTR-GPT-002023",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote Inquiry for Crude Oil Transport - Antibes to Chongqing\n\nHello,\n\nI hope this message finds you well. We are looking into options for transporting a cargo of Crude Oil, size around 4186MT, from Antibes to Chongqing. Our vessel, FPMC B NATURE, is currently open for booking. The initial freight rate we can offer is USD64/MT.\n\nLooking forward to your response and any additional requirements you might have!\n\nBest regards,\nJohn Doe\nOceanic Trade Services",
+    "fields": {
+      "Loading Port": "Antibes",
+      "Discharge Port": "Chongqing"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "BARE-DEE-009902",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Time for bid - contact Ms. Jayne Smythe for appointment\n\nHello Mr. Jones,\n\nThis is just a quick note to say that we need to keep the bid for this charter coming in with a good scope. Any thoughts?\n\nDo you have availability for a 40-foot container from London to Southampton?\n\nI am available for a call Tuesday and Thursday mornings.\n\nKind regards,\nPatrick",
+    "fields": {
+      "Loading Port": "London",
+      "Discharge Port": "Southampton"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "FEW--DEE-005354",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry: Iron Ore Shipment from Tubarão to Rotterdam\n\nDear Emily,\n\nWe are looking to ship 25,000MT of iron ore from Tubarão to Rotterdam under CIF terms. Could you provide a freight quote and vessel availability for a laycan of November 15-20?\n\nBest regards,\nLucas Fernandez\nOcean Freight Brokers",
+    "fields": {
+      "Loading Port": "Tubarão",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Few-Shot / DeepSeek"
+  },
+  {
+    "id": "BARE-MIS-012190",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Urea Shipment from Sines to Santos\n\nHello Mr. DeCosta,\n\nWe are loading 4,300MT of Urea from Sines, Portugal to Santos, Brazil. Could you confirm your earliest availability and share a ballpark lumpsum freight?\n\nKind regards,\nMonika",
+    "fields": {
+      "Loading Port": "Sines, Portugal",
+      "Discharge Port": "Santos, Brazil"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "ATTR-CLA-001723",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Coal Cargo Binzhou-Xinhui Inquiry\n\nDear Kristin,\n\nLooking for suitable vessel for coal cargo:\n- 2973MT\n- Binzhou/Xinhui\n- Laycan: 15-25 Jan\n\nPlease advise options and rates.\n\nBest regards,\nRich",
+    "fields": {
+      "Loading Port": "Binzhou",
+      "Discharge Port": "Xinhui"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "ATTR-GEM-000251",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Cotton Enquiry - Marina Plaza to New York\n\nDear Judy,\n\nHope you're well.\n\nWe're looking to ship approx. 7767MT of Cotton from Marina Plaza Harbor to New York under CIF terms. Can you provide a freight indication? Any suitable vessels open in the spot market? Rumor has it that someone in the region is getting deals done for mid 50s. Any truth in that? \n\nBest regards,\nMark Mason\nContinental Trading",
+    "fields": {
+      "Loading Port": "Marina Plaza Harbor",
+      "Discharge Port": "New York"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "FEW--GEM-004460",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Quick Quote Request - Petcoke from Rotterdam to Paranagua\n\nDear Rafael,\n\nHope you're having a good week. We have an urgent requirement for a petcoke shipment, approximately 35,000 MT, from Rotterdam to Paranagua. Could you please provide a freight indication ASAP?\n\nThanks,\nSerena Williams\nGlobal Sea Shipping",
+    "fields": {
+      "Loading Port": "Rotterdam",
+      "Discharge Port": "Paranagua"
+    },
+    "note": "Few-Shot / Gemini"
+  },
+  {
+    "id": "BARE-CLA-013042",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Coal Shipment Quote Request - Newcastle to Melbourne\n\nDear Capt. Harper,\n\nI need to move 13,000MT of coal from Newcastle to Melbourne in early October. Can you provide me with a quote for a fixed LASH?\n\nSincerely,\nMadelyn",
+    "fields": {
+      "Loading Port": "Newcastle",
+      "Discharge Port": "Melbourne"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "FEW--GPT-005695",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry - Machinery Transport from Hamburg to Baltimore\n\nDear Philip,\n\nI hope this message finds you well. We can offer the vessel GLORY HORIZON for your upcoming machinery shipment. The cargo size is estimated at 5500MT. Proposal terms: FAS Hamburg to Baltimore at USD 75/MT.\n\nLaycan is tentatively set for May 1-5. Please let me know if this meets your requirements and we can proceed with drafting an agreement.\n\nBest regards,\nElena Ramos",
+    "fields": {
+      "Loading Port": "Hamburg",
+      "Discharge Port": "Baltimore"
+    },
+    "note": "Few-Shot / GPT-4"
+  },
+  {
+    "id": "ATTR-GPT-002623",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: URGENT: Request for Immediate Charter - LNG from Port Everglades to Dammam\n\nDear Jill,\n\nWe face an emergency situation due to a major disruption in our shipping schedule and urgently require a vessel capable of carrying approximately 10,602 MT of LNG from Port Everglades to Dammam. We are targeting a loading window starting June 28. Could you please provide us with possible options and CIF rates as soon as possible?\n\nBest regards,\nLaura Cook",
+    "fields": {
+      "Loading Port": "Port Everglades",
+      "Discharge Port": "Dammam"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "ATTR-GPT-002577",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Market Update and Vessel Availability for Rice Shipment\n\nGood Morning Will,\n\nI hope this message finds you well. As part of our continuous effort to keep our clients ahead, here's your weekly freight market briefing. Currently, we are seeing a steady trend in freight rates, particularly for bulk carriers from Asia to Europe. For your upcoming shipment of 7837MT of rice from Mokpo to London, we have available the NYK VENUS, a suitable vessel for this capacity.\n\nThe starting freight quote based on DAP Incoterm is EUR63 per ton. Please let us know your thoughts so we can secure the vessel.\n\nBest Regards,\nStacey Nelson\nAnderson Shipping Brokers\n*Just so you know, the temperatures in Mokpo are particularly chilly this time of the year, reaching below 3°C!*",
+    "fields": {
+      "Loading Port": "Mokpo",
+      "Discharge Port": "London"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "ATTR-CLA-001061",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Wheat Cargo - Sanremo/Port Hamble\n\nCarol,\n\nHope you're well. For your 7707MT wheat cargo ex Sanremo to Port Hamble, can offer FPMC B NATURE at USD34.55 pmt FOB basis.\n\nVessel stats look good for your ports. Let me know if you need further details.\n\nRegards,\nSalvador",
+    "fields": {
+      "Loading Port": "Sanremo",
+      "Discharge Port": "Port Hamble"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "ATTR-CLA-001386",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Aluminum Cargo HK to Marsamxett - Competitor Rate Check\n\nHi Victor,\n\nHeard through the grapevine that Pacific Metals secured a vessel for their aluminum shipment from Hong Kong to Marsamxett at around AUD65. Can you check what's available for a similar route?\n\nLooking at 7650MT, FOB terms.\n\nCheers,\nAdam",
+    "fields": {
+      "Loading Port": "Hong Kong",
+      "Discharge Port": "Marsamxett"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "BARE-GPT-011327",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Estimate Request for Acetic Acid Shipment\n\nGreetings, Can you offer a freight estimate for 12,000MT of acetic acid from Antwerp to Kuantan? Regards, Mia",
+    "fields": {
+      "Loading Port": "Antwerp",
+      "Discharge Port": "Kuantan"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "ATTR-GPT-002213",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote Request for Wheat from Zhuhai to Portland Me\n\nDear Chartering Team, We're reaching out to provide the initial freight quote for carrying 782MT of Wheat FOB from Zhuhai to Portland Me on the vessel MARIPERLA. The starting rate would be in the high 90s. Please advise further documentation requirements and laycan preferences. Best regards, Anderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Zhuhai",
+      "Discharge Port": "Portland Me"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "ATTR-MIS-003580",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Corn Shipment from Ghent to Nakhodka\n\nDear Ann,\n\nHope this message finds you well. I am writing to propose a shipment of 2180MT of corn from Ghent to Nakhodka. The terms are CFR, and we are considering the vessel BASRA for this voyage.\n\nOur starting freight quote is USD72.79. Please let me know your thoughts on this.\n\nBest regards,\nPedro Zuniga\nOceanic Trade Services",
+    "fields": {
+      "Loading Port": "Ghent",
+      "Discharge Port": "Nakhodka"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "ZERO-DEE-007628",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Crude Oil Shipment\n\nHi John, I hope this email finds you well. I’m reaching out regarding your recent inquiry for a crude oil shipment from Houston to Rotterdam. I have a suitable vessel, the MV Oceanic Star, available for this route. She’s a 150,000 DWT tanker with an LOA of 280 meters. The starting freight rate is in the low 50s ($50.50 per ton). Let me know if this works for you or if you’d like to discuss further. Best regards, Sarah.",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / DeepSeek"
+  },
+  {
+    "id": "ATTR-GPT-002321",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for Vessel Details and Initial Quote for Iron Ore Transport\n\nHi Mauricio,\n\nHope this finds you well. We are looking to transport a cargo of Iron Ore, estimated 2968MT, from Bruinisse to Van Isle. Kindly provide all necessary technical specifications of the vessel JUDITH SCHULTE, including draft, consumption, etc., and your initial freight quote.\n\nThanks,\nTom",
+    "fields": {
+      "Loading Port": "Bruinisse",
+      "Discharge Port": "Van Isle"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "BARE-GPT-014732",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry about Shipping Logistics and Costs\n\nDear Dr. Benson,\n\nI'm interested in shipping 20,000MT of road salt from Narita Airport to Buffalo. Could you let me know if there's a fee for storing the cargo before it's picked up? Additionally, I'd like to understand the insurance costs per container and per mile, as well as the premium for 1,200 MT of salt.\n\nThank you,\nLloyd",
+    "fields": {
+      "Loading Port": "Narita Airport",
+      "Discharge Port": "Buffalo"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "ATTR-CLA-001795",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Palm Oil Stem - Muiderzand/Taizhou - M/V BAO GUO\n\nDear Mr. Rodriguez,\n\nWe can offer M/V BAO GUO for your palm oil cargo:\n- 8552MT\n- Load: Muiderzand\n- Disch: Taizhou\n- Laycan: 15-20 April\n- Rate: AUD68 CFR\n\nVessel is proven in palm oil trades.\n\nPls advise if interested.\n\nBest regards,\nIsmael Wong\nOceanic Trade Services",
+    "fields": {
+      "Loading Port": "Muiderzand",
+      "Discharge Port": "Taizhou"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "BARE-CLA-009416",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Kerosene Shipment NOLA-JAX\n\nHi Carlos,\n\nCould you take on 11,400MT of kerosene from New Orleans to Jacksonville? Any ideas on extra insurance premiums for weekend deliveries?\n\nThanks,\nVitoria",
+    "fields": {
+      "Loading Port": "New Orleans",
+      "Discharge Port": "Jacksonville"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "BARE-DEE-010572",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for 15,000MT Diesel Cargo from Fujairah to Abidjan\n\nDear Mr. Smith,\n\nWe need a 15,000MT cargo of diesel to ship from Fujairah to Abidjan. Kindly provide your best terms and confirm on any delays in transit that could affect laytime.\n\nThanks,\nBonnie",
+    "fields": {
+      "Loading Port": "Fujairah",
+      "Discharge Port": "Abidjan"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "ATTR-MIS-003005",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: LNG Shipment from Lisboa to Santos Anch\n\nDear Patricia,\n\nHope this email finds you well.\n\nWe are pleased to offer the GASLOG GEORGETOWN for your LNG shipment from Lisboa to Santos Anch. The vessel has a DWT of 88184 and LOA of 293m, suitable for your cargo size of 10013MT.\n\nOur starting freight quote is in the low 50s USD per metric ton. Please let us know if you require any further details.\n\nBest regards,\nFred Woods\nSeaway Commercial Brokers",
+    "fields": {
+      "Loading Port": "Lisboa",
+      "Discharge Port": "Santos Anch"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "BARE-MIS-016089",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Shipping Request for Hot-Rolled Steel Coils\n\nHi Mr. Fitzgerald,\n\nWe’d like to ship 18,000MT of hot-rolled steel coils from Ambarava to Lima. What’s the best way to do it?\n\nBest regards,\nAshley",
+    "fields": {
+      "Loading Port": "Ambarava",
+      "Discharge Port": "Lima"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "ATTR-MIS-003384",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: FOB Coal Shipment - Vlissingen to Taizhou\n\nHi Alice,\n\nHope you're well. We have the INDIGO HOPE available for your coal shipment from Vlissingen to Taizhou. The cargo size is 11550MT, and we're quoting $81.01 for the freight. Let me know your thoughts.\n\nBest,\nMarilyn",
+    "fields": {
+      "Loading Port": "Vlissingen",
+      "Discharge Port": "Taizhou"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "BARE-MIS-012322",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Organic fertilizer shipment\n\nHello Nicholas,\n\nWe are looking to ship 1,600MT of fertilizer from Savusavu to Majuro. Could you confirm your earliest laycan slot and clarify if you quote on a CIF basis?\n\nKind regards,\nMariette Bosman\nProcurement\nSasol",
+    "fields": {
+      "Loading Port": "Savusavu",
+      "Discharge Port": "Majuro"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "ATTR-MIS-003339",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for LNG Shipment from Mercury to Hindeloopen\n\nDear Rocio,\n\nI hope this message finds you well. We are looking to ship 7135MT of LNG from Mercury to Hindeloopen under CFR terms. Could you please provide a freight quote and indicate vessel availability for this route?\n\nBest regards,\nAngie Rios\nCharterer Company",
+    "fields": {
+      "Loading Port": "Mercury",
+      "Discharge Port": "Hindeloopen"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "ZERO-GEM-006927",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Shipment - Inquiry\n\nDear John,\n\nHope you're having a good week.\n\nWe have a suitable vessel, the 'Ocean Star', DWT 105,000, available for a crude oil shipment from Ras Tanura to Rotterdam. Laycan is Feb 10-14. Let me know if this fits your requirements and I'll send over full details. Looking for something in the low 50s.\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Ras Tanura",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / Gemini"
+  },
+  {
+    "id": "BARE-DEE-010134",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Santos Soya Meal VOG and Preloading Survey\n\nHi Ms. Taylor,\n\nCan you please advise when you plan to have the VOG for the Soyabean meal from Santos to Mombasa?\n\nI understand the vessel will be at anchor on this cargo, but how about the preloading survey?\n\nThanks,\nRegan",
+    "fields": {
+      "Loading Port": "Santos",
+      "Discharge Port": "Mombasa"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-DEE-013858",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Steel Plates from Kaohsiung to Jakarta\n\nDear Mr. Kadiwala,\n\nI have 3500 metric tons of steel plates to be shipped from Kaohsiung to Jakarta. Could you please provide me with a lumpsum freight quote for this shipment?\n\nThank you,\nAlma",
+    "fields": {
+      "Loading Port": "Kaohsiung",
+      "Discharge Port": "Jakarta"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "FEW--CLA-004730",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Rice Shipment - Bangkok to Manila\n\nDear Lucia,\n\nI trust this finds you well. We have a vessel available for your rice shipment from Bangkok to Manila:\n\nCargo: 5200MT Thai White Rice\nVessel: MV ASIAN SPIRIT\nDWT: 82500\nLOA: 229m\nLaycan: Mar 5-10, 2024\nRate: USD 28.50 per MT FOB\n\nVessel is currently completing discharge in Singapore with excellent performance record.\n\nBest regards,\nRaj Patel\nAsia Freight Solutions",
+    "fields": {
+      "Loading Port": "Bangkok",
+      "Discharge Port": "Manila"
+    },
+    "note": "Few-Shot / Claude"
+  },
+  {
+    "id": "ZERO-CLA-007140",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry - Iron Ore Shipment ex Newcastle to Qingdao\n\nHi Sarah,\n\nLooking for a Capesize vessel for 170,000MT iron ore cargo, Newcastle to Qingdao. Laycan 25-30 March 2024.\n\nCan you check market availability and rates?\n\nRegards,\nMike",
+    "fields": {
+      "Loading Port": "Newcastle",
+      "Discharge Port": "Qingdao"
+    },
+    "note": "Zero-Shot / Claude"
+  },
+  {
+    "id": "BARE-CLA-013087",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Ethanol Delivery Incident - Vigo to Fos sur Mer\n\nGood afternoon Mr. Ross,\n\nDo you remember the delivery incident of Ethanol from Vigo to Fos sur Mer? It would be best to prepare the load list and schedule to avoid similar occurrences in the future.\n\nBest regards,\nRory",
+    "fields": {
+      "Loading Port": "Vigo",
+      "Discharge Port": "Fos sur Mer"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "BARE-GPT-011253",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Coal Shipment from Qingdao to Hong Kong\n\nHi Ms. Ge,\n\nCould your vessel load 900MT of coal from Qingdao to Hong Kong next week? What is your typical lead time for loading?\n\nThank you,\nLauren",
+    "fields": {
+      "Loading Port": "Qingdao",
+      "Discharge Port": "Hong Kong"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "ATTR-CLA-001253",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Aluminum Cargo - Xiamen to Zea Early Jan\n\nDear Ms. Bryant,\n\nWe are looking to move 8447MT of aluminum from Xiamen to Zea with a loading window around January 15-20. Could you please check vessel availability and provide a freight quote?\n\nBest regards,\nSarah González",
+    "fields": {
+      "Loading Port": "Xiamen",
+      "Discharge Port": "Zea"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "ATTR-CLA-001039",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Corn Cargo - Qinhuangdao to Noumea\n\nDear Junior,\n\nHope this finds you well. We have mv EVER LISSOME opening Qinhuangdao around Nov 15-20. Could lift your 11,568MT corn cargo to Noumea.\n\nInitial indication at USD65 PMT DDP basis.\n\nVessel particulars available upon interest.\n\nBest regards,\nRoy Martínez\nSeaway Commercial Brokers",
+    "fields": {
+      "Loading Port": "Qinhuangdao",
+      "Discharge Port": "Noumea"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "FEW--DEE-005045",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Coal Shipment from Richards Bay to Rotterdam\n\nDear Sophia,\n\nI hope this message finds you well. We are looking to charter a vessel for a shipment of 75,000MT of coal from Richards Bay to Rotterdam on FOB terms. Could you please provide a suitable vessel candidate and a freight quote?\n\nBest regards,\nLiam Carter",
+    "fields": {
+      "Loading Port": "Richards Bay",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Few-Shot / DeepSeek"
+  },
+  {
+    "id": "FEW--DEE-005451",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Iron Ore Shipment Inquiry - Tubarao to Qingdao\n\nHi Sarah,\n\nWe are looking to charter a vessel for an iron ore shipment from Tubarao to Qingdao. Cargo size is approximately 180,000 MT. Could you provide a freight rate and vessel availability for a laycan around October 10-15?\n\nBest regards,\nAlex Martinez",
+    "fields": {
+      "Loading Port": "Tubarao",
+      "Discharge Port": "Qingdao"
+    },
+    "note": "Few-Shot / DeepSeek"
+  },
+  {
+    "id": "BARE-GPT-014707",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Requesting Shipping Slot for Methanol from India to Chile\n\nHi Rahul,\nCan I reserve a slot to ship 8,400MT of methanol from India to Chile? We prefer the shipment to start on Sunday, noon, with a laycan by the following Friday. Could you confirm the details and send a proforma invoice? Thanks, David",
+    "fields": {
+      "Loading Port": "India",
+      "Discharge Port": "Chile"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-CLA-009042",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Coal Shipment Booking Request - Santos to Sibenik\n\nDear Dan,\n\nPlease book our 3,000 metric tons of shipment for coal in Santos, Brazil to Sibenik, Croatia.\n\nThanks,\nNana",
+    "fields": {
+      "Loading Port": "Santos",
+      "Discharge Port": "Sibenik"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "BARE-CLA-008993",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Cement Transport Query\n\nHey Mr. Jang,\n\nPlease check if we can transport 1,400 tonnes of cement from Ashdod to Bombay. What is the base FOB rate for this shipment?\n\nKind regards,\nMatt",
+    "fields": {
+      "Loading Port": "Ashdod",
+      "Discharge Port": "Bombay"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "FEW--CLA-004586",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Rice Shipment - Bangkok to Chennai\n\nDear Rajesh,\n\nAs discussed, here's our initial offer for your rice shipment:\n\nVessel: MV ASIAN GLORY\nCargo: 12500MT Thai White Rice\nRoute: Bangkok to Chennai\nRate: USD 42.50/MT CFR\nLaycan: March 10-15, 2024\n\nVessel specs: DWT 28450, LOA 169m\nDemurrage rate: USD 8500 per day pro rata\n\nLet me know your thoughts.\n\nBest regards,\nSophia",
+    "fields": {
+      "Loading Port": "Bangkok",
+      "Discharge Port": "Chennai"
+    },
+    "note": "Few-Shot / Claude"
+  },
+  {
+    "id": "ZERO-GEM-006907",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Inquiry - AG to Rotterdam\n\nHi John,\n\nHope you're well. I have a VLCC open in the AG for a prompt loading, carrying crude to Rotterdam. Vessel details below. Let me know if you have any interest.\n\nVessel: MT Phoenix\nDWT: 320,000 mt\nLOA: 333m\nLaycan: Feb 5-7\n\nLooking forward to hearing from you.\n\nBest,\nSarah",
+    "fields": {
+      "Loading Port": "AG",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / Gemini"
+  },
+  {
+    "id": "BARE-CLA-009678",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Almond Cargo Freight Inquiry - Port Pirie to Rio\n\nHello Mr. Pino,\n\nWe have a cargo of 4,000MT of almonds from Port Pirie to Rio de Janeiro. We'd be interested in exploring alternative freight structures. Could you please share a lumpsum estimate to help us compare?\n\nRegards,\nIan",
+    "fields": {
+      "Loading Port": "Port Pirie",
+      "Discharge Port": "Rio de Janeiro"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "BARE-DEE-014151",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Urgent: Wheat Shipment from Haifa to Genoa\n\nWe have 800MT of wheat to ship ASAP. What’s the ETA? Any chance you can free up a ship from Haifa to Genoa?\n\nThanks,\nJoe",
+    "fields": {
+      "Loading Port": "Haifa",
+      "Discharge Port": "Genoa"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "ATTR-GEM-000193",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry: Iron Ore - Yeosu to Lymington\n\nHi Carolyn,\n\nHope you're well.\n\nCould you provide offers for a shipment of Iron Ore from Yeosu Anch to Lymington? Cargo size is around 3697MT, FOB terms. Keen to see what you have available.\n\nBest,\nJulie Rogers\nSeaShip Charters",
+    "fields": {
+      "Loading Port": "Yeosu Anch",
+      "Discharge Port": "Lymington"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "BARE-CLA-012622",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Container Request - Christchurch to Auckland\n\nHello Bob & Kim,\n\nCould you advise me on available empty containers from Christchurch to Auckland? I understand the vessel is due to dock the 29th of September at 2PM, so if you could allocate a 40HC to suit, I would greatly appreciate it. I am looking at moving a first quarter build of 4,000 bikes to my dealers and so a quick turnaround would be a blessing.\n\nThanks and look forward to hearing from you,\nKris",
+    "fields": {
+      "Loading Port": "Christchurch",
+      "Discharge Port": "Auckland"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "BARE-CLA-013379",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Urgent: 5000MT Soybean Shipment Ningbo-Zeebrugge\n\nHi Mr. Bravo,\n\nI need a ship ASAP for a 5,000MT soybean shipment from Ningbo. Do you accept LADs on barrels, and do you have an open laycan to Zeebrugge that's ideal for this load?\n\nThanks,\nDesmond",
+    "fields": {
+      "Loading Port": "Ningbo",
+      "Discharge Port": "Zeebrugge"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "ATTR-MIS-003249",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Iron Ore Shipment from Enkhuizen to Panama Anch Pacific\n\nDear James,\n\nI hope this message finds you well. We are pleased to offer the GASLOG GEORGETOWN for your Iron Ore shipment of 3102MT from Enkhuizen to Panama Anch Pacific on DDP terms. Our starting freight quote is in the high 50s. The vessel has a DWT of 88184 and LOA of 293m, ensuring efficient and reliable transportation.\n\nPlease let me know if you have any questions or need further details.\n\nBest regards,\nMia Gordon\nGlobal Maritime Brokers",
+    "fields": {
+      "Loading Port": "Enkhuizen",
+      "Discharge Port": "Panama Anch Pacific"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "BARE-CLA-009781",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Vessel Inquiry - Iron Ore Transport Dampier to Yuan Island\n\nDear Ms. Chen,\n\nWe have urgent need for a vessel, 50,000dwt size, with good dry-bulk and/or ore carrier experience for transportation of between 20,000 and 25,000 MT of iron ore from Dampier to Yuan Island.\n\nPlease confirm your vessel's availability, draft and size, and also availability of existing ballast water. When can you have your vessel at sea, and does it accept 'dumping' of cargo in the event of strike?\n\nWe would be most grateful if you could provide a detailed specification of your vessel, including crew, safety records, and insurance policy information, by 7th August.\n\nWe will contact you regarding further details after this date.\n\nYours faithfully,\nRichard Vernon",
+    "fields": {
+      "Loading Port": "Dampier",
+      "Discharge Port": "Yuan Island"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "ZERO-GPT-008185",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Proposal for Crude Oil Shipment on MV Ocean Carrier\n\nDear John,\n\nI hope this message finds you well. We are currently offering the MV Ocean Carrier for your crude oil shipment requirements. The vessel details and rates are as follows:\n- Vessel Name: MV Ocean Carrier\n- DWT: 150,000\n- LOA: 270 meters\n- Cargo Size: Approx. 130,000 MT\n- Load Port: Ras Tanura\n- Discharge Port: Rotterdam\n- Freight Rate: USD Low 50s per MT\n\nPlease let me know if this meets your requirements so that we can proceed further. Looking forward to your feedback!\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Ras Tanura",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / GPT-4"
+  },
+  {
+    "id": "BARE-DEE-010160",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry: Shipping Vegetable Oils from Hong Kong to Osaka\n\nHello Mia,\n\nI am interested in shipping 2,000 metric tons (MT) of vegetable oils from Hong Kong to Osaka. Would you be able to accommodate a delay of 1 week in the shipment schedule? Additionally, could you confirm if you are willing to install FFA metering equipment for this shipment?\n\nThank you,\nTheo",
+    "fields": {
+      "Loading Port": "Hong Kong",
+      "Discharge Port": "Osaka"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "ATTR-CLA-001449",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Oslo/Toronto - 988MT Aluminum\n\nHi Casey,\n\nHope you're well. Have a spot cargo nomination for you:\n\n- 988MT Aluminum\n- Load: Oslo\n- Disch: Toronto\n- Vessel: GOLDEN BEIJING\n- Laycan: Mar 1-5\n\nCan offer high 50s basis DAP Toronto. Note there's currently a war risk premium of USD 2.50/MT applicable for this route.\n\nLet me know if you'd like to work on this.\n\nBest regards,\nMaribel",
+    "fields": {
+      "Loading Port": "Oslo",
+      "Discharge Port": "Toronto"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "ZERO-CLA-007394",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry - Crude Oil Shipment Rotterdam to Singapore\n\nHi Sarah,\n\nLooking for a vessel to move 80,000MT crude oil from Rotterdam to Singapore. Laycan needed between March 5-15. Can you check market availability and rates?\n\nBest regards,\nMichael",
+    "fields": {
+      "Loading Port": "Rotterdam",
+      "Discharge Port": "Singapore"
+    },
+    "note": "Zero-Shot / Claude"
+  },
+  {
+    "id": "ZERO-DEE-007840",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Crude Oil Shipment\n\nHi John, I hope this email finds you well. I’m reaching out regarding your inquiry for a crude oil shipment from Houston to Rotterdam. We have a suitable vessel, the MV Ocean Voyager, with a DWT of 150,000 and LOA of 280m. The laycan is 15-20 October. Our starting freight quote is in the low 50s, say $50.75 per metric ton. Let me know your thoughts. Best, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / DeepSeek"
+  },
+  {
+    "id": "ZERO-GPT-008123",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Proposal for Grain Shipment on MV Oceanic Star\n\nDear John,\n\nI hope this message finds you well. I am reaching out to propose the MV Oceanic Star for your upcoming grain shipment from Odessa to Alexandria. The vessel has a DWT of 30,000 tons and is available with a laycan from October 15-20. The starting freight rate proposal is $51 per ton.\n\nPlease let me know your thoughts or if you need any additional vessel details.\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Odessa",
+      "Discharge Port": "Alexandria"
+    },
+    "note": "Zero-Shot / GPT-4"
+  },
+  {
+    "id": "BARE-MIS-012298",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Urgent Requirement for LNG Tanker\n\nHi Ms. Cheng,\n\nWe have an urgent requirement for a tanker to carry 25,000MT of LNG from Lagos to Hong Kong. Would you be able to provide your best freight rate and do you allow reinstatement of laytime beyond 96 hours?\n\nThank you,\nDamian",
+    "fields": {
+      "Loading Port": "Lagos",
+      "Discharge Port": "Hong Kong"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "BARE-MIS-012335",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for Cargo Loading\n\nHello Ms. An,\n\nIf you still have room on your 1st Apr laycan to Kaohsiung, can we load 5,000MT of blue crystalline sodium nitrate from Kaohsiung to Xiamen next week?\n\nRegards,\nPhil",
+    "fields": {
+      "Loading Port": "Kaohsiung",
+      "Discharge Port": "Xiamen"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "ATTR-GPT-002514",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry: MARAN GAS DELPHI for Coal Shipment from Charleston to Shidao\n\nHi Marvin,\n\nCan we discuss the suitability of MARAN GAS DELPHI for our coal shipment from Charleston to Shidao? I'm concerned about the vessel’s age and whether it complies with our draft restrictions at Shidao port. Could you confirm these details? Also, please provide the starting freight rate.\n\nBest regards,\nAllen Liu",
+    "fields": {
+      "Loading Port": "Charleston",
+      "Discharge Port": "Shidao"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "ATTR-CLA-001295",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Coal Cargo - Portimao to HCMC - 3952MT\n\nDear Mr. Zuniga,\n\nWe are pleased to offer the following opportunity for your consideration:\n\nVessel: FPMC B NATURE\nCargo: Coal (3952MT)\nLoad Port: Portimao\nDischarge Port: Ho Chi Minh\nLaycan: Sept 10-15, 2013\nFreight Rate: AUD94 CFR basis\nDemurrage: AUD 22,000 per day pro rata\n\nVessel's particulars:\nDWT: 207,987\nLOA: 300m\n\nKindly advise your interest.\n\nBest regards,\nBenjamin Richardson\nAnderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Portimao",
+      "Discharge Port": "Ho Chi Minh"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "BARE-GPT-011217",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry about Shipping Options and Rates\n\nHi Kari,\n\nI'm starting to schedule a shipment of biodegradable plastic from Adelaide to Melbourne and I'm wondering if we can talk about the carrier options and rates.\n\nBest,\nClaudia",
+    "fields": {
+      "Loading Port": "Adelaide",
+      "Discharge Port": "Melbourne"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "FEW--CLA-004882",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Soybean Shipment - Santos to Qingdao\n\nDear Sarah,\n\nFollowing our call, here's our initial offer for your soybean cargo:\n\nCargo: Soybeans in bulk\nQuantity: 65,000 MT MOLOO\nLoad Port: Santos, Brazil\nDischarge: Qingdao, China\nLaycan: 15-20 March 2024\nFreight: USD 42.50/MT\nVessel: MV PACIFIC FORTUNE\n\nVessel particulars:\nDWT: 76,524\nLOA: 225m\n\nPlease let me know your thoughts.\n\nBest regards,\nMarco Silva",
+    "fields": {
+      "Loading Port": "Santos",
+      "Discharge Port": "Qingdao"
+    },
+    "note": "Few-Shot / Claude"
+  },
+  {
+    "id": "ATTR-GEM-000084",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Spot Offer - Aluminum Neustadt/Fourchon\n\nDear Al,\n\nGood morning from Maritime Exchange!\n\nWe have a prompt vessel available for your Aluminum shipment from Neustadt to Fourchon. Cargo size around 968MT. Vessel is currently in the area and ready to load.\n\nOur initial freight idea is USD69 dhdwtsbe, DDP Fourchon. Laycan is flexible around Dec 10-15.\n\nLet me know your thoughts, please.\n\nBest regards,\nRose Smith\nMaritime Exchange Ltd.",
+    "fields": {
+      "Loading Port": "Neustadt",
+      "Discharge Port": "Fourchon"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "ATTR-GPT-002520",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Offer for LNG Cargo - Muiderzand to St Helier\n\nDear Allen, \n\nWe are pleased to present an initial freight offer for transporting your LNG cargo from Muiderzand to St Helier. We propose using the vessel SPIRIT OF HELA, which boasts a DWT of 87130 and an LOA of 298m. As per your cargo size of 3466MT, and under CIF terms, our starting freight quote is USD32 per MT. We await your feedback and any further details you might require.\n\nBest regards,\nJoel Cruz\nAnderson Shipping Brokers\nNote: This email is for negotiation purposes and is subject to contract and final confirmation.",
+    "fields": {
+      "Loading Port": "Muiderzand",
+      "Discharge Port": "St Helier"
+    },
+    "note": "AttrPrompting / GPT-4"
+  },
+  {
+    "id": "ATTR-MIS-003176",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Vessel Offer for Sugar Shipment - New Bedford to Fethiye\n\nDear Mr. Jackson,\n\nPlease find our offer for transporting 10331MT of sugar from New Bedford to Fethiye. The vessel DAN is available for this shipment on CFR terms.\n\nFreight Quote: €60.37 per MT\n\nPlease confirm your interest at your earliest convenience.\n\nBest regards,\nBrandon Peterson\nSeaway Commercial Brokers",
+    "fields": {
+      "Loading Port": "New Bedford",
+      "Discharge Port": "Fethiye"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "FEW--GPT-005947",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Sorghum Shipment Inquiry - Houston to Rotterdam\n\nGood morning Samantha, We are looking to ship 5000MT of sorghum from Houston to Rotterdam. Can you offer a vessel with suitable specs around mid-March? Also, please provide your best freight quote on CIF basis. Regards, Aaron",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Few-Shot / GPT-4"
+  },
+  {
+    "id": "BARE-GPT-011467",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry About Shipment ETA to Vigo\n\nMs. Shugaku, I have been tasked to track our shipment of 22,000 tonnes of cement clinker from Tunisia to Vigo. Could you please confirm whether the shipment is on schedule to dock in Vigo on Friday? I observed that the vessel made a U-turn and is currently heading in a direction away from Vigo. Can you please clarify if this will affect the expected arrival time of before 12pm on Friday? Thank you for your assistance. Best regards, Carrie",
+    "fields": {
+      "Loading Port": "Tunisia",
+      "Discharge Port": "Vigo"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "FEW--MIS-006219",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Wheat Shipment from Odessa to Mombasa\n\nHi Jane,\n\nWe have a requirement to ship 35,000 MT of wheat from Odessa to Mombasa. Could you provide a vessel and a freight quote? We need a laycan of 10-15 June.\n\nBest regards,\nJohn Doe\nOcean Brokers Ltd.",
+    "fields": {
+      "Loading Port": "Odessa",
+      "Discharge Port": "Mombasa"
+    },
+    "note": "Few-Shot / Mistral"
+  },
+  {
+    "id": "ZERO-GPT-007994",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Rate Inquiry for Bulk Grain Shipment\n\nDear John,\n\nHope this message finds you well. I wish to discuss the upcoming shipment of bulk grains you're planning from Houston to Singapore. We have a suitable vessel, the MV Grainer, ready to load an estimated 50,000 MT. Could we discuss the initial freight rate which is currently in the low 50s per metric ton?\n\nLooking forward to your response.\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Singapore"
+    },
+    "note": "Zero-Shot / GPT-4"
+  },
+  {
+    "id": "BARE-DEE-010590",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for Quotation - Soybean Oil Transport\n\nDear Ms. Liang,\n\nHow much would it cost to transport 15,000MT of soybean oil from Gulf of Kuantan to Busan by the 30th of December? Please send your quote to me.\n\nThanks,\nGary",
+    "fields": {
+      "Loading Port": "Gulf of Kuantan",
+      "Discharge Port": "Busan"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-CLA-009695",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Shipment Inquiry - NY to London\n\nMorning Mr. Smith,\n\nI need 1500 m3 of crude oil transported from New York to London by August 1st. Could you please advise on your demurrage rate if we're 15 minutes late?\n\nRegards,\nJames",
+    "fields": {
+      "Loading Port": "New York",
+      "Discharge Port": "London"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "BARE-CLA-013502",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Charter Request - Kuwait to Singapore\n\nDear Mr. Hein,\n\nCan you give me a proposal on your tankers for a charter from Kuwait to Singapore, with laycan between May 23 and June 1?\n\nThanks,\nJose Martinez",
+    "fields": {
+      "Loading Port": "Kuwait",
+      "Discharge Port": "Singapore"
+    },
+    "note": "BARE / Claude"
+  },
+  {
+    "id": "ATTR-MIS-003039",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Coal Shipment from Helsinki to Mundra\n\nDear Susan,\n\nHope this email finds you well. We have a vessel, YM WHOLESOME, available for your coal shipment from Helsinki to Mundra. The cargo size is 9442MT under DDP terms. Our starting freight quote is €57.\n\nPlease let me know your thoughts.\n\nBest regards,\nEvan Lemus\nAnderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Helsinki",
+      "Discharge Port": "Mundra"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "ATTR-CLA-001823",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Sugar Cargo - Zhangjiagang/Kamsar - 4887MT\n\nDear Jonathan,\n\nLooking for reefer space for 4887MT refined sugar in 1MT bags. Loading Zhangjiagang, discharge Kamsar .\nTemp requirements: max 25C, RH below 65%.\nLaycan window: Sept 1-10\nCan you quote basis DDP terms?\n\nRegards,\nMarina",
+    "fields": {
+      "Loading Port": "Zhangjiagang",
+      "Discharge Port": "Kamsar"
+    },
+    "note": "AttrPrompting / Claude"
+  },
+  {
+    "id": "BARE-GPT-011429",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry: Potential Shipment from Hazira to Pipavav\n\nHi Captain G,\n\nAre you interested in transporting 7,000MT of ethylene glycol from Hazira to Pipavav? We can increase the cargo to 8,000MT if you can ensure unloading by May 2nd.\n\nRegards,\nAlex",
+    "fields": {
+      "Loading Port": "Hazira",
+      "Discharge Port": "Pipavav"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "BARE-MIS-012265",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote Request for Sulphuric Acid Shipment\n\nPlease could you send a freight quote on 3,000 MT of sulphuric acid from Point Comfort to Gibraltar? We will be issuing an LOI by next Wednesday morning.\n\nBest regards,\nAmelia",
+    "fields": {
+      "Loading Port": "Point Comfort",
+      "Discharge Port": "Gibraltar"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "BARE-DEE-013825",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for LPG Shipment from Singapore to Bremen\n\nDear Mr. Labonante,\n\nWe require a 1,600MT LPG shipment from Singapore to Bremen. If your vessel can service us in the next 15 days, we’d like to proceed with a load. Could you please provide your monthly rates for shipping 1,600MT LPG?\n\nThank you,\nValentin",
+    "fields": {
+      "Loading Port": "Singapore",
+      "Discharge Port": "Bremen"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "BARE-DEE-010426",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for Vessel Data for Cargo Delivery\n\nHi Mr. Nguyen,\n\nOur client has 2,000MT of refined oil in Rotterdam ready for delivery to Ho Chi Minh. Could you provide the latest data on your vessels, including laycans, sailing speed, and historical load/discharge times?\n\nBest regards,\nColm",
+    "fields": {
+      "Loading Port": "Rotterdam",
+      "Discharge Port": "Ho Chi Minh"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "ZERO-MIS-008665",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Shipment Proposal\n\nDear John,\n\nHope you are doing well. I have a proposal for a crude oil shipment from Houston to Rotterdam. The cargo size is around 250,000 MT. Could you provide your initial freight rate and preferred laycan?\n\nBest regards,\nSarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / Mistral"
+  },
+  {
+    "id": "FEW--CLA-004660",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Wheat Cargo - Santos to Mumbai\n\nDear Sarah,\n\nLooking for a Panamax vessel to carry 65,000MT wheat from Santos to Mumbai. Preferred laycan March 15-25. Please advise available tonnage and rates.\n\nBest regards,\nKiran",
+    "fields": {
+      "Loading Port": "Santos",
+      "Discharge Port": "Mumbai"
+    },
+    "note": "Few-Shot / Claude"
+  },
+  {
+    "id": "ZERO-GEM-006685",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Crude Oil Inquiry - Basrah to Rotterdam\n\nDear John,\n\nHope you're having a good week. I have a 130,000 MT crude oil cargo from Basrah to Rotterdam looking for tonnage, Laycan Feb 15-20. Any interest?\n\nRegards,\nSarah",
+    "fields": {
+      "Loading Port": "Basrah",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / Gemini"
+  },
+  {
+    "id": "ZERO-DEE-007936",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Crude Oil Shipment\n\nHi John, I hope you're doing well. I’m reaching out regarding your inquiry for a crude oil shipment from Houston to Rotterdam. We have a suitable vessel, the MV Ocean Star, with a DWT of 150,000 and LOA of 280m. The laycan is 15-20 October. Our starting freight quote is in the low 50s, specifically $50.75 per metric ton. Let me know your thoughts. Best regards, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / DeepSeek"
+  },
+  {
+    "id": "ZERO-DEE-007927",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry for Crude Oil Shipment\n\nHi John, I hope this email finds you well. I’m reaching out regarding your inquiry for a crude oil shipment from Houston to Rotterdam. We have a suitable vessel, the MV Ocean Star, with a DWT of 150,000 and an LOA of 280 meters. The laycan is October 20-25. Our starting freight quote is in the low 50s ($50.50 per metric ton). Let me know if this works for you or if you’d like to discuss further. Best regards, Sarah",
+    "fields": {
+      "Loading Port": "Houston",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / DeepSeek"
+  },
+  {
+    "id": "ATTR-MIS-003293",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: LNG Shipment from Langedrag to Chongqing\n\nDear Mari,\n\nHope you are well.\n\nWe have available vessel for your LNG shipment, 1984MT, FOB. Vessel is ENERGY FRONTIER. Load port Langedrag, discharge at Chongqing. Freight quote is mid 60s.\n\nPlease confirm if this suits your needs.\n\nBest regards,\nSophia Ferguson\nMaritime Exchange Ltd.",
+    "fields": {
+      "Loading Port": "Langedrag",
+      "Discharge Port": "Chongqing"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "ATTR-GEM-000759",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote - Aluminum - Paranagua/Port Everglades\n\nDear Ms. Allen,\n\nPlease find our firm offer for shipment of Aluminum, basis details below:\n\nCommodity: Aluminum\nLoad Port: Paranagua\nDischarge Port: Port Everglades\nCargo Size: 2375MT\nIncoterm: CIF\n\nFreight: AUD53/MT\n\nPlease advise if acceptable. Laycan is prompt.\n\nBest Regards,\nCarolyn Pierre\nAnderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Paranagua",
+      "Discharge Port": "Port Everglades"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "BARE-DEE-013580",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for Rate Quote - Plastic Granules from Gdansk to Pecem\n\nDavid,\n\nWe have 6,000MT of plastic granules available for shipment from Gdansk to Pecem. Could you provide your best rate to the above port as soon as possible?\n\nThanks,\nJeff",
+    "fields": {
+      "Loading Port": "Gdansk",
+      "Discharge Port": "Pecem"
+    },
+    "note": "BARE / DeepSeek"
+  },
+  {
+    "id": "ATTR-MIS-003358",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote for Rice Shipment\n\nHey Francisco,\n\nHope you're doing well. We've got the HENRIETTE OLDENDORFF available for your rice shipment from Sharjah to Toronto. Cargo size is 3940MT, and we're quoting a freight rate of USD82.06 CIF.\n\nLet me know your thoughts.\n\nBest,\nHolly Stevens\nAnderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Sharjah",
+      "Discharge Port": "Toronto"
+    },
+    "note": "AttrPrompting / Mistral"
+  },
+  {
+    "id": "FEW--MIS-006241",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Grain Shipment - Rotterdam to Singapore\n\nGood morning Emily,\n\nWe have an offer for the shipment of 3500MT of grain from Rotterdam to Singapore under CIF terms. Our initial freight quote is USD 45 per metric ton.\n\nThe vessel we propose is the STAR RUNNER, with a DWT of 55000 and LOA of 200m. Please let us know your thoughts on the offer.\n\nBest regards,\nAlex Parker\nBlue Maritime Brokers",
+    "fields": {
+      "Loading Port": "Rotterdam",
+      "Discharge Port": "Singapore"
+    },
+    "note": "Few-Shot / Mistral"
+  },
+  {
+    "id": "FEW--DEE-005394",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Quote for 12,000 MT of Coal - Newcastle to Yokohama\n\nDear Michael,\n\nI hope this message finds you well.\n\nWe are pleased to provide a freight quote for the shipment of 12,000 MT of coal from Newcastle to Yokohama under CIF terms. Our initial freight quote is $42 per metric ton.\n\nThe vessel we propose is the MV OCEAN HORIZON, which has a DWT of 75,000 and LOA of 225m. Please let us know your thoughts and if you have any specific requirements for the laycan or loading window.\n\nBest regards,\nLaura Fernandez\nMaritime Brokers",
+    "fields": {
+      "Loading Port": "Newcastle",
+      "Discharge Port": "Yokohama"
+    },
+    "note": "Few-Shot / DeepSeek"
+  },
+  {
+    "id": "ZERO-CLA-007400",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry - Iron Ore Cargo ex Port Hedland to Qingdao\n\nHi Sarah,\n\nLooking for a Cape for 170,000mt +/- 10% iron ore cargo.\nLaycan: 25-28 Feb\nLoad: Port Hedland\nDischarge: Qingdao\n\nPlease advise available tonnage and freight ideas.\n\nBest regards,\nMichael",
+    "fields": {
+      "Loading Port": "Port Hedland",
+      "Discharge Port": "Qingdao"
+    },
+    "note": "Zero-Shot / Claude"
+  },
+  {
+    "id": "FEW--GEM-004207",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Alumina Shipment - Port Hedland to Long Beach\n\nHi Jane,\n\nHope you're having a good week.\n\nWe have the 'AEGEAN STAR' available for your alumina shipment from Port Hedland to Long Beach. Details as follows:\n\n- Cargo Size: 75,000 MT\n- Incoterm: FOB\n- Laycan: April 10-15, 2024\n\nOur initial lumpsum offer is USD 1,250,000.\n\nPlease let me know your thoughts.\n\nBest regards,\nSteve Rogers\nOlympus Shipping",
+    "fields": {
+      "Loading Port": "Port Hedland",
+      "Discharge Port": "Long Beach"
+    },
+    "note": "Few-Shot / Gemini"
+  },
+  {
+    "id": "BARE-GPT-014478",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Request for CFR Quote for Corn Cargo from Vancouver to Busan\n\nDear Ms. Zhang,\n\nWe have approximately 14000 mt of corn that needs to be shipped from Vancouver to Busan. Could you please send us your best quote on a CFR basis?\n\nThank you.\nLouis",
+    "fields": {
+      "Loading Port": "Vancouver",
+      "Discharge Port": "Busan"
+    },
+    "note": "BARE / GPT-4"
+  },
+  {
+    "id": "ZERO-GPT-008237",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Offer for Grain Shipment from Santos to Rotterdam\n\nHi John,\n\nHope this email finds you well. We have a viable vessel, MV Oceanic, available for your grain shipment requirements from Santos to Rotterdam. Anticipating a cargo size of around 50,000 MT. We're starting the offer on a freight quote of $25.00 per metric ton. Please advise on your laycan dates and any other special requirements.\n\nBest Regards,\nSarah",
+    "fields": {
+      "Loading Port": "Santos",
+      "Discharge Port": "Rotterdam"
+    },
+    "note": "Zero-Shot / GPT-4"
+  },
+  {
+    "id": "ATTR-GEM-000940",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Freight Inquiry: Coal - Moscow to Kochi\n\nDear Ms. Sullivan,\n\nFollowing our conversation, please find our initial quote for the shipment of approximately 2555MT of Coal from Moscow to Kochi, under CIF Incoterms:\n\nFreight: USD 53.02 per MT\n\nSubject to stem and vessel availability. Laycan to be confirmed upon agreement.\n\nBest regards,\nJordan Murphy\nAnderson Shipping Brokers",
+    "fields": {
+      "Loading Port": "Moscow",
+      "Discharge Port": "Kochi"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "ATTR-GEM-000517",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Soybeans Hirtshals/Vladivostok - Firm Offer\n\nDear Mr. Castro,\n\nFollowing our conversation, we are pleased to offer firm on sb ex Hirtshals to Vladivostok, cif basis:\n\nCommodity: Soybeans\nQuantity: 1219 MT\nVessel: HL SALDANHA BAY (details available upon request)\nFreight: AUD55.68/MT\nLoading Window: 15-20 Feb 2025\n\nPlease advise if of interest.\n\nBest regards,\n\nJennifer Wood\nSeaway Commercial Brokers\n",
+    "fields": {
+      "Loading Port": "Hirtshals",
+      "Discharge Port": "Vladivostok"
+    },
+    "note": "AttrPrompting / Gemini"
+  },
+  {
+    "id": "BARE-MIS-015368",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Inquiry for Timber Shipment\n\nDear Sir,\n\nI need to transport 3,700MT of timber from Freetown to Felixstowe in early June. Could you provide a list of your vessels and their specifications? Do you have any ships that are suitable for heavy loads?\n\nBest wishes,\nPatrick",
+    "fields": {
+      "Loading Port": "Freetown",
+      "Discharge Port": "Felixstowe"
+    },
+    "note": "BARE / Mistral"
+  },
+  {
+    "id": "BARE-GPT-011323",
+    "split": "ext-test",
+    "category": "CARGO VC",
+    "text": "Subject: Rate Confirmation and Vessel Readiness\n\nThanks for your reply, Ms. Jenkins, and for the details provided. We are now expecting the vessel to be ready around the 7th of May. According to your earlier quotation, we would need a rate of $95/MT to ship from Damieta to Mersin. Please confirm if this is agreeable.",
+    "fields": {
+      "Loading Port": "Damieta",
+      "Discharge Port": "Mersin"
+    },
+    "note": "BARE / GPT-4"
+  }
+]

@@ -1,11 +1,14 @@
 import re
 
 MIN_SCORE = 3
+FLAGS = re.IGNORECASE | re.MULTILINE
+NOT_DATE = (r"(?!(?:MON|TUES|WEDNES|THURS|FRI|SATUR|SUN)DAY\b|JANUARY\b|FEBRUARY\b|MARCH\b|APRIL\b|MAY\b"
+            r"|JUNE\b|JULY\b|AUGUST\b|SEPTEMBER\b|OCTOBER\b|NOVEMBER\b|DECEMBER\b)")
 
 EVIDENCE = {
     "TONNAGE": [
         (r"\bDWT\b", 3),
-        (r"\bM/?V\b\s+[A-Z]", 2),
+        (r"\bM[./]?V\b\.?\s+[A-Z]", 2),
         (r"\bOPEN\s*(?:AT\s+|:\s*)?[A-Z][A-Z ,'-]*?\s+\d{1,2}\b", 2),
         (r"\bOPEN\s+(?:POSITION|TONNAGE)\b", 2),
     ],
@@ -14,7 +17,11 @@ EVIDENCE = {
         (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|POD)\b", 3),
         (r"^\s*LOAD\s*:", 2),
         (r"\bEX\s+[A-Z]+\s+TO\s+[A-Z]+", 2),
-        (r"\d[\d,]*\s*(?:MT|MTS|TONS)\b", 2),
+        (r"\bFROM\s+" + NOT_DATE + r"(?-i:[A-Z][\w'\-]*(?:[ \t]+[A-Z][\w'\-]*)*)\s+TO\s+" + NOT_DATE + r"(?-i:[A-Z])", 2),
+        (r"\d[\d,]*\s*(?:MT|MTS|METRIC\s+TON(?:NE)?S|TONNES|TONS)\b", 2),
+        (r"(?:\bPER\s+(?:MT|METRIC\s+TON(?:NE)?|TON(?:NE)?)\b|\bPMT\b|/\s*MT\b)", 2),
+        (r"\b(?:FOB|CIF|CFR|FAS|DAP|DDP)\b", 1),
+        (r"\b(?:FREIGHT|LUMP\s*SUM)\b", 1),
         (r"\bLAYCAN\b", 1),
         (r"\b(?:SAFE PORT|SP)\b", 1),
     ],
@@ -28,11 +35,10 @@ EVIDENCE = {
 
 
 def score_email(text):
-    text = text.upper()
     scores = {}
     for category, rules in EVIDENCE.items():
         scores[category] = sum(
-            weight for pattern, weight in rules if re.search(pattern, text, re.MULTILINE)
+            weight for pattern, weight in rules if re.search(pattern, text, FLAGS)
         )
     return scores
 
