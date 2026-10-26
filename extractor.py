@@ -1,6 +1,6 @@
 import re
 
-from classifier import NOT_DATE
+from classifier import NOT_DATE, normalize_newlines
 
 FLAGS = re.IGNORECASE | re.MULTILINE
 
@@ -83,6 +83,7 @@ def find_route(text):
 
 
 def extract_data(text, category):
+    text = normalize_newlines(text)
     result = {}
 
     if category == "TONNAGE":

@@ -34,7 +34,12 @@ EVIDENCE = {
 }
 
 
+def normalize_newlines(text):
+    return text.replace("\r\n", "\n").replace("\r", "\n")
+
+
 def score_email(text):
+    text = normalize_newlines(text)
     scores = {}
     for category, rules in EVIDENCE.items():
         scores[category] = sum(

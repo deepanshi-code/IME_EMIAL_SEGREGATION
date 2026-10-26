@@ -1,0 +1,8 @@
+From: demo.sender@example.com
+To: demo.desk@example.com
+Subject: Office closed Monday
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Reminder: the office will be closed on Monday for Diwali. Open again Tuesday.

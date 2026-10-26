@@ -17,7 +17,31 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+The app has two tabs:
+
+- **Single email** – paste one email; shows category, confidence, the score behind each
+  category, and the extracted fields, with a JSON download.
+- **Batch upload** – upload several `.txt` / `.eml` files (one email each) and/or `.csv` files
+  (one email per row; the text column is guessed and can be changed, a subject column is
+  optional). Shows counts per category, a filterable results table, and a CSV download with
+  every field and score. Try it with the files in `samples/`.
+
+**Confidence** comes from the category scores in `classifier.score_email()`:
+
+| Level | Rule |
+|-------|------|
+| High   | top score >= 6 and >= 3 points ahead of the next category; or UNKNOWN with no evidence at all |
+| Medium | anything between |
+| Low    | top two scores within 1 point, top score exactly at the threshold (3), or UNKNOWN with 1-2 points of evidence. Flagged **Needs Review** |
+
+Checked on the tuning splits only (dev, ext-dev, neg-dev; 474 emails): High was correct
+381/382 (99.7%), Medium 55/55, Low 22/37 (59.5%). 15 of the 16 errors were flagged Low, so
+reviewing only the Low emails (8% of the batch) catches most mistakes.
+
 ## How it works
+
+- `pipeline.py` is shared by the app: it runs the classifier and extractor, computes confidence,
+  parses `.eml` / `.csv` uploads, and builds the results table with a fixed set of columns.
 
 - `classifier.py` scores each category by adding weighted evidence (e.g. `DWT` = 3, "from X to Y"
   route = 2, "Laycan" = 1) and returns the highest score, or UNKNOWN below 3 points.

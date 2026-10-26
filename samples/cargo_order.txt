@@ -1,0 +1,6 @@
+Firm cargo order
+30,000 MT steel coils
+Loading port: Tianjin
+Discharging port: Mundra
+Laycan 5-15 Dec
+Frt idea USD 28 pmt
