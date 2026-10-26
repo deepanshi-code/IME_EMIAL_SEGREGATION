@@ -95,8 +95,8 @@ contact lines); the site's terms do not restrict reuse, but the posts name real 
 text stays in `eval/real/` (not committed). Every post was labelled **before** the system was
 run on it, using the rules in `eval/shipbroker_gr_labels.json` (committed; port and vessel names
 only): category from what the post is, fields for the first record, Vessel Size only when a DWT
-is stated. Labels were written by one annotator (the AI assistant), not a domain expert; spot-check
-them. Alternate posts form real-dev and real-test. There are no CARGO TC posts: period/TCT
+is stated. Labels were drafted with AI assistance and have not yet been checked by a domain
+expert; spot-check them. Alternate posts form real-dev and real-test. There are no CARGO TC posts: period/TCT
 requests only appear as side items inside cargo posts.
 
 ```
@@ -234,8 +234,8 @@ Real emails stay on your machine (`eval/real/` and `eval/real.json` are in `.git
 ### Limitations
 
 - **Small real sample, one source.** 84 real circulars from one public board, one day's snapshot,
-  mostly small general-cargo/bulk trades in the Med, Black Sea and Asia, labelled by one non-expert
-  annotator. A broker's own inbox (larger ships, replies, forwarded threads) may differ. Real-test
+  mostly small general-cargo/bulk trades in the Med, Black Sea and Asia, with AI-drafted labels
+  not yet checked by a domain expert. A broker's own inbox (larger ships, replies, forwarded threads) may differ. Real-test
   has 42 posts, so one error moves accuracy by about 2.4 points.
 - **CARGO TC is barely tested.** No real post is a time-charter enquiry; CARGO TC is measured only
   on 10 hand-written emails.
@@ -251,3 +251,8 @@ Real emails stay on your machine (`eval/real/` and `eval/real.json` are in `.git
 - **Missed formats.** Tonnage positions without "MV"/"DWT" ("Supramax open Kandla 5 Nov") are
   UNKNOWN; weak-evidence enquiries (only a route, no quantity or freight terms) are UNKNOWN.
 - **Fields not extracted.** One record per email; no dates/laycan, cargo type, quantity or rates.
+
+## AI assistance
+
+An AI coding assistant (Claude) was used for code suggestions, evaluation scripts, and drafting
+test labels. All design decisions, testing, and results were reviewed by the author.
