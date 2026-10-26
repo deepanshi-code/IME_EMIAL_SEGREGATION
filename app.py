@@ -30,14 +30,19 @@ def format_value(name, value):
     return f"{int(value):,} DWT" if name == "Vessel Size" else value
 
 
-def result_card(result):
+def result_card(result, compact=False):
+    # compact: the card sits in a half-width column, so badges and fields stack instead of sitting side by side.
     with st.container(border=True):
-        badges = st.columns([3, 2], vertical_alignment="center")
-        with badges[0]:
+        if compact:
             st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]])
-            st.caption(f"Category: {result['category']}")
-        with badges[1]:
             st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]])
+        else:
+            badges = st.columns([3, 2], vertical_alignment="center")
+            with badges[0]:
+                st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]])
+                st.caption(f"Category: {result['category']}")
+            with badges[1]:
+                st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]])
 
         if result["needs_review"]:
             st.warning(result["reason"], icon=":material/visibility:")
@@ -45,7 +50,9 @@ def result_card(result):
             st.write(result["reason"])
 
         found = [(name, value) for name, value in result["fields"].items() if value]
-        if found:
+        if found and compact:
+            st.markdown("\n".join(f"- **{name}:** {format_value(name, value)}" for name, value in found))
+        elif found:
             columns = st.columns(min(len(found), 3))
             for i, (name, value) in enumerate(found):
                 columns[i % len(columns)].metric(name, format_value(name, value))
@@ -237,7 +244,7 @@ with batch_tab:
                 left, right = st.columns(2)
                 left.text_area("Email", texts[index], height=260, disabled=True, key=f"view-{index}")
                 with right:
-                    result_card(results[index])
+                    result_card(results[index], compact=True)
 
         st.download_button(
             "Download results CSV",
