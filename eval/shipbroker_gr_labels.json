@@ -1,87 +1,1015 @@
 [
-  {"id": "cargo-01", "category": "CARGO VC", "fields": {"Loading Port": "Kandla", "Discharge Port": "Subic Bay"}, "note": "two cargoes; first labelled"},
-  {"id": "cargo-02", "category": "CARGO VC", "fields": {"Loading Port": "Galati", "Discharge Port": "Marghera"}, "note": "three cargoes; draft in brackets after port"},
-  {"id": "cargo-03", "category": "CARGO VC", "fields": {"Loading Port": "MARMARA", "Discharge Port": "DOULA"}, "note": "intro says 'from Marmara to West Africa'; firm route is MARMARA/DOULA"},
-  {"id": "cargo-04", "category": "CARGO VC", "fields": {"Loading Port": "Mumbai", "Discharge Port": "Tema"}, "note": "project cargo; 'Tema or Takoradi chopt'"},
-  {"id": "cargo-05", "category": "CARGO VC", "fields": {"Loading Port": "Üst_luga", "Discharge Port": "Djibouti"}, "note": "broker typo for Ust-Luga kept as written"},
-  {"id": "cargo-06", "category": "CARGO VC", "fields": {"Loading Port": "Algeria", "Discharge Port": "Nouakchott"}, "note": "'Load port 1 Algeria' = one port in Algeria"},
-  {"id": "cargo-07", "category": "CARGO VC", "fields": {"Loading Port": "Varna West", "Discharge Port": "Bizerte"}, "note": "route joined by hyphen"},
-  {"id": "cargo-08", "category": "CARGO VC", "fields": {"Loading Port": "Gulluk", "Discharge Port": "Sousse"}, "note": "three cargoes"},
-  {"id": "cargo-09", "category": "CARGO VC", "fields": {"Loading Port": "Orlivka", "Discharge Port": "Marmara"}, "note": "list of many cargoes, 'X - Y' routes"},
-  {"id": "cargo-10", "category": "CARGO VC", "fields": {"Loading Port": "Misurata", "Discharge Port": "Iskenderun"}, "note": "three cargoes"},
-  {"id": "cargo-11", "category": "CARGO VC", "fields": {"Loading Port": "Alexandria", "Discharge Port": "Durres"}, "note": ""},
-  {"id": "cargo-12", "category": "CARGO VC", "fields": {"Loading Port": "North China", "Discharge Port": "Libya"}, "note": "IMO containers, prose 'North China to Libya'"},
-  {"id": "cargo-13", "category": "CARGO VC", "fields": {"Loading Port": "Tuapse", "Discharge Port": "TBS"}, "note": "'Tuapse or Novo /TBS o Marmara o Izmir'"},
-  {"id": "cargo-14", "category": "CARGO VC", "fields": {"Loading Port": "Dunkirk", "Discharge Port": "Greece"}, "note": "'Dunkirk + Antwerp / 1 Greece + 2 Marmara'"},
-  {"id": "cargo-15", "category": "CARGO VC", "fields": {"Loading Port": "Misurata", "Discharge Port": "Greece"}, "note": "'Misurata/1 Greece'"},
-  {"id": "cargo-16", "category": "TONNAGE", "fields": {"Vessel Size": "23000", "Open Port": "oman"}, "note": "vessel list posted on the cargo page; no vessel names"},
-  {"id": "cargo-17", "category": "CARGO VC", "fields": {"Loading Port": "El-Arish", "Discharge Port": "Tartous"}, "note": "labelled 'Ld port' / 'Disch port'"},
-  {"id": "cargo-18", "category": "CARGO VC", "fields": {"Loading Port": "Egypt Med", "Discharge Port": "Syria"}, "note": "second item mentions T/C option"},
-  {"id": "cargo-19", "category": "CARGO VC", "fields": {"Loading Port": "North China", "Discharge Port": "Libya"}, "note": "prose 'from North China to Libya'"},
-  {"id": "cargo-20", "category": "TONNAGE", "fields": {"Vessel Name": "PPM"}, "note": "liner vessels seeking cargo; no DWT or 'open'"},
-  {"id": "cargo-21", "category": "CARGO VC", "fields": {"Loading Port": "Misurata", "Discharge Port": "Greece"}, "note": "repost of cargo-15"},
-  {"id": "cargo-22", "category": "CARGO VC", "fields": {"Loading Port": "Misurata", "Discharge Port": "Damietta"}, "note": "'Port of Loading: Misurata, Libya'"},
-  {"id": "cargo-23", "category": "CARGO VC", "fields": {"Loading Port": "Iskenderun", "Discharge Port": "Varna"}, "note": "two cargoes"},
-  {"id": "cargo-24", "category": "CARGO VC", "fields": {"Loading Port": "Reni", "Discharge Port": "Samsun"}, "note": "'Reni - Samsun or Marmara or Izmir'"},
-  {"id": "cargo-25", "category": "CARGO VC", "fields": {"Loading Port": "Giurgiulesti", "Discharge Port": "Psachna"}, "note": "draft in brackets after port"},
-  {"id": "cargo-26", "category": "CARGO VC", "fields": {"Loading Port": "Alexandria", "Discharge Port": "Tema"}, "note": "'Loading port' / 'Discharging port'"},
-  {"id": "cargo-27", "category": "CARGO VC", "fields": {"Loading Port": "Iskenderun", "Discharge Port": "Varna"}, "note": ""},
-  {"id": "cargo-28", "category": "CARGO VC", "fields": {"Loading Port": "Abidjan", "Discharge Port": "Norrsundet"}, "note": "draft in brackets after port"},
-  {"id": "cargo-29", "category": "CARGO VC", "fields": {"Loading Port": "Bin Qasim", "Discharge Port": "Djibouti"}, "note": "'POL : 1SBP Bin Qasim'"},
-  {"id": "cargo-30", "category": "UNKNOWN", "fields": {}, "note": "bunker price list, not a cargo or vessel"},
-  {"id": "cargo-31", "category": "CARGO VC", "fields": {"Loading Port": "Pakistan", "Discharge Port": "Phillipines"}, "note": "first item VC; later items are TCT/period requests"},
-  {"id": "cargo-32", "category": "CARGO VC", "fields": {"Loading Port": "Galati", "Discharge Port": "Egypt"}, "note": ""},
-  {"id": "cargo-33", "category": "CARGO VC", "fields": {"Loading Port": "Antwerp", "Discharge Port": "Greece"}, "note": "first item states required vessel size, not cargo"},
-  {"id": "cargo-34", "category": "CARGO VC", "fields": {"Loading Port": "Misurata", "Discharge Port": "izmir"}, "note": ""},
-  {"id": "cargo-35", "category": "CARGO VC", "fields": {"Loading Port": "Marmara", "Discharge Port": "Algeria"}, "note": ""},
-  {"id": "cargo-36", "category": "CARGO VC", "fields": {"Loading Port": "Qingdao", "Discharge Port": "Georgia"}, "note": "'Ex Qingdao, China. to Georgia'"},
-  {"id": "cargo-37", "category": "CARGO VC", "fields": {"Loading Port": "DJEN DJEN", "Discharge Port": "MISURATA"}, "note": ""},
-  {"id": "cargo-38", "category": "CARGO VC", "fields": {"Loading Port": "Galati", "Discharge Port": "Egypt Med"}, "note": "'Galati, Romania drft-6,7m / Egypt Med'"},
-  {"id": "cargo-39", "category": "CARGO VC", "fields": {"Loading Port": "Iskenderun", "Discharge Port": "Varna"}, "note": ""},
-  {"id": "cargo-40", "category": "CARGO VC", "fields": {"Loading Port": "BANDIRMA", "Discharge Port": "SZCZECIN"}, "note": "route joined by ' - '"},
-  {"id": "cargo-41", "category": "CARGO VC", "fields": {"Loading Port": "Kandla", "Discharge Port": "Chittagong"}, "note": "'POL: Kandla or Mundra, India'"},
-  {"id": "cargo-42", "category": "CARGO VC", "fields": {"Loading Port": "LAIZHOU", "Discharge Port": "DONGHAE"}, "note": ""},
-  {"id": "cargo-43", "category": "CARGO VC", "fields": {"Loading Port": "Izmail", "Discharge Port": "Varna"}, "note": "last item is a TC request"},
-  {"id": "cargo-44", "category": "CARGO VC", "fields": {"Loading Port": "WCI", "Discharge Port": "MOZAMBIQUE"}, "note": "'1SP WCI/1-2SP MOZAMBIQUE'; one line per order"},
-  {"id": "cargo-45", "category": "CARGO VC", "fields": {"Loading Port": "Gdynia", "Discharge Port": "Seville"}, "note": "three cargoes"},
-  {"id": "cargo-46", "category": "CARGO VC", "fields": {"Loading Port": "Izmail", "Discharge Port": "Varna"}, "note": ""},
-  {"id": "cargo-47", "category": "CARGO VC", "fields": {"Loading Port": "Misurata", "Discharge Port": "Eregli"}, "note": ""},
-  {"id": "cargo-48", "category": "CARGO VC", "fields": {"Loading Port": "El-Arish", "Discharge Port": "latakia"}, "note": "'Disch port : port of latakia'"},
-  {"id": "cargo-49", "category": "CARGO VC", "fields": {"Loading Port": "Eregli", "Discharge Port": "Izmail"}, "note": ""},
-
-  {"id": "vessel-01", "category": "TONNAGE", "fields": {"Vessel Name": "R LINE", "Vessel Size": "7331", "Open Port": "E.MED"}, "note": "'DWT: 7.331,1 MT' European decimal format"},
-  {"id": "vessel-02", "category": "TONNAGE", "fields": {"Vessel Name": "YONGSHENG 151", "Open Port": "Surabaya"}, "note": "numbered list; DWCC only (no DWT)"},
-  {"id": "vessel-03", "category": "TONNAGE", "fields": {"Vessel Name": "IMPERIAL VARALAXMI", "Vessel Size": "32318", "Open Port": "WCI"}, "note": "'SUMMER DEADWEIGHT: 32,318.3 MT'"},
-  {"id": "vessel-04", "category": "TONNAGE", "fields": {"Vessel Name": "SVR MERCURY", "Vessel Size": "4250", "Open Port": "THESSALONIKI"}, "note": ""},
-  {"id": "vessel-05", "category": "TONNAGE", "fields": {"Vessel Name": "TBN 1", "Vessel Size": "4000", "Open Port": "MARMARA"}, "note": "'OPEN @MARMARA'"},
-  {"id": "vessel-06", "category": "TONNAGE", "fields": {"Vessel Name": "GEMINI CAPO", "Open Port": "ISKENDERUN"}, "note": "table without 'open'; DWCC only"},
-  {"id": "vessel-07", "category": "TONNAGE", "fields": {"Vessel Size": "998", "Open Port": "Piraeus Roads"}, "note": "no vessel name; 'open in Piraeus Roads'"},
-  {"id": "vessel-08", "category": "TONNAGE", "fields": {"Vessel Name": "DSX"}, "note": "liner vessels seeking cargo"},
-  {"id": "vessel-09", "category": "TONNAGE", "fields": {"Vessel Name": "phrygia", "Vessel Size": "3332", "Open Port": "MARMARA"}, "note": "position line gives DWCC; DWT in particulars"},
-  {"id": "vessel-10", "category": "TONNAGE", "fields": {"Vessel Name": "ANKA BLUE", "Vessel Size": "8181", "Open Port": "Mtawara"}, "note": "table without 'open'; DWT in particulars"},
-  {"id": "vessel-11", "category": "TONNAGE", "fields": {"Vessel Name": "SVR VENUS", "Vessel Size": "4211", "Open Port": "WEST COAST UK"}, "note": ""},
-  {"id": "vessel-12", "category": "TONNAGE", "fields": {"Vessel Name": "FLOKI", "Open Port": "IZMIR"}, "note": "'MV FLOKI /09-11 NOV IZMIR'; DWCC only"},
-  {"id": "vessel-13", "category": "TONNAGE", "fields": {"Vessel Name": "QAMARIS PROGRESS"}, "note": "liner vessel seeking cargo"},
-  {"id": "vessel-14", "category": "TONNAGE", "fields": {"Vessel Name": "Raven", "Open Port": "Turkish Black Sea"}, "note": "no 'open'; DWCC only"},
-  {"id": "vessel-15", "category": "TONNAGE", "fields": {"Vessel Name": "INDIANA JONES 1", "Open Port": "Marmara Sea"}, "note": "'open @Marmara Sea'; DWCC only"},
-  {"id": "vessel-16", "category": "TONNAGE", "fields": {"Vessel Name": "SVR VENUS", "Vessel Size": "4211", "Open Port": "WEST COAST UK"}, "note": "repost of vessel-11"},
-  {"id": "vessel-17", "category": "TONNAGE", "fields": {"Vessel Name": "POS 1", "Vessel Size": "25240"}, "note": "liner vessel seeking cargo; 'BLT 2013 - 25,240 DWT'"},
-  {"id": "vessel-18", "category": "TONNAGE", "fields": {"Open Port": "Spore"}, "note": "tanker offered for 12 months TC; no name or DWT"},
-  {"id": "vessel-19", "category": "TONNAGE", "fields": {"Vessel Name": "Sky Falcon", "Vessel Size": "3821", "Open Port": "E.Med"}, "note": "table without 'open'"},
-  {"id": "vessel-20", "category": "TONNAGE", "fields": {"Vessel Name": "EC TURAN", "Vessel Size": "18000", "Open Port": "GIBRALTAR"}, "note": "position line 18,000 DWT; particulars 18,430"},
-  {"id": "vessel-21", "category": "TONNAGE", "fields": {"Vessel Name": "TBN 1", "Vessel Size": "3000", "Open Port": "GREAT YARMOUTH"}, "note": ""},
-  {"id": "vessel-22", "category": "TONNAGE", "fields": {"Vessel Name": "SNOW", "Vessel Size": "4226", "Open Port": "Marmara"}, "note": "eight vessels"},
-  {"id": "vessel-23", "category": "TONNAGE", "fields": {"Vessel Name": "TBN 2", "Vessel Size": "2200", "Open Port": "MARMARA"}, "note": ""},
-  {"id": "vessel-24", "category": "TONNAGE", "fields": {"Vessel Name": "RAPTOR", "Vessel Size": "4299", "Open Port": "DAKAR"}, "note": "'SPOT DAKAR'; '4299,59 DWT'"},
-  {"id": "vessel-25", "category": "TONNAGE", "fields": {"Vessel Name": "Sky Marine", "Vessel Size": "4726", "Open Port": "CORK"}, "note": "table without 'open'"},
-  {"id": "vessel-26", "category": "TONNAGE", "fields": {"Vessel Name": "AL LUQTA", "Vessel Size": "10500"}, "note": "region headers instead of open ports"},
-  {"id": "vessel-27", "category": "TONNAGE", "fields": {"Vessel Name": "POSTBN", "Open Port": "Bacolod"}, "note": "'OPEN AROUND 22 OCT Bacolod'; size not labelled DWT"},
-  {"id": "vessel-28", "category": "TONNAGE", "fields": {"Vessel Name": "KAE"}, "note": "liner vessels seeking cargo"},
-  {"id": "vessel-29", "category": "TONNAGE", "fields": {"Vessel Name": "EC FATMA", "Vessel Size": "22107", "Open Port": "ASHDOD"}, "note": ""},
-  {"id": "vessel-30", "category": "TONNAGE", "fields": {"Vessel Name": "LUCKY SEA", "Vessel Size": "3004", "Open Port": "Great Yarmouth"}, "note": "bulleted particulars"},
-  {"id": "vessel-31", "category": "TONNAGE", "fields": {"Vessel Name": "RAVEN", "Vessel Size": "11400", "Open Port": "Iskenderun"}, "note": ""},
-  {"id": "vessel-32", "category": "TONNAGE", "fields": {"Vessel Size": "47000"}, "note": "first position unnamed, area only"},
-  {"id": "vessel-33", "category": "TONNAGE", "fields": {"Vessel Name": "EAE"}, "note": "liner vessels seeking cargo"},
-  {"id": "vessel-34", "category": "TONNAGE", "fields": {"Vessel Name": "POS FORTUNE", "Vessel Size": "18000", "Open Port": "PHIL"}, "note": "'18K DWT'"},
-  {"id": "vessel-35", "category": "TONNAGE", "fields": {"Vessel Name": "TPN", "Vessel Size": "4600", "Open Port": "Constanta"}, "note": "'4600.0MTS DWT'"}
+ {
+  "id": "cargo-01",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Kandla",
+   "Discharge Port": "Subic Bay",
+   "Cargo": "bagged rice",
+   "Quantity": "8000",
+   "Laycan": "20 nov onwards"
+  },
+  "note": "two cargoes; first labelled",
+  "records": 2
+ },
+ {
+  "id": "cargo-02",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Galati",
+   "Discharge Port": "Marghera",
+   "Cargo": "pig iron",
+   "Quantity": "5000-10000",
+   "Laycan": "07-10 November"
+  },
+  "note": "three cargoes; draft in brackets after port",
+  "records": 3
+ },
+ {
+  "id": "cargo-03",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "MARMARA",
+   "Discharge Port": "DOULA",
+   "Cargo": "GENERALS",
+   "Quantity": "2000-4000",
+   "Laycan": "10-15 NOVEMBER"
+  },
+  "note": "intro says 'from Marmara to West Africa'; firm route is MARMARA/DOULA",
+  "records": 1
+ },
+ {
+  "id": "cargo-04",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Mumbai",
+   "Discharge Port": "Tema",
+   "Cargo": "transformer",
+   "Quantity": "437",
+   "Laycan": "21-27 November"
+  },
+  "note": "project cargo; 'Tema or Takoradi chopt'",
+  "records": 1
+ },
+ {
+  "id": "cargo-05",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Üst_luga",
+   "Discharge Port": "Djibouti",
+   "Cargo": "Wheat",
+   "Quantity": "70000",
+   "Laycan": "Vsl date"
+  },
+  "note": "broker typo for Ust-Luga kept as written",
+  "records": 1
+ },
+ {
+  "id": "cargo-06",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Algeria",
+   "Discharge Port": "Nouakchott",
+   "Cargo": "bulk clinker",
+   "Quantity": "35000",
+   "Laycan": "15 – 20 November 2026"
+  },
+  "note": "'Load port 1 Algeria' = one port in Algeria",
+  "records": 1
+ },
+ {
+  "id": "cargo-07",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Varna West",
+   "Discharge Port": "Bizerte",
+   "Cargo": "soda",
+   "Quantity": "5600",
+   "Laycan": "31.10/2.11"
+  },
+  "note": "route joined by hyphen",
+  "records": 1
+ },
+ {
+  "id": "cargo-08",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Gulluk",
+   "Discharge Port": "Sousse",
+   "Cargo": "minerals",
+   "Quantity": "9000-12000",
+   "Laycan": "SPOT"
+  },
+  "note": "three cargoes",
+  "records": 3
+ },
+ {
+  "id": "cargo-09",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Orlivka",
+   "Discharge Port": "Marmara",
+   "Cargo": "wheat",
+   "Quantity": "5000",
+   "Laycan": "spot"
+  },
+  "note": "list of many cargoes, 'X - Y' routes",
+  "records": 15
+ },
+ {
+  "id": "cargo-10",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Misurata",
+   "Discharge Port": "Iskenderun",
+   "Cargo": "HBI",
+   "Quantity": "30000",
+   "Laycan": "SPOT"
+  },
+  "note": "three cargoes",
+  "records": 3
+ },
+ {
+  "id": "cargo-11",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Alexandria",
+   "Discharge Port": "Durres",
+   "Cargo": "steel rebars",
+   "Quantity": "7100",
+   "Laycan": "20 – 23 Oct 2026"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "cargo-12",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "North China",
+   "Discharge Port": "Libya",
+   "Cargo": "IMO Class 1 Containers",
+   "Laycan": "End Oct - Early November"
+  },
+  "note": "IMO containers, prose 'North China to Libya'",
+  "records": 1
+ },
+ {
+  "id": "cargo-13",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Tuapse",
+   "Discharge Port": "TBS",
+   "Cargo": "grain",
+   "Quantity": "3000-8000",
+   "Laycan": "Prompt"
+  },
+  "note": "'Tuapse or Novo /TBS o Marmara o Izmir'",
+  "records": 1
+ },
+ {
+  "id": "cargo-14",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Dunkirk",
+   "Discharge Port": "Greece",
+   "Cargo": "steels",
+   "Quantity": "8000-12000",
+   "Laycan": "23 / 28 Oct"
+  },
+  "note": "'Dunkirk + Antwerp / 1 Greece + 2 Marmara'",
+  "records": 3
+ },
+ {
+  "id": "cargo-15",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Misurata",
+   "Discharge Port": "Greece",
+   "Cargo": "Steel scrap",
+   "Laycan": "22-24 October"
+  },
+  "note": "'Misurata/1 Greece'",
+  "records": 1
+ },
+ {
+  "id": "cargo-16",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Size": "23000",
+   "Open Port": "oman",
+   "Open Date": "nov 2"
+  },
+  "note": "vessel list posted on the cargo page; no vessel names",
+  "records": 4
+ },
+ {
+  "id": "cargo-17",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "El-Arish",
+   "Discharge Port": "Tartous",
+   "Cargo": "cement in bags",
+   "Quantity": "7000-20000",
+   "Laycan": "spot"
+  },
+  "note": "labelled 'Ld port' / 'Disch port'",
+  "records": 1
+ },
+ {
+  "id": "cargo-18",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Egypt Med",
+   "Discharge Port": "Syria",
+   "Cargo": "plastic tanks",
+   "Quantity": "3000-4000",
+   "Laycan": "25_30 October"
+  },
+  "note": "second item mentions T/C option",
+  "records": 2
+ },
+ {
+  "id": "cargo-19",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "North China",
+   "Discharge Port": "Libya",
+   "Cargo": "IMO Class 1 cargo",
+   "Laycan": "First Half November"
+  },
+  "note": "prose 'from North China to Libya'",
+  "records": 1
+ },
+ {
+  "id": "cargo-20",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "PPM",
+   "Open Date": "nov 1-10"
+  },
+  "note": "liner vessels seeking cargo; no DWT or 'open'",
+  "records": 8
+ },
+ {
+  "id": "cargo-21",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Misurata",
+   "Discharge Port": "Greece",
+   "Cargo": "Steel scrap",
+   "Laycan": "20-24 October"
+  },
+  "note": "repost of cargo-15",
+  "records": 1
+ },
+ {
+  "id": "cargo-22",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Misurata",
+   "Discharge Port": "Damietta",
+   "Cargo": "Project Cargo",
+   "Quantity": "2038",
+   "Laycan": "18 OCT ONW"
+  },
+  "note": "'Port of Loading: Misurata, Libya'",
+  "records": 1
+ },
+ {
+  "id": "cargo-23",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Iskenderun",
+   "Discharge Port": "Varna",
+   "Cargo": "GBFS",
+   "Quantity": "11000-17000",
+   "Laycan": "26-28 Oct"
+  },
+  "note": "two cargoes",
+  "records": 2
+ },
+ {
+  "id": "cargo-24",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Reni",
+   "Discharge Port": "Samsun",
+   "Cargo": "wheat",
+   "Quantity": "6000"
+  },
+  "note": "'Reni - Samsun or Marmara or Izmir'",
+  "records": 16
+ },
+ {
+  "id": "cargo-25",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Giurgiulesti",
+   "Discharge Port": "Psachna",
+   "Cargo": "sfs",
+   "Quantity": "3000-4000",
+   "Laycan": "Spot onw"
+  },
+  "note": "draft in brackets after port",
+  "records": 2
+ },
+ {
+  "id": "cargo-26",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Alexandria",
+   "Discharge Port": "Tema",
+   "Cargo": "truck fly",
+   "Laycan": "Spot"
+  },
+  "note": "'Loading port' / 'Discharging port'",
+  "records": 1
+ },
+ {
+  "id": "cargo-27",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Iskenderun",
+   "Discharge Port": "Varna",
+   "Cargo": "GBFS",
+   "Quantity": "15000",
+   "Laycan": "26-28 Oct"
+  },
+  "note": "",
+  "records": 2
+ },
+ {
+  "id": "cargo-28",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Abidjan",
+   "Discharge Port": "Norrsundet",
+   "Cargo": "cashew nut shells",
+   "Quantity": "5000",
+   "Laycan": "22 Oct - 15 Nov"
+  },
+  "note": "draft in brackets after port",
+  "records": 2
+ },
+ {
+  "id": "cargo-29",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Bin Qasim",
+   "Discharge Port": "Djibouti",
+   "Cargo": "Bagged rice",
+   "Quantity": "8000",
+   "Laycan": "Spot"
+  },
+  "note": "'POL : 1SBP Bin Qasim'",
+  "records": 3
+ },
+ {
+  "id": "cargo-30",
+  "category": "UNKNOWN",
+  "fields": {},
+  "note": "bunker price list, not a cargo or vessel",
+  "records": 0
+ },
+ {
+  "id": "cargo-31",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Pakistan",
+   "Discharge Port": "Phillipines",
+   "Cargo": "bagged rice",
+   "Quantity": "30000-35000",
+   "Laycan": "18-25 Oct, 2026"
+  },
+  "note": "first item VC; later items are TCT/period requests",
+  "records": 3
+ },
+ {
+  "id": "cargo-32",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Galati",
+   "Discharge Port": "Egypt",
+   "Cargo": "Wheat",
+   "Quantity": "6000",
+   "Laycan": "Spot"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "cargo-33",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Antwerp",
+   "Discharge Port": "Greece",
+   "Laycan": "23 / 27 Oct"
+  },
+  "note": "first item states required vessel size, not cargo",
+  "records": 2
+ },
+ {
+  "id": "cargo-34",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Misurata",
+   "Discharge Port": "izmir",
+   "Cargo": "Steel scrap",
+   "Laycan": "SPOT"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "cargo-35",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Marmara",
+   "Discharge Port": "Algeria",
+   "Cargo": "minerals",
+   "Quantity": "3500",
+   "Laycan": "SPOT"
+  },
+  "note": "",
+  "records": 3
+ },
+ {
+  "id": "cargo-36",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Qingdao",
+   "Discharge Port": "Georgia",
+   "Cargo": "Steel Coils",
+   "Quantity": "10340",
+   "Laycan": "mid/End oct 2026"
+  },
+  "note": "'Ex Qingdao, China. to Georgia'",
+  "records": 1
+ },
+ {
+  "id": "cargo-37",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "DJEN DJEN",
+   "Discharge Port": "MISURATA",
+   "Cargo": "WIRE RODS",
+   "Quantity": "4200-4500",
+   "Laycan": "10-12 OCT"
+  },
+  "note": "",
+  "records": 2
+ },
+ {
+  "id": "cargo-38",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Galati",
+   "Discharge Port": "Egypt Med",
+   "Quantity": "6500",
+   "Laycan": "Mid Oct"
+  },
+  "note": "'Galati, Romania drft-6,7m / Egypt Med'",
+  "records": 1
+ },
+ {
+  "id": "cargo-39",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Iskenderun",
+   "Discharge Port": "Varna",
+   "Cargo": "GBFS",
+   "Quantity": "15000",
+   "Laycan": "26-28 October 2026"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "cargo-40",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "BANDIRMA",
+   "Discharge Port": "SZCZECIN",
+   "Cargo": "HARMLESS MINERALS",
+   "Quantity": "4868",
+   "Laycan": "12/15 OCTOBER"
+  },
+  "note": "route joined by ' - '",
+  "records": 1
+ },
+ {
+  "id": "cargo-41",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Kandla",
+   "Discharge Port": "Chittagong",
+   "Cargo": "Crude Salt",
+   "Quantity": "30000",
+   "Laycan": "around 30 Oct 2026"
+  },
+  "note": "'POL: Kandla or Mundra, India'",
+  "records": 1
+ },
+ {
+  "id": "cargo-42",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "LAIZHOU",
+   "Discharge Port": "DONGHAE",
+   "Cargo": "GYPSUM",
+   "Quantity": "20000-40000",
+   "Laycan": "SPOT"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "cargo-43",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Izmail",
+   "Discharge Port": "Varna",
+   "Cargo": "vegoil",
+   "Quantity": "3000",
+   "Laycan": "29 Oct / 10 Nov 2026"
+  },
+  "note": "last item is a TC request",
+  "records": 2
+ },
+ {
+  "id": "cargo-44",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "WCI",
+   "Discharge Port": "MOZAMBIQUE",
+   "Cargo": "BGD RICE",
+   "Quantity": "20000-25000"
+  },
+  "note": "'1SP WCI/1-2SP MOZAMBIQUE'; one line per order",
+  "records": 12
+ },
+ {
+  "id": "cargo-45",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Gdynia",
+   "Discharge Port": "Seville",
+   "Cargo": "grains",
+   "Quantity": "7000",
+   "Laycan": "October"
+  },
+  "note": "three cargoes",
+  "records": 3
+ },
+ {
+  "id": "cargo-46",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Izmail",
+   "Discharge Port": "Varna",
+   "Cargo": "vegoil",
+   "Quantity": "3000",
+   "Laycan": "29 Oct / 10 Nov 2026"
+  },
+  "note": "",
+  "records": 2
+ },
+ {
+  "id": "cargo-47",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Misurata",
+   "Discharge Port": "Eregli",
+   "Cargo": "Hot Briquetted Iron",
+   "Quantity": "10000",
+   "Laycan": "Spot"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "cargo-48",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "El-Arish",
+   "Discharge Port": "latakia",
+   "Cargo": "cement in bags",
+   "Quantity": "7000-20000",
+   "Laycan": "5-15 oct,2026"
+  },
+  "note": "'Disch port : port of latakia'",
+  "records": 1
+ },
+ {
+  "id": "cargo-49",
+  "category": "CARGO VC",
+  "fields": {
+   "Loading Port": "Eregli",
+   "Discharge Port": "Izmail",
+   "Cargo": "steel coils",
+   "Quantity": "1715"
+  },
+  "note": "",
+  "records": 2
+ },
+ {
+  "id": "vessel-01",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "R LINE",
+   "Vessel Size": "7331",
+   "Open Port": "E.MED",
+   "Open Date": "27-28/OCT"
+  },
+  "note": "'DWT: 7.331,1 MT' European decimal format",
+  "records": 1
+ },
+ {
+  "id": "vessel-02",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "YONGSHENG 151",
+   "Open Port": "Surabaya",
+   "Open Date": "31 October 2026"
+  },
+  "note": "numbered list; DWCC only (no DWT)",
+  "records": 4
+ },
+ {
+  "id": "vessel-03",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "IMPERIAL VARALAXMI",
+   "Vessel Size": "32318",
+   "Open Port": "WCI",
+   "Open Date": "29 OCT - 05 NOV"
+  },
+  "note": "'SUMMER DEADWEIGHT: 32,318.3 MT'",
+  "records": 1
+ },
+ {
+  "id": "vessel-04",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "SVR MERCURY",
+   "Vessel Size": "4250",
+   "Open Port": "THESSALONIKI",
+   "Open Date": "27-29 OCTOBER"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "vessel-05",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "TBN 1",
+   "Vessel Size": "4000",
+   "Open Port": "MARMARA",
+   "Open Date": "12-15 NOVEMBER"
+  },
+  "note": "'OPEN @MARMARA'",
+  "records": 1
+ },
+ {
+  "id": "vessel-06",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "GEMINI CAPO",
+   "Open Port": "ISKENDERUN",
+   "Open Date": "27-28 OCT"
+  },
+  "note": "table without 'open'; DWCC only",
+  "records": 4
+ },
+ {
+  "id": "vessel-07",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Size": "998",
+   "Open Port": "Piraeus Roads",
+   "Open Date": "25 to 30 Oct"
+  },
+  "note": "no vessel name; 'open in Piraeus Roads'",
+  "records": 1
+ },
+ {
+  "id": "vessel-08",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "DSX",
+   "Open Date": "nov 1-10"
+  },
+  "note": "liner vessels seeking cargo",
+  "records": 6
+ },
+ {
+  "id": "vessel-09",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "phrygia",
+   "Vessel Size": "3332",
+   "Open Port": "MARMARA",
+   "Open Date": "24-26 OCTOBER"
+  },
+  "note": "position line gives DWCC; DWT in particulars",
+  "records": 1
+ },
+ {
+  "id": "vessel-10",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "ANKA BLUE",
+   "Vessel Size": "8181",
+   "Open Port": "Mtawara",
+   "Open Date": "First half of November"
+  },
+  "note": "table without 'open'; DWT in particulars",
+  "records": 4
+ },
+ {
+  "id": "vessel-11",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "SVR VENUS",
+   "Vessel Size": "4211",
+   "Open Port": "WEST COAST UK",
+   "Open Date": "28-30 OCTOBER"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "vessel-12",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "FLOKI",
+   "Open Port": "IZMIR",
+   "Open Date": "09-11 NOV"
+  },
+  "note": "'MV FLOKI /09-11 NOV IZMIR'; DWCC only",
+  "records": 7
+ },
+ {
+  "id": "vessel-13",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "QAMARIS PROGRESS",
+   "Open Date": "Nov 15-20, 2026"
+  },
+  "note": "liner vessel seeking cargo",
+  "records": 2
+ },
+ {
+  "id": "vessel-14",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "Raven",
+   "Open Port": "Turkish Black Sea",
+   "Open Date": "22-25 October"
+  },
+  "note": "no 'open'; DWCC only",
+  "records": 1
+ },
+ {
+  "id": "vessel-15",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "INDIANA JONES 1",
+   "Open Port": "Marmara Sea",
+   "Open Date": "22/25 October"
+  },
+  "note": "'open @Marmara Sea'; DWCC only",
+  "records": 1
+ },
+ {
+  "id": "vessel-16",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "SVR VENUS",
+   "Vessel Size": "4211",
+   "Open Port": "WEST COAST UK",
+   "Open Date": "26-30 OCTOBER"
+  },
+  "note": "repost of vessel-11",
+  "records": 1
+ },
+ {
+  "id": "vessel-17",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "POS 1",
+   "Vessel Size": "25240",
+   "Open Date": "14 - 24 Oct."
+  },
+  "note": "liner vessel seeking cargo; 'BLT 2013 - 25,240 DWT'",
+  "records": 2
+ },
+ {
+  "id": "vessel-18",
+  "category": "TONNAGE",
+  "fields": {
+   "Open Port": "Spore",
+   "Open Date": "1-10/11"
+  },
+  "note": "tanker offered for 12 months TC; no name or DWT",
+  "records": 1
+ },
+ {
+  "id": "vessel-19",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "Sky Falcon",
+   "Vessel Size": "3821",
+   "Open Port": "E.Med",
+   "Open Date": "SPOT"
+  },
+  "note": "table without 'open'",
+  "records": 6
+ },
+ {
+  "id": "vessel-20",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "EC TURAN",
+   "Vessel Size": "18000",
+   "Open Port": "GIBRALTAR",
+   "Open Date": "19 OCT"
+  },
+  "note": "position line 18,000 DWT; particulars 18,430",
+  "records": 1
+ },
+ {
+  "id": "vessel-21",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "TBN 1",
+   "Vessel Size": "3000",
+   "Open Port": "GREAT YARMOUTH",
+   "Open Date": "SPOT"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "vessel-22",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "SNOW",
+   "Vessel Size": "4226",
+   "Open Port": "Marmara",
+   "Open Date": "13-14 Oct"
+  },
+  "note": "eight vessels",
+  "records": 8
+ },
+ {
+  "id": "vessel-23",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "TBN 2",
+   "Vessel Size": "2200",
+   "Open Port": "MARMARA",
+   "Open Date": "20-25 OCTOBER"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "vessel-24",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "RAPTOR",
+   "Vessel Size": "4299",
+   "Open Port": "DAKAR",
+   "Open Date": "SPOT"
+  },
+  "note": "'SPOT DAKAR'; '4299,59 DWT'",
+  "records": 1
+ },
+ {
+  "id": "vessel-25",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "Sky Marine",
+   "Vessel Size": "4726",
+   "Open Port": "CORK",
+   "Open Date": "SPOT"
+  },
+  "note": "table without 'open'",
+  "records": 1
+ },
+ {
+  "id": "vessel-26",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "AL LUQTA",
+   "Vessel Size": "10500",
+   "Open Date": "Mid-October"
+  },
+  "note": "region headers instead of open ports",
+  "records": 20
+ },
+ {
+  "id": "vessel-27",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "POSTBN",
+   "Open Port": "Bacolod",
+   "Open Date": "22 OCT"
+  },
+  "note": "'OPEN AROUND 22 OCT Bacolod'; size not labelled DWT",
+  "records": 1
+ },
+ {
+  "id": "vessel-28",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "KAE",
+   "Open Date": "oct 5-10"
+  },
+  "note": "liner vessels seeking cargo",
+  "records": 4
+ },
+ {
+  "id": "vessel-29",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "EC FATMA",
+   "Vessel Size": "22107",
+   "Open Port": "ASHDOD",
+   "Open Date": "18-19 OCT"
+  },
+  "note": "",
+  "records": 1
+ },
+ {
+  "id": "vessel-30",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "LUCKY SEA",
+   "Vessel Size": "3004",
+   "Open Port": "Great Yarmouth",
+   "Open Date": "Prompt"
+  },
+  "note": "bulleted particulars",
+  "records": 1
+ },
+ {
+  "id": "vessel-31",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "RAVEN",
+   "Vessel Size": "11400",
+   "Open Port": "Iskenderun",
+   "Open Date": "4-5 Oct"
+  },
+  "note": "",
+  "records": 6
+ },
+ {
+  "id": "vessel-32",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Size": "47000",
+   "Open Date": "10 Oct"
+  },
+  "note": "first position unnamed, area only",
+  "records": 7
+ },
+ {
+  "id": "vessel-33",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "EAE",
+   "Open Date": "sep 28-oct 5"
+  },
+  "note": "liner vessels seeking cargo",
+  "records": 2
+ },
+ {
+  "id": "vessel-34",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "POS FORTUNE",
+   "Vessel Size": "18000",
+   "Open Port": "PHIL",
+   "Open Date": "MID OF OCT"
+  },
+  "note": "'18K DWT'",
+  "records": 1
+ },
+ {
+  "id": "vessel-35",
+  "category": "TONNAGE",
+  "fields": {
+   "Vessel Name": "TPN",
+   "Vessel Size": "4600",
+   "Open Port": "Constanta",
+   "Open Date": "27th September"
+  },
+  "note": "'4600.0MTS DWT'",
+  "records": 1
+ }
 ]

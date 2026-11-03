@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import re
 import sys
 from collections import Counter, defaultdict
 
@@ -8,15 +9,35 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 from classifier import classify_email
-from extractor import extract_data
+from extractor import extract_data, extract_records
 
 CATEGORIES = ["TONNAGE", "CARGO VC", "CARGO TC", "UNKNOWN"]
 DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "emails.json")
+MONTHS = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}
+
+
+LENIENT_FIELDS = {"Cargo", "Laycan", "Open Date"}
+STOPWORDS = {"of", "in", "the", "abt", "about"}
 
 
 def normalize(value):
     # Case- and whitespace-insensitive only; separators like ": " still count as wrong.
     return " ".join(str(value).upper().split())
+
+
+def tokens(value):
+    words = re.findall(r"[a-z0-9]+", str(value).lower())
+    return {w[:3] if w[:3] in MONTHS else w for w in words if w not in STOPWORDS}
+
+
+def field_matches(name, predicted, gold):
+    if name not in LENIENT_FIELDS:
+        return normalize(predicted) == normalize(gold)
+    # Free-text fields: one side's words contain the other's, and the shorter has at least half
+    # as many words ("29 OCT" ~ "29 OCT - 05 NOV", but "Oct" !~ "26-28 Oct").
+    p, g = tokens(predicted), tokens(gold)
+    small, large = sorted((p, g), key=len)
+    return bool(small) and small <= large and 2 * len(small) >= len(large)
 
 
 def load_examples(split, path=DATA_PATH):
@@ -33,6 +54,9 @@ def evaluate(examples):
     spurious = 0
     fully_correct = 0
     errors = []
+    records = Counter()
+    # Only fields this dataset labels can be spurious; older sets do not label the newer fields.
+    labelled = {name for ex in examples for name in ex["fields"]}
 
     for ex in examples:
         predicted = classify_email(ex["text"])
@@ -47,14 +71,22 @@ def evaluate(examples):
             if name not in fields:
                 field_stats[name]["missing"] += 1
                 problems.append(f"{name}: missing (expected {gold!r})")
-            elif normalize(fields[name]) == normalize(gold):
+            elif field_matches(name, fields[name], gold):
                 field_stats[name]["correct"] += 1
             else:
                 field_stats[name]["wrong"] += 1
                 problems.append(f"{name}: expected {gold!r}, got {fields[name]!r}")
 
+        if "records" in ex:
+            found = len(extract_records(ex["text"], predicted)) if predicted in ("TONNAGE", "CARGO VC") else 0
+            records["total"] += 1
+            records["exact"] += found == ex["records"]
+            records["abs_error"] += abs(found - ex["records"])
+            if found != ex["records"]:
+                problems.append(f"records: expected {ex['records']}, got {found}")
+
         for name in fields:
-            if name not in ex["fields"]:
+            if name in labelled and name not in ex["fields"]:
                 spurious += 1
                 problems.append(f"{name}: spurious {fields[name]!r}")
 
@@ -63,14 +95,14 @@ def evaluate(examples):
         else:
             fully_correct += 1
 
-    return confusion, field_stats, spurious, fully_correct, errors
+    return confusion, field_stats, spurious, fully_correct, errors, records
 
 
 def pct(num, den):
     return f"{100 * num / den:5.1f}%" if den else "  n/a"
 
 
-def report(examples, confusion, field_stats, spurious, fully_correct, errors, show_errors):
+def report(examples, confusion, field_stats, spurious, fully_correct, errors, records, show_errors):
     n = len(examples)
     correct = sum(confusion[c][c] for c in CATEGORIES)
     print(f"Examples: {n}")
@@ -107,6 +139,9 @@ def report(examples, confusion, field_stats, spurious, fully_correct, errors, sh
         print(f"{name:<16} {s['correct']:>8} {s['wrong']:>6} {s['missing']:>8} {pct(s['correct'], count):>9}")
     print(f"Overall field accuracy: {total_correct}/{total} = {pct(total_correct, total)}")
     print(f"Spurious fields (predicted but not in gold): {spurious}")
+    if records["total"]:
+        print(f"Record count exact: {records['exact']}/{records['total']} = {pct(records['exact'], records['total'])}"
+              f"  (mean absolute error {records['abs_error'] / records['total']:.2f})")
     print(f"\nEmails fully correct (category + all fields, nothing spurious): {fully_correct}/{n} = {pct(fully_correct, n)}")
 
     if show_errors and errors:

@@ -2,13 +2,17 @@
 
 Sorts maritime chartering emails into **TONNAGE** (vessel open positions), **CARGO VC**
 (voyage-charter cargo orders), **CARGO TC** (time-charter enquiries) or **UNKNOWN**, and extracts
-the key fields for each category as JSON.
+the key fields for every vessel position or cargo order in the email.
 
-| Category | Extracted fields |
+| Category | Extracted fields (per record) |
 |----------|------------------|
-| TONNAGE  | Vessel Name, Vessel Size (DWT), Open Port |
-| CARGO VC | Loading Port, Discharge Port |
+| TONNAGE  | Vessel Name, Vessel Size (DWT), Open Port, Open Date |
+| CARGO VC | Loading Port, Discharge Port, Cargo, Quantity (tonnes, "min-max" for ranges), Laycan |
 | CARGO TC | Delivery Port, Redelivery Port, Duration |
+
+Broker circulars often list several vessels or cargoes; `extractor.extract_records()` returns one
+record per vessel position or cargo order (e.g. 20 vessels in one tonnage list), and the batch view
+exports them all as a **positions board** CSV.
 
 ## Run
 
@@ -20,18 +24,30 @@ streamlit run app.py
 The app has two tabs and an About sidebar (what the four types mean, how to read confidence,
 measured accuracy):
 
-- **Single email** – five "Try a sample" buttons (vessel position, cargo order, time charter, a
-  tricky vessel-for-cargo email, a normal email) load and process an example in one click, or paste
+- **Single email** – six "Try a sample" buttons (vessel position, cargo order, vessel list, time
+  charter, a tricky vessel-for-cargo email, a normal email) load and process an example in one click, or paste
   your own. The result card shows the type and confidence as coloured badges, a plain-language
   reason ("Close call: looks like a voyage cargo order (6 points) but also a vessel position
-  (5 points). Please check."), and the extracted details in large print. Scores and JSON download
-  are under "Technical details".
+  (5 points). Please check."), the extracted details in large print, and a table of every record
+  when the email lists more than one. Scores and JSON download are under "Technical details".
 - **Batch upload** – upload several `.txt` / `.eml` files (one email each) and/or `.csv` files
   (one email per row; the text column is guessed and can be changed, a subject column is
   optional), or switch on the 42 demo emails from `samples/`. Shows counts per type, and a table
   with one readable "Key Details" line and a "Why" reason per email; emails needing review come
   first. Click a row to see the email beside its result card. "All columns" shows every field and
-  score; the CSV download always includes everything.
+  score. Two downloads: results CSV (one row per email, everything included) and positions board CSV
+  (one row per vessel or cargo across the batch).
+
+## Tests
+
+```
+python -m unittest discover -s tests -v
+```
+
+`tests/test_rules.py` checks number and quantity parsing ("7.331,1", "42-4500 MT" = 4200-4500),
+classification including known false-positive traps, laycan forms, and record splitting.
+`tests/test_accuracy.py` runs the evaluation on the committed datasets and fails if accuracy drops
+below the current level. GitHub Actions (`.github/workflows/tests.yml`) runs both on every push.
 
 **Confidence** comes from the category scores in `classifier.score_email()`:
 
@@ -84,7 +100,8 @@ Field values are compared case- and whitespace-insensitively; everything else mu
 | `eval/maritimemails_ext-test.json` | ext-test | 150 | MaritimEmails test split (first email of each thread) |
 | `eval/negatives_neg-dev.json` | neg-dev | 300 | Non-shipping emails: 150 Enron ham + 150 SpamAssassin easy_ham |
 | `eval/negatives_neg-test.json` | neg-test | 300 | Same sources, disjoint emails |
-| `eval/real/shipbroker_gr.json` | real-dev / real-test | 42 / 42 | **Real broker circulars** from shipbroker.gr (see below) |
+| `eval/real/shipbroker_gr.json` | real-dev / real-test | 42 / 42 | **Real broker circulars** from shipbroker.gr, 26 Oct 2026 (see below); development data since v6 |
+| `eval/real/shipbroker_gr_20261103.json` | real-20261103 | 30 | Fresh shipbroker.gr snapshot, 3 Nov 2026: posts after 26 Oct that are not reposts. **v6 held-out test** |
 
 **Real broker circulars.** [shipbroker.gr](http://www.ship.gr/shipbroker/cargo.html) publishes
 cargo orders and open-vessel positions that brokers submit, as the circulars they email
@@ -99,10 +116,24 @@ is stated. Labels were drafted with AI assistance and have not yet been checked 
 expert; spot-check them. Alternate posts form real-dev and real-test. There are no CARGO TC posts: period/TCT
 requests only appear as side items inside cargo posts.
 
+For v6 the 84 first-snapshot posts also got labels for the new fields (Open Date; Cargo, Quantity,
+Laycan for the first record) and a record count (vessel positions or cargo orders of the post's
+category). Free-text fields (Cargo, Laycan, Open Date) are scored leniently: one value's words must
+contain the other's and the shorter must have at least half as many words ("29 OCT" matches
+"29 OCT - 05 NOV"; "Oct" does not match "26-28 Oct"). Quantity must match exactly in tonnes.
+
+**Fresh snapshots as held-out tests.** The board changes daily, so a later snapshot gives an unseen
+test set: `parse --snapshot YYYYMMDD` keeps only posts dated after 26 Oct that are not reposts
+(90% text similarity). The 3 Nov snapshot was saved before any v6 change, left unread until the v6
+rules were frozen, then labelled (`eval/shipbroker_gr_labels_20261103.json`) and run once.
+
 ```
 python eval/build_shipbroker_gr.py parse --cargo-html cargo.html --vessel-html vessel.html
 python eval/build_shipbroker_gr.py merge
-python eval/evaluate.py --data eval/real/shipbroker_gr.json --split real-dev --errors
+python eval/evaluate.py --data eval/real/shipbroker_gr.json --split all --errors
+python eval/build_shipbroker_gr.py parse --snapshot 20261103 --cargo-html cargo.html --vessel-html vessel.html
+python eval/build_shipbroker_gr.py merge --snapshot 20261103
+python eval/evaluate.py --data eval/real/shipbroker_gr_20261103.json --split real-20261103
 ```
 
 **Non-shipping negatives** measure false positives (normal emails classified as shipping).
@@ -127,13 +158,44 @@ The external sets come from **MaritimEmails** (Bruendler & Clematide, LREC 2026)
 (`eval/build_maritimemails.py`, seed 42). Only threads whose first email contains both labelled
 ports were used; each is labelled CARGO VC with the dataset's `load_port` / `discharge_port`.
 
-Tune rules on `dev`, `ext-dev`, `neg-dev` and `real-dev` only. `ext-test`, `neg-test` and
-`real-test` are run once per frozen version.
+Tune rules on `dev`, `ext-dev`, `neg-dev` and the first real snapshot only. `ext-test`, `neg-test`
+and the newest real snapshot are run once per frozen version.
 
 ### Results
 
-**Headline (held-out real broker circulars, v5): 95.2% category accuracy (40/42), 74.7% field
-accuracy (68/91).**
+**Headline (v6, 30 fresh real broker circulars never seen during development): 83.3% category
+accuracy (25/30), 66.4% field accuracy (79/119, including the new fields), 96.3% exact record
+counts (26/27).** The v5 rules score 76.7% / 31.9% on the same posts.
+
+| Version | real 26 Oct, all 84 (development) cat / fields / records | **real 3 Nov, 30 (held out)** cat / fields / records | ext-test (150) cat / fields | False positives neg-test (300) |
+|---------|------|------|------|------|
+| v5 | 95.2% / 83.5% (old fields only) / – | 76.7% / 31.9% / – | 89.3% / 83.3% | 1 (0.3%) |
+| v6 multi-record + new fields | 98.8% / 92.7% / 85.7% | **83.3% / 66.4% / 96.3%** | 89.3% / 83.3% | 1 (0.3%) |
+
+v6 field accuracy on the fresh posts: Open Date 88.9%, Vessel Name 88.9%, Open Port 85.7%, Laycan
+77.8%, Vessel Size 71.4%, Quantity 69.2%, Loading/Discharge Port 61.1%, Cargo 37.5%. The drop from
+development (92.7%) to held out (66.4%) is the honest generalisation gap: the fresh posts contain
+formats the development posts did not. Known v6 errors on the 3 Nov posts, left unfixed so the number
+stays clean (v7 work, to be measured on a later snapshot):
+
+- **Real time-charter requests are missed** (2 of 3): "Firm T/C Requirement", "Charter Period:",
+  "Hire Idea: USD 10,000 PDPR" are not evidence yet; a tanker TC request with load/discharge ports was
+  read as a voyage order.
+- **"Time charter OR voyage" route requests with a required size** ("4/5K DWT") read as vessel offers.
+- **Unseen label formats:** markdown "**Load Port:**", "L/Port:" / "D/port:", "Voyage: Basrah –
+  Shandong", "Diach port" (typo), "N China TO Med".
+- **Wrong record window:** in posts with two orders written as labelled blocks, cargo/quantity were
+  taken from the second order; cargo cleaning keeps packaging words ("chopt Feldspar in bb",
+  "ton jumbo bag sulphur").
+- Liner vessel sizes written "MV DSX (DWT53k)" are missed or taken from the next vessel.
+
+v6 changes (all from development-set analysis): records per vessel/cargo; Open Date, Cargo,
+Quantity (broker shorthand "2-4000" = 2000-4000, "42-4500" = 4200-4500, "8k", "11.000 mts up to
+17.000"), Laycan (labelled forms, "spot/ppt", prose "the laycan is ..."); vessel tables without
+"open" ("MV FLOKI /09-11 NOV IZMIR"); "open home tonnage" no longer read as a port; hyphenated route
+lines need capitalised ports ("On Monday - member panel" is not a route); liner posts ("MV X /
+loading: ...") count as vessels seeking cargo; loading/discharge rates count as voyage evidence;
+bracketed notes no longer hide a route line. Older version history:
 
 | Version | dev (24) cat / fields | test (18) cat / fields | ext-dev (150) cat / fields | ext-test (150) cat / fields | False positives neg-dev / neg-test (300 each) | real-dev (42) cat / fields | real-test (42) cat / fields |
 |---------|------|------|------|------|------|------|------|
@@ -233,12 +295,12 @@ Real emails stay on your machine (`eval/real/` and `eval/real.json` are in `.git
 
 ### Limitations
 
-- **Small real sample, one source.** 84 real circulars from one public board, one day's snapshot,
+- **Small real sample, one source.** 114 real circulars from one public board (two snapshots),
   mostly small general-cargo/bulk trades in the Med, Black Sea and Asia, with AI-drafted labels
-  not yet checked by a domain expert. A broker's own inbox (larger ships, replies, forwarded threads) may differ. Real-test
-  has 42 posts, so one error moves accuracy by about 2.4 points.
-- **CARGO TC is barely tested.** No real post is a time-charter enquiry; CARGO TC is measured only
-  on 10 hand-written emails.
+  not yet checked by a domain expert. A broker's own inbox (larger ships, replies, forwarded threads)
+  may differ. The held-out snapshot has 30 posts, so one error moves accuracy by about 3.3 points.
+- **CARGO TC is barely tested.** Only 3 real posts are time-charter requests (2 missed by v6); the
+  rest of CARGO TC testing is 10 hand-written emails.
 - **Negatives are old and narrow.** Enron (2000-2002) and SpamAssassin (2002-2003) ham;
   no spam, newsletters from shipping companies, or non-chartering logistics email (courier,
   container booking), which are the likeliest real false positives in a broker's inbox.
@@ -250,7 +312,10 @@ Real emails stay on your machine (`eval/real/` and `eval/real.json` are in `.git
 - **Label conventions.** "Hull" vs gold "Hull, UK" and "AG" vs "Arabian Gulf" count as wrong.
 - **Missed formats.** Tonnage positions without "MV"/"DWT" ("Supramax open Kandla 5 Nov") are
   UNKNOWN; weak-evidence enquiries (only a route, no quantity or freight terms) are UNKNOWN.
-- **Fields not extracted.** One record per email; no dates/laycan, cargo type, quantity or rates.
+- **Records.** Orders written one per line with the quantity on the same line ("20-25000 MT BGD RICE -
+  1SP WCI/1-2SP MOZAMBIQUE - ...") are not split into records; only the first record's fields are
+  scored against labels (record counts are scored separately).
+- **Fields not extracted.** Freight and hire rates, commission, demurrage, vessel type and gear.
 
 ## AI assistance
 

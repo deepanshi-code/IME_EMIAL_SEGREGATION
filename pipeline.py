@@ -7,11 +7,11 @@ import re
 import pandas as pd
 
 from classifier import MIN_SCORE, classify_email, evidence, score_email
-from extractor import extract_data
+from extractor import extract_data, extract_records
 
 FIELD_NAMES = [
-    "Vessel Name", "Vessel Size", "Open Port",
-    "Loading Port", "Discharge Port",
+    "Vessel Name", "Vessel Size", "Open Port", "Open Date",
+    "Loading Port", "Discharge Port", "Cargo", "Quantity", "Laycan",
     "Delivery Port", "Redelivery Port", "Duration",
 ]
 TEXT_COLUMN_HINTS = ["text", "body", "email", "content", "message"]
@@ -57,6 +57,10 @@ def explain(text, category, level, scores):
     return f"{prefix} a {name}, based on: {clues}."
 
 
+def format_quantity(value):
+    return "–".join(f"{int(part):,}" for part in value.split("-")) + " t"
+
+
 def summary(fields):
     # One readable line per email for the batch table: "SEA HAWK · 58,000 DWT · open Tianjin".
     parts = []
@@ -66,8 +70,16 @@ def summary(fields):
         parts.append(f"{int(fields['Vessel Size']):,} DWT")
     if fields["Open Port"]:
         parts.append(f"open {fields['Open Port']}")
+    if fields["Open Date"]:
+        parts.append(fields["Open Date"])
+    if fields["Quantity"]:
+        parts.append(format_quantity(fields["Quantity"]))
+    if fields["Cargo"]:
+        parts.append(fields["Cargo"])
     if fields["Loading Port"] or fields["Discharge Port"]:
         parts.append(f"{fields['Loading Port'] or '?'} → {fields['Discharge Port'] or '?'}")
+    if fields["Laycan"]:
+        parts.append(f"laycan {fields['Laycan']}")
     if fields["Delivery Port"]:
         parts.append(f"del {fields['Delivery Port']}")
     if fields["Redelivery Port"]:
@@ -82,6 +94,7 @@ def process_email(text):
     category = classify_email(text)
     level = confidence(category, scores)
     found = extract_data(text, category)
+    records = extract_records(text, category) if category in ("TONNAGE", "CARGO VC") else []
     return {
         "category": category,
         "confidence": level,
@@ -89,6 +102,7 @@ def process_email(text):
         "reason": explain(text, category, level, scores),
         "scores": scores,
         "fields": {name: found.get(name) for name in FIELD_NAMES},
+        "records": [{name: record.get(name) for name in FIELD_NAMES} for record in records],
     }
 
 
@@ -134,10 +148,23 @@ def results_table(sources, results):
             "Category": result["category"],
             "Confidence": result["confidence"],
             "Needs Review": result["needs_review"],
+            "Records": len(result["records"]) or None,
             "Key Details": summary(result["fields"]),
             "Why": result["reason"],
         }
         row.update(result["fields"])
         row.update({f"Score {name}": value for name, value in result["scores"].items()})
         rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def records_table(sources, results):
+    # One row per vessel position or cargo order across the whole batch (a positions board).
+    rows = []
+    for source, result in zip(sources, results):
+        for number, record in enumerate(result["records"], start=1):
+            row = {"Source": source, "Record": number, "Category": result["category"],
+                   "Confidence": result["confidence"]}
+            row.update(record)
+            rows.append(row)
     return pd.DataFrame(rows)

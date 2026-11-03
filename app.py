@@ -4,9 +4,10 @@ import os
 import streamlit as st
 
 from pipeline import (
-    CATEGORY_NAMES, FIELD_NAMES, TEXT_COLUMN_HINTS, decode_text, guess_column, parse_eml, process_email,
-    read_csv, results_table,
+    CATEGORY_NAMES, FIELD_NAMES, TEXT_COLUMN_HINTS, decode_text, format_quantity, guess_column, parse_eml,
+    process_email, read_csv, records_table, results_table,
 )
+import pandas as pd
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 DEMO_CSV = os.path.join(APP_DIR, "samples", "demo_emails.csv")
@@ -17,6 +18,12 @@ CONFIDENCE_COLORS = {"High": "green", "Medium": "orange", "Low": "red"}
 SAMPLES = {
     "Vessel position": "MV SEA HAWK 58,000 DWT\nOPEN TIANJIN 10-12 DEC\nGEARED 4X30T\nPLS OFFER SUITABLE CARGO",
     "Cargo order": "Pls offer firm for;\nMundra / Chittagong\n12,000 mt bagged sugar\n5-10 Dec\n2000x / 1500x\n2.5% ttl",
+    "Vessel list": (
+        "Please propose cargoes for our home tonnage:\n"
+        "M/V SEA HAWK : 5,200 DWT – Open at Constanta 12-14 Nov.\n"
+        "M/V BLUE ARROW : 3,800 DWT – Open at Izmir 15-17 Nov.\n"
+        "M/V NORTH STAR : 7,050 DWT – Open at Alexandria 20-22 Nov."
+    ),
     "Time charter": "Period enquiry\nDel: Haldia\nRedel: Far East\nPeriod: 11-13 months\nKamsarmax required",
     "Tricky case": (
         "Hi John, we have a vessel available for a crude oil shipment from Houston to Rotterdam. "
@@ -27,7 +34,19 @@ SAMPLES = {
 
 
 def format_value(name, value):
-    return f"{int(value):,} DWT" if name == "Vessel Size" else value
+    if name == "Vessel Size":
+        return f"{int(value):,} DWT"
+    return format_quantity(value) if name == "Quantity" else value
+
+
+def records_frame(records):
+    frame = pd.DataFrame(records)
+    frame = frame.dropna(axis=1, how="all").fillna("")
+    for name in ("Vessel Size", "Quantity"):
+        if name in frame:
+            frame[name] = [format_value(name, v) if v else "" for v in frame[name]]
+    frame.index = range(1, len(frame) + 1)
+    return frame
 
 
 def result_card(result, compact=False):
@@ -58,6 +77,11 @@ def result_card(result, compact=False):
                 columns[i % len(columns)].metric(name, format_value(name, value))
         elif result["category"] != "UNKNOWN":
             st.info("The category was recognised, but no fields could be extracted.")
+
+        if len(result["records"]) > 1:
+            noun = "vessel positions" if result["category"] == "TONNAGE" else "cargo orders"
+            st.caption(f"{len(result['records'])} {noun} found in this email (the first is shown above):")
+            st.dataframe(records_frame(result["records"]), width="stretch")
 
 
 def load_sample(name):
@@ -217,7 +241,8 @@ with batch_tab:
         if all_columns:
             view = view.dropna(axis=1, how="all").fillna("")
         else:
-            view = view[["Source", "Category", "Confidence", "Needs Review", "Key Details", "Why"]]
+            view = view[["Source", "Category", "Confidence", "Needs Review", "Records", "Key Details", "Why"]]
+            view = view.assign(Records=view["Records"].fillna("").astype(str).str.replace(".0", "", regex=False))
             view = view.assign(Category=view["Category"].map(lambda c: CATEGORY_NAMES[c].capitalize()))
 
         if view.empty:
@@ -246,9 +271,18 @@ with batch_tab:
                 with right:
                     result_card(results[index], compact=True)
 
-        st.download_button(
-            "Download results CSV",
+        board = records_table(sources, results).dropna(axis=1, how="all")
+        downloads = st.columns(2)
+        downloads[0].download_button(
+            "Download results CSV (one row per email)",
             data=table.to_csv(index=False).encode("utf-8-sig"),
             file_name="email_segregation_results.csv",
             mime="text/csv",
+        )
+        downloads[1].download_button(
+            f"Download positions board CSV ({len(board)} vessels and cargoes)",
+            data=board.to_csv(index=False).encode("utf-8-sig"),
+            file_name="positions_board.csv",
+            mime="text/csv",
+            disabled=board.empty,
         )

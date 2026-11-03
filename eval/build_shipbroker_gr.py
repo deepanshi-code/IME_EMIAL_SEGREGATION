@@ -1,13 +1,21 @@
 import argparse
+import difflib
 import html
 import json
 import os
 import re
+from datetime import datetime
 
 EVAL_DIR = os.path.dirname(os.path.abspath(__file__))
-POSTS_PATH = os.path.join(EVAL_DIR, "real", "shipbroker_gr_posts.json")
-LABELS_PATH = os.path.join(EVAL_DIR, "shipbroker_gr_labels.json")
-OUT_PATH = os.path.join(EVAL_DIR, "real", "shipbroker_gr.json")
+FIRST_SNAPSHOT = "26 October 2026"
+
+
+def paths(snapshot):
+    # The first snapshot keeps its original file names; later ones are suffixed with their date tag.
+    suffix = f"_{snapshot}" if snapshot else ""
+    return (os.path.join(EVAL_DIR, "real", f"shipbroker_gr_posts{suffix}.json"),
+            os.path.join(EVAL_DIR, f"shipbroker_gr_labels{suffix}.json"),
+            os.path.join(EVAL_DIR, "real", f"shipbroker_gr{suffix}.json"))
 
 DATE_LINE = re.compile(r"^\d{1,2} [A-Z][a-z]+ 20\d\d$")
 SIGN_OFF = re.compile(
@@ -15,12 +23,14 @@ SIGN_OFF = re.compile(
     r"|^thanks?\s*[,.!]*$",
     re.IGNORECASE,
 )
-CONTACT_LINE = re.compile(r"^\(?(?:tel|phone|mob|mobile|fax|e-?mail|teams|whats\s*app|website|skype)\b", re.IGNORECASE)
+CONTACT_LINE = re.compile(r"^\(?(?:tel|phone|mob|mobile|fax|e-?mail|teams|whats\s*app|website|web|skype|personnel\s+e-?mail)\b",
+                          re.IGNORECASE)
 NAME_LINE = re.compile(r"^[^\W\d_][\w.'’ -]{1,40}$")
 PHONE = re.compile(r"(?:\+\d[\d ()/.-]{6,}\d|\(?\d[\d ()/.-]{8,}\d)")
 SHIPPING_WORDS = r"\b(?:mts?|dwt|open|l/[cd]|laycan|lc)\b|\d\s*%"
 PERSONAL = [
     (re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+"), "[EMAIL]"),
+    (re.compile(r"[\w.+-]+\s*[(\[]at[)\]]\s*[\w-]+(?:\.[\w-]+)+", re.IGNORECASE), "[EMAIL]"),
     (re.compile(r"(?:https?://|www\.)\S+"), "[URL]"),
 ]
 
@@ -82,38 +92,58 @@ def anonymise(lines):
     return re.split(r"\n(?:ADD SHIP or CARGO|Contact\s*\|)", text)[0].strip()
 
 
+def is_new(post, earlier_texts, cutoff):
+    # Later snapshots keep only posts dated after the first snapshot that are not reposts of earlier ones.
+    if datetime.strptime(post["date"], "%d %B %Y") <= cutoff:
+        return False
+    return all(difflib.SequenceMatcher(None, post["text"], old).ratio() < 0.9 for old in earlier_texts)
+
+
 def parse(args):
+    posts_path, _, _ = paths(args.snapshot)
     posts = []
     for page, path in (("cargo", args.cargo_html), ("vessel", args.vessel_html)):
         for i, (date, lines) in enumerate(split_posts(page_text(path)), start=1):
             text = anonymise(lines)
             if text:
                 posts.append({"id": f"{page}-{i:02d}", "page": page, "date": date, "text": text})
-    os.makedirs(os.path.dirname(POSTS_PATH), exist_ok=True)
-    with open(POSTS_PATH, "w", encoding="utf-8") as f:
+    total = len(posts)
+    if args.snapshot:
+        with open(paths("")[0], encoding="utf-8") as f:
+            earlier = [p["text"] for p in json.load(f)]
+        cutoff = datetime.strptime(FIRST_SNAPSHOT, "%d %B %Y")
+        posts = [p for p in posts if is_new(p, earlier, cutoff)]
+    os.makedirs(os.path.dirname(posts_path), exist_ok=True)
+    with open(posts_path, "w", encoding="utf-8") as f:
         json.dump(posts, f, indent=2, ensure_ascii=False)
-    print(f"wrote {len(posts)} anonymised posts to {POSTS_PATH}")
+    print(f"{total} posts on the pages, wrote {len(posts)} new anonymised posts to {posts_path}")
 
 
-def merge():
-    with open(POSTS_PATH, encoding="utf-8") as f:
+def merge(args):
+    posts_path, labels_path, out_path = paths(args.snapshot)
+    with open(posts_path, encoding="utf-8") as f:
         posts = {p["id"]: p for p in json.load(f)}
-    with open(LABELS_PATH, encoding="utf-8") as f:
+    with open(labels_path, encoding="utf-8") as f:
         labels = json.load(f)
     examples = []
     for i, label in enumerate(labels):
         post = posts[label["id"]]
+        if args.snapshot:
+            split = f"real-{args.snapshot}"
+        else:
+            split = "real-dev" if i % 2 == 0 else "real-test"
         examples.append({
             "id": label["id"],
-            "split": "real-dev" if i % 2 == 0 else "real-test",
+            "split": split,
             "category": label["category"],
             "text": post["text"],
             "fields": label["fields"],
+            **({"records": label["records"]} if "records" in label else {}),
             "note": label.get("note", ""),
         })
-    with open(OUT_PATH, "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump(examples, f, indent=2, ensure_ascii=False)
-    print(f"wrote {len(examples)} labelled posts to {OUT_PATH}")
+    print(f"wrote {len(examples)} labelled posts to {out_path}")
 
 
 def main():
@@ -122,9 +152,11 @@ def main():
     p = sub.add_parser("parse", help="split saved HTML pages into anonymised posts")
     p.add_argument("--cargo-html", required=True, help="saved http://www.ship.gr/shipbroker/cargo.html")
     p.add_argument("--vessel-html", required=True, help="saved http://www.ship.gr/shipbroker/vessel.html")
-    sub.add_parser("merge", help="combine posts with eval/shipbroker_gr_labels.json")
+    m = sub.add_parser("merge", help="combine posts with eval/shipbroker_gr_labels[_SNAPSHOT].json")
+    for command in (p, m):
+        command.add_argument("--snapshot", default="", help="date tag of a later snapshot, e.g. 20261103")
     args = parser.parse_args()
-    parse(args) if args.command == "parse" else merge()
+    parse(args) if args.command == "parse" else merge(args)
 
 
 if __name__ == "__main__":

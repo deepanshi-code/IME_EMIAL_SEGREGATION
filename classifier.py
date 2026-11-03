@@ -8,7 +8,8 @@ NOT_DATE = (r"(?!(?:MON|TUES|WEDNES|THURS|FRI|SATUR|SUN)DAY\b|JANUARY\b|FEBRUARY
 # Vessel particulars ("GRT / NRT", "HO/HA", "Grain / Bale") look like "X / Y" routes.
 SPEC_WORDS = (r"\b(?:LOA|LBP|GRT|NRT|GT|NT|HO|HA|GRAIN|BALE|BOX|FLAG|CLASS|DRA(?:FT|UGHT)|HOLDS?|HATCH(?:ES)?"
               r"|BEAM|DEPTH|CRANES?|GRABS?|BUILT|BLT|GEN|GENERAL|SID|TWD|MPP|DWT|DWCC|CARGO|DECKER|MTS?|CBM"
-              r"|CBFT|SIR|MADAM|DEAR|L/[CD]|SHEX|SHINC|FHEX|ATTN|DESK|CO2|IMO)\b")
+              r"|CBFT|SIR|MADAM|DEAR|L/[CD]|SHEX|SHINC|FHEX|ATTN|DESK|CO2|IMO|SPOT|PROMPT|PPT|TRY|ONW|ONWARDS"
+              r"|DATES?)\b")
 ROUTE_WORD = r"(?!(?:or|o|and)\b)[^\W\d_][\w.'’]*"
 ROUTE_SIDE = re.compile(r"(?:\d(?:-\d)?[ \t]*(?:S[BP]{1,3}P?)?[ \t]+)?(" + ROUTE_WORD + r"(?:[ \t]+" + ROUTE_WORD + r"){0,2})"
                         r"(?=$|[ \t]*(?:[(,+.]|[-–—]|\bor\b|\bo\b))", re.IGNORECASE)
@@ -21,25 +22,34 @@ def route_side(part):
     return match.group(1)
 
 
-def find_route_line(text):
+def route_lines(text):
     # Broker circulars put the route on a line of its own: "Kandla / Subic Bay", "Orlivka - Marmara",
-    # "Misurata/1 Greece", "Galati (6,1 m) / Marghera".
-    for line in text.splitlines():
+    # "Misurata/1 Greece", "Galati (6,1 m) / Marghera". Returns (line index, load, discharge) for each.
+    found = []
+    for index, line in enumerate(text.splitlines()):
         line = line.strip()
-        if not line or len(line) > 70 or re.search(SPEC_WORDS, line, re.IGNORECASE):
+        # Bracketed notes ("Abidjan / Norrsundet (draft 6,20m)") do not make a line vessel particulars.
+        if not line or len(line) > 70 or re.search(SPEC_WORDS, re.sub(r"\([^)]*\)", "", line), re.IGNORECASE):
             continue
         if "/" in line:
-            parts = line.split("/", 1)
+            parts, hyphen = line.split("/", 1), False
         elif re.search(r"[ \t][-–][ \t]|–", line):
-            parts = re.split(r"[ \t]*–[ \t]*|[ \t]+-[ \t]+", line, maxsplit=1)
+            parts, hyphen = re.split(r"[ \t]*–[ \t]*|[ \t]+-[ \t]+", line, maxsplit=1), True
         elif "-" in line:
-            parts = line.split("-", 1)
+            parts, hyphen = line.split("-", 1), True
         else:
             continue
         load, discharge = route_side(parts[0]), route_side(parts[1])
-        if load and discharge and load[0].isupper():
-            return load, discharge
-    return None, None
+        # A hyphen also joins ordinary prose ("On Monday - member panel to ..."), so both sides of a
+        # hyphenated route must be capitalised.
+        if load and discharge and load[0].isupper() and (discharge[0].isupper() or not hyphen):
+            found.append((index, load, discharge))
+    return found
+
+
+def find_route_line(text):
+    found = route_lines(text)
+    return found[0][1:] if found else (None, None)
 
 
 EVIDENCE = {
@@ -52,6 +62,8 @@ EVIDENCE = {
         # A vessel looking for cargo: "need named/rated cgo", "propose your firm cargoes", "pls pps suitable cargo".
         (r"\b(?:NEEDS?|SEEKING|PROPOSE|PPS)\b(?:(?!VESSEL|VSL|TONNAGE)[^\n]){0,30}?\b(?:CARGO|CARGOES|CGO)\b"
          r"|\b(?:RATED|NAMED)\b[ /&\w]{0,12}\b(?:CARGO|CARGOES|CGO)\b", 3, "asks for cargo"),
+        # Liner/MPP space offers: "MV DSX / loading: tianjin, shanghai / disport: jeddah".
+        (r"^[ \t]*M[./]?V\b[^\n]*\n(?:[^\n]*\n){0,4}?[ \t]*loading[ \t]*:", 3, "liner vessel with loading ports"),
     ],
     "CARGO VC": [
         (find_route_line, 2, "route line (X / Y)"),
@@ -72,6 +84,7 @@ EVIDENCE = {
         (r"(?:\bPER\s+(?:MT|METRIC\s+TON(?:NE)?|TON(?:NE)?)\b|\bPMT\b|/\s*MT\b)", 2, "freight per tonne"),
         (r"\b(?:FOB|CIF|CFR|FAS|DAP|DDP)\b", 1, "Incoterm (FOB, CIF...)"),
         (r"\b(?:FREIGHT|LUMP\s*SUM)\b", 1, "freight / lumpsum"),
+        (r"\b(?:L/?D|LD[ \t]+RATES?|R/D[ \t]+RATE)\b[ \t]*:?[ \t]*\d", 2, "loading/discharge rates"),
         (r"\bLAYCAN\b", 1, "laycan"),
         (r"\b(?:SAFE PORT|SP)\b", 1, "safe port"),
     ],
