@@ -10,7 +10,7 @@ from classifier import MIN_SCORE, classify_email, evidence, score_email
 from extractor import extract_data, extract_records
 
 FIELD_NAMES = [
-    "Vessel Name", "Vessel Size", "Open Port", "Open Date",
+    "Vessel Name", "Vessel Size", "Cargo Capacity", "Open Port", "Open Date",
     "Loading Port", "Discharge Port", "Cargo", "Quantity", "Laycan",
     "Delivery Port", "Redelivery Port", "Duration",
 ]
@@ -68,6 +68,8 @@ def summary(fields):
         parts.append(fields["Vessel Name"])
     if fields["Vessel Size"]:
         parts.append(f"{int(fields['Vessel Size']):,} DWT")
+    elif fields["Cargo Capacity"]:
+        parts.append(f"{int(fields['Cargo Capacity']):,} DWCC")
     if fields["Open Port"]:
         parts.append(f"open {fields['Open Port']}")
     if fields["Open Date"]:

@@ -35,6 +35,9 @@ QUANTITY = (r"(?<![\d.,])(\d[\d.,]*)[ \t]*(K)?[ \t]*"
             r"(?:\(\+/-[^)]*\)[ \t]*)?(?:(?:MTS?|TS|TONS|TONNES|T)\b|(?<=K)(?=[ \t]+[A-Z])|(?:(?<=\) )|(?<=\)))(?=OF\b))")
 DATE = (r"(?:" + DAY + r"[ \t]*" + MONTH + r"[ \t]*[-–/][ \t]*" + DAY + r"[ \t]*" + MONTH + r"(?:[ \t]*,?[ \t]*20\d\d)?|"
         + DATE[3:])
+# A short trailing number is part of the name ("YONGSHENG 151", "TBN 1"); a long one is the size.
+VESSEL_NAME = (r"\bM[./]?V\b\.?\s+(" + PLACE[1:-1] + r"(?:[ \t]+\d{1,3}\b(?![\d,.]|[ \t]*K\b))?)"
+               r"(?=\s*(?:[/,(:;|]|[-–—]|\d|\bDWT\b|\bDWCC\b|\bOPEN\b|\bSPOT\b|\bBLT\b|\bIMO\b|$))")
 VESSEL_START = re.compile(r"^[ \t]*(?:[•*\-]|\d+[.)])?[ \t]*M[./]?V\b\.?\s", re.IGNORECASE)
 NOT_CARGO_WORDS = {"or", "up", "to", "upto", "of", "abt", "about", "per", "day", "in", "x", "and", "with"}
 
@@ -206,11 +209,11 @@ def table_open_port(lines):
     # Position tables without the word "open": "MV FLOKI /09-11 NOV IZMIR",
     # "MV Sky Falcon  3,821 Dwt  2025  E.Med  SPOT". Strip what is not a place and keep the last segment.
     for line in lines[:2]:
-        rest = re.sub(r"^[ \t]*(?:[•*\-]|\d+[.)])?[ \t]*M[./]?V\b\.?\s+" + PLACE[1:-1] + r"(?:[ \t]+\d{1,3}\b)?", "",
-                      line, flags=re.IGNORECASE)
+        name = re.search(VESSEL_NAME, line, FLAGS)
+        rest = line[name.end():] if name else line
         rest = re.sub(DATE, " ", rest, flags=re.IGNORECASE)
-        rest = re.sub(r"\d[\d.,]*[ \t]*K?[ \t]*(?:DWT|DWCC|MTS?|TS)?\b|\b(?:GEARED|GEARLESS|DIR|PREFER\w*)\b", " ", rest,
-                      flags=re.IGNORECASE)
+        rest = re.sub(r"\d[\d.,]*[ \t]*K?[ \t]*(?:DWT|DWCC|MTS?|TS)?\b|\b(?:GEARED|GEARLESS|DIR|PREFER\w*|IMO|OPEN"
+                      r"|ABOUT|ABT|AROUND|ON|SPOT|PROMPT|PERIOD)\b", " ", rest, flags=re.IGNORECASE)
         segments = [s.strip(" .:'\"") for s in re.split(r"[|/–—]|\s-\s|\s{2,}|^-|-$", rest)]
         places = [s for s in segments if re.fullmatch(r"[^\W\d_][\w.'’ ]{1,30}", s) and len(s.split()) <= 4]
         if places:
@@ -227,20 +230,27 @@ def tonnage_blocks(lines):
     for n, start in enumerate(starts):
         end = min(starts[n + 1] if n + 1 < len(starts) else len(lines), start + 4)
         block = lines[start:end]
-        # Particulars ("MV SKY FALCON / 3821 DWT ON 5,48 M / BLT 2024") repeat the name without a position date.
-        if find_date(block) or re.search(r"\bOPEN\b", " ".join(block), re.IGNORECASE):
+        # Particulars ("MV SKY FALCON / 3821 DWT ON 5,48 M / BLT 2024", "Open hatch") repeat the name
+        # without a position date or open port.
+        if find_date(block) or find_open_port("\n".join(block)):
             blocks.append(block)
     return blocks
 
 
+def find_dwcc(text):
+    # Deadweight cargo capacity: what the vessel can actually load ("7150 dwcc", "DWCC: 4,000 mts").
+    match = re.search(NUMBER + r"[ \t]*(?:MTS?[ \t]*)?DWCC\b|\bDWCC\b(?:[ \t]*S/W)?[^\d\n]{0,12}?" + NUMBER, text, FLAGS)
+    return to_tonnes(match.group(1) or match.group(2)) if match else None
+
+
 def tonnage_record(block_text, lines):
-    vessel = search(r"\bM[./]?V\b\.?\s+(" + PLACE[1:-1] + r"(?:[ \t]+\d{1,3}\b(?![\d,.]|[ \t]*K\b))?)"
-                    r"(?=\s*(?:[/,(:;|]|[-–—]|\d|\bDWT\b|\bDWCC\b|\bOPEN\b|\bSPOT\b|\bBLT\b|$))", block_text)
+    vessel = search(VESSEL_NAME, block_text)
     size = re.search(NUMBER + r"[ \t]*(?:MTS?[ \t]*)?DWT\b|\b(?:DWT|DEADWEIGHT)\b[^\d\n]{0,20}?" + NUMBER,
                      block_text, FLAGS)
     record = {
         "Vessel Name": vessel,
         "Vessel Size": to_tonnes(size.group(1) or size.group(2)) if size else None,
+        "Cargo Capacity": find_dwcc(block_text),
         "Open Port": find_open_port(block_text) or (table_open_port(lines) if lines else None),
         "Open Date": find_date(lines) if lines else None,
     }
@@ -310,9 +320,7 @@ def extract_data(text, category):
     result = {}
 
     if category == "TONNAGE":
-        # A short trailing number is part of the name ("YONGSHENG 151", "TBN 1"); a long one is the size.
-        vessel = search(r"\bM[./]?V\b\.?\s+(" + PLACE[1:-1] + r"(?:[ \t]+\d{1,3}\b(?![\d,.]|[ \t]*K\b))?)"
-                        r"(?=\s*(?:[/,(:;|]|[-–—]|\d|\bDWT\b|\bDWCC\b|\bOPEN\b|\bSPOT\b|\bBLT\b|$))", text)
+        vessel = search(VESSEL_NAME, text)
         size = re.search(NUMBER + r"[ \t]*(?:MTS?[ \t]*)?DWT\b|\b(?:DWT|DEADWEIGHT)\b[^\d\n]{0,20}?" + NUMBER,
                          text, FLAGS)
         port = find_open_port(text)
@@ -329,6 +337,9 @@ def extract_data(text, category):
             result["Open Port"] = port
         if size:
             result["Vessel Size"] = to_tonnes(size.group(1) or size.group(2))
+        capacity = find_dwcc("\n".join(blocks[0]) if blocks else text)
+        if capacity:
+            result["Cargo Capacity"] = capacity
         if date:
             result["Open Date"] = date
 

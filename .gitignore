@@ -6,3 +6,4 @@ venv/
 eval/negatives_*.json
 eval/real/
 eval/real.json
+*.db

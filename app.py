@@ -1,16 +1,29 @@
+import io
 import json
 import os
+from datetime import date, timedelta
 
+import pandas as pd
 import streamlit as st
 
+import board as boardstore
+import matching
+from inbox import IMAP_HOSTS, read_imap, read_mbox
 from pipeline import (
     CATEGORY_NAMES, FIELD_NAMES, TEXT_COLUMN_HINTS, decode_text, format_quantity, guess_column, parse_eml,
     process_email, read_csv, records_table, results_table,
 )
-import pandas as pd
+from regions import REGIONS
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 DEMO_CSV = os.path.join(APP_DIR, "samples", "demo_emails.csv")
+DEMO_BOARD_CSV = os.path.join(APP_DIR, "samples", "demo_board.csv")
+BOARD_COLUMNS = {
+    "category": "Type", "vessel_name": "Vessel", "vessel_size": "DWT", "vessel_dwcc": "DWCC", "open_port": "Open port",
+    "open_date": "Open date", "loading_port": "Load port", "discharge_port": "Discharge port", "cargo": "Cargo",
+    "quantity": "Quantity (t)", "laycan": "Laycan", "start": "From", "end": "To", "region": "Region",
+    "confidence": "Confidence", "received": "Received", "source": "Source",
+}
 CATEGORIES = ["TONNAGE", "CARGO VC", "CARGO TC", "UNKNOWN"]
 SHORT_NAMES = {"TONNAGE": "Vessels", "CARGO VC": "Cargo orders", "CARGO TC": "TC enquiries", "UNKNOWN": "Other"}
 CATEGORY_COLORS = {"TONNAGE": "blue", "CARGO VC": "green", "CARGO TC": "violet", "UNKNOWN": "gray"}
@@ -137,6 +150,43 @@ def demo_batch():
     return [f"demo row {i + 2}" for i in range(len(frame))], list(frame["email_text"])
 
 
+def positions():
+    # One board per browser session (in memory) unless POSITIONS_DB points at a file on your own machine.
+    if "board" not in st.session_state:
+        st.session_state["board"] = boardstore.connect(os.environ.get("POSITIONS_DB", ":memory:"))
+    return st.session_state["board"]
+
+
+def add_to_board(items):
+    added = boardstore.add(positions(), items)
+    st.success(f"Added {added} new vessel positions and cargo orders to the positions board"
+               + ("" if added else " (all were already there)") + ".")
+
+
+def load_demo_board():
+    with open(DEMO_BOARD_CSV, "rb") as f:
+        frame = read_csv(f.read())
+    items = [(row["id"], row["email_text"], process_email(row["email_text"]), date.today())
+             for _, row in frame.iterrows()]
+    boardstore.add(positions(), items)
+
+
+def board_label(row):
+    if row["category"] == "TONNAGE":
+        size = f"{row['vessel_size']:,} DWT" if row["vessel_size"] else (
+            f"{row['vessel_dwcc']:,} DWCC" if row["vessel_dwcc"] else "size ?")
+        return f"{row['vessel_name'] or 'Unnamed vessel'} · {size} · open {row['open_port'] or '?'} {row['open_date'] or ''}"
+    quantity = format_quantity(row["quantity"]) if row["quantity"] else "? t"
+    return (f"{quantity} {row['cargo'] or 'cargo'} · {row['loading_port'] or '?'} → {row['discharge_port'] or '?'}"
+            f" · laycan {row['laycan'] or '?'}")
+
+
+def excel_bytes(frame):
+    buffer = io.BytesIO()
+    frame.to_excel(buffer, index=False, sheet_name="Positions board")
+    return buffer.getvalue()
+
+
 st.set_page_config(page_title="Email Segregation", page_icon=":material/mail:", layout="wide")
 
 with st.sidebar:
@@ -159,16 +209,17 @@ with st.sidebar:
     )
     st.subheader("How well it works")
     st.markdown(
-        "On 42 real broker circulars not used during development: **95%** sorted correctly, "
-        "**75%** of details extracted correctly. On 300 normal emails, 1 was wrongly flagged.\n\n"
-        "Rule-based, so every decision can be explained. Details only come from the first "
-        "vessel or cargo in an email."
+        "On 30 fresh real broker circulars not seen during development: **83%** sorted correctly, "
+        "**66%** of details extracted correctly, **96%** of vessel/cargo counts right. "
+        "On 300 normal emails, 1 was wrongly flagged.\n\n"
+        "Rule-based, so every decision can be explained. Matches are suggestions to check, not fixtures."
     )
 
 st.title("Chartering Email Segregation")
-st.caption("IME Innovation Challenge – sort broker emails and extract vessel and cargo details.")
+st.caption("IME Innovation Challenge – sort broker emails, build a positions board, and match vessels to cargoes.")
 
-single_tab, batch_tab = st.tabs(["Single email", "Batch upload"])
+single_tab, batch_tab, inbox_tab, board_tab, match_tab = st.tabs(
+    ["Single email", "Batch upload", "Inbox", "Positions board", "Matches"])
 
 with single_tab:
     st.write("Try a sample:")
@@ -271,8 +322,8 @@ with batch_tab:
                 with right:
                     result_card(results[index], compact=True)
 
-        board = records_table(sources, results).dropna(axis=1, how="all")
-        downloads = st.columns(2)
+        batch_records = records_table(sources, results).dropna(axis=1, how="all")
+        downloads = st.columns(3)
         downloads[0].download_button(
             "Download results CSV (one row per email)",
             data=table.to_csv(index=False).encode("utf-8-sig"),
@@ -280,9 +331,148 @@ with batch_tab:
             mime="text/csv",
         )
         downloads[1].download_button(
-            f"Download positions board CSV ({len(board)} vessels and cargoes)",
-            data=board.to_csv(index=False).encode("utf-8-sig"),
+            f"Download records CSV ({len(batch_records)} vessels and cargoes)",
+            data=batch_records.to_csv(index=False).encode("utf-8-sig"),
             file_name="positions_board.csv",
             mime="text/csv",
-            disabled=board.empty,
+            disabled=batch_records.empty,
         )
+        if downloads[2].button("Add to positions board", type="primary", disabled=batch_records.empty):
+            add_to_board([(source, text, result, None) for source, text, result in zip(sources, texts, results)])
+
+with inbox_tab:
+    st.write("Read emails straight from a mailbox. Results go to the **Positions board** and **Matches** tabs.")
+    left, right = st.columns(2)
+    with left:
+        st.subheader("Upload an exported mailbox")
+        st.caption("Export a folder as .mbox from Gmail (Google Takeout), Thunderbird or Apple Mail. "
+                   "Nothing leaves this app session and no password is needed.")
+        mbox = st.file_uploader("Mailbox file (.mbox)", type=["mbox"], key="mbox")
+        if mbox is not None and st.button("Read mailbox file"):
+            try:
+                st.session_state["inbox_items"] = read_mbox(mbox.getvalue())
+            except Exception as error:
+                st.error(f"Could not read {mbox.name}: {error}")
+    with right:
+        st.subheader("Connect by IMAP (read-only)")
+        st.caption("The folder is opened read-only: nothing is deleted, moved or marked as read. "
+                   "Use an **app password** (Gmail: Google Account → Security → App passwords), never your "
+                   "normal password, and prefer running this app on your own computer: on a shared "
+                   "deployment, the server you type into belongs to whoever hosts it. Credentials are used for "
+                   "this request only and are not stored.")
+        with st.form("imap"):
+            provider = st.selectbox("Provider", list(IMAP_HOSTS) + ["Other"])
+            host = st.text_input("IMAP server", placeholder="imap.example.com",
+                                 help="Only needed for 'Other'; otherwise the provider's server is used.")
+            user = st.text_input("Email address")
+            password = st.text_input("App password", type="password")
+            folder = st.text_input("Folder", value="INBOX")
+            days = st.slider("Emails from the last … days", 1, 30, 7)
+            limit = st.number_input("At most this many emails", 10, 500, 100, step=10)
+            connect_now = st.form_submit_button("Read inbox (read-only)")
+        if connect_now:
+            server = host.strip() if provider == "Other" else IMAP_HOSTS[provider]
+            if not (server and user and password):
+                st.warning("Fill in the server, email address and app password.")
+            else:
+                try:
+                    with st.spinner("Reading the mailbox…"):
+                        st.session_state["inbox_items"] = read_imap(server, user, password, folder, days, int(limit))
+                except Exception as error:
+                    st.error(f"Could not read the mailbox: {error}")
+                finally:
+                    password = None
+
+    items = st.session_state.get("inbox_items")
+    if items is not None:
+        results = [process_email(item["text"]) for item in items]
+        shipping = sum(r["category"] != "UNKNOWN" for r in results)
+        st.subheader(f"{len(items)} emails read · {shipping} chartering emails")
+        inbox_table = pd.DataFrame([{
+            "Received": item["received"], "Email": item["source"],
+            "Type": CATEGORY_NAMES[r["category"]].capitalize(), "Confidence": r["confidence"],
+            "Records": len(r["records"]) or "", "Why": r["reason"],
+        } for item, r in zip(items, results)])
+        st.dataframe(inbox_table, width="stretch", hide_index=True)
+        if st.button("Add chartering emails to the positions board", type="primary", disabled=not shipping):
+            add_to_board([(item["source"], item["text"], r, item["received"])
+                          for item, r in zip(items, results) if r["records"]])
+
+with board_tab:
+    conn = positions()
+    all_rows = boardstore.frame(conn)
+    top = st.columns([3, 1, 1], vertical_alignment="bottom")
+    top[0].write(f"**{len(all_rows)}** vessel positions and cargo orders on the board (this session). "
+                 "Add emails from the Batch upload or Inbox tabs.")
+    if top[1].button("Load demo board", help="Invented tonnage lists and cargo orders that match each other"):
+        load_demo_board()
+        st.rerun()
+    if top[2].button("Clear board", disabled=all_rows.empty):
+        boardstore.clear(conn)
+        st.rerun()
+
+    if all_rows.empty:
+        st.info("The board is empty. Load the demo board, or add emails from the Batch upload or Inbox tabs.")
+    else:
+        filters = st.columns([1, 2, 1, 1, 1])
+        kind = filters[0].selectbox("Show", ["All", "Vessels", "Cargo orders"])
+        text = filters[1].text_input("Search", placeholder="vessel, port, cargo…")
+        region = filters[2].selectbox("Region", ["Any"] + list(REGIONS))
+        min_size = filters[3].number_input("Min DWT / tonnes", 0, 500000, 0, step=1000)
+        max_size = filters[4].number_input("Max DWT / tonnes", 0, 500000, 0, step=1000, help="0 = no limit")
+        use_dates = st.toggle("Only dates between")
+        window = None
+        if use_dates:
+            window = st.date_input("Open date / laycan between", (date.today(), date.today() + timedelta(days=30)))
+        start, end = (window if isinstance(window, tuple) and len(window) == 2 else (None, None))
+        rows = boardstore.search(
+            conn, category={"Vessels": "TONNAGE", "Cargo orders": "CARGO VC"}.get(kind), text=text.strip(),
+            region=None if region == "Any" else region, start=start, end=end,
+            min_size=min_size or None, max_size=max_size or None)
+        view = rows[list(BOARD_COLUMNS)].rename(columns=BOARD_COLUMNS)
+        view["Type"] = view["Type"].map({"TONNAGE": "Vessel", "CARGO VC": "Cargo"}).fillna(view["Type"])
+        view = view.dropna(axis=1, how="all")
+        for column in view.columns:
+            if column in ("DWT", "DWCC"):
+                view[column] = [f"{int(v):,}" if pd.notna(v) else "" for v in pd.to_numeric(view[column], errors="coerce")]
+            else:
+                view[column] = view[column].astype(object).where(view[column].notna(), "")
+        st.caption(f"{len(view)} of {len(all_rows)} shown.")
+        st.dataframe(view, width="stretch", hide_index=True)
+        downloads = st.columns(2)
+        downloads[0].download_button("Download board as Excel", data=excel_bytes(view), file_name="positions_board.xlsx",
+                                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        downloads[1].download_button("Download board as CSV", data=view.to_csv(index=False).encode("utf-8-sig"),
+                                     file_name="positions_board.csv", mime="text/csv")
+
+with match_tab:
+    conn = positions()
+    vessels = boardstore.records(boardstore.search(conn, category="TONNAGE"))
+    cargoes = boardstore.records(boardstore.search(conn, category="CARGO VC"))
+    if not vessels or not cargoes:
+        st.info("Matching needs both vessels and cargo orders on the positions board. "
+                "Try **Load demo board** on the Positions board tab.")
+    else:
+        st.caption("Each pair scores up to +3 for dates (vessel opens within or just before the laycan), "
+                   "+3 for size (cargo fills 70-95% of DWT, or up to 100% of DWCC) and +3 for location "
+                   "(open at the load port; +2 same region, +1 neighbouring region, −2 far away). Pairs that "
+                   "cannot work (vessel opens after the laycan, or cargo too big) are left out. "
+                   "Suggestions to check, not fixtures.")
+        direction = st.radio("Find", ["Vessels for a cargo", "Cargoes for a vessel"], horizontal=True)
+        show_weak = st.toggle("Show weak matches (score 0 or less)")
+        if direction == "Vessels for a cargo":
+            target = st.selectbox("Cargo order", cargoes, format_func=board_label)
+            ranked = matching.rank(target, vessels, target_is_cargo=True, limit=20)
+        else:
+            target = st.selectbox("Vessel", vessels, format_func=board_label)
+            ranked = matching.rank(target, cargoes, target_is_cargo=False, limit=20)
+        ranked = [r for r in ranked if show_weak or r[0] > 0]
+        if not ranked:
+            st.info("No workable matches on the board for this one.")
+        else:
+            st.dataframe(pd.DataFrame([{
+                "Score": score, "Match": board_label(candidate), "Why": " · ".join(reasons),
+                "Source": candidate["source"],
+            } for score, candidate, reasons in ranked]), width="stretch", hide_index=True, column_config={
+                "Score": st.column_config.ProgressColumn(min_value=-4, max_value=9, format="%+d"),
+                "Why": st.column_config.TextColumn(width="large")})
