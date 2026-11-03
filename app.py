@@ -447,7 +447,7 @@ with board_tab:
 
 with match_tab:
     conn = positions()
-    vessels = boardstore.records(boardstore.search(conn, category="TONNAGE"))
+    vessels = matching.latest_positions(boardstore.records(boardstore.search(conn, category="TONNAGE")))
     cargoes = boardstore.records(boardstore.search(conn, category="CARGO VC"))
     if not vessels or not cargoes:
         st.info("Matching needs both vessels and cargo orders on the positions board. "
@@ -456,8 +456,8 @@ with match_tab:
         st.caption("Each pair scores up to +3 for dates (vessel opens within or just before the laycan), "
                    "+3 for size (cargo fills 70-95% of DWT, or up to 100% of DWCC) and +3 for location "
                    "(open at the load port; +2 same region, +1 neighbouring region, −2 far away). Pairs that "
-                   "cannot work (vessel opens after the laycan, or cargo too big) are left out. "
-                   "Suggestions to check, not fixtures.")
+                   "cannot work (vessel opens after the laycan or over 30 days before it, or cargo too big) "
+                   "are left out; reposted vessels use their latest position. Suggestions to check, not fixtures.")
         direction = st.radio("Find", ["Vessels for a cargo", "Cargoes for a vessel"], horizontal=True)
         show_weak = st.toggle("Show weak matches (score 0 or less)")
         if direction == "Vessels for a cargo":
@@ -470,9 +470,52 @@ with match_tab:
         if not ranked:
             st.info("No workable matches on the board for this one.")
         else:
-            st.dataframe(pd.DataFrame([{
-                "Score": score, "Match": board_label(candidate), "Why": " · ".join(reasons),
-                "Source": candidate["source"],
-            } for score, candidate, reasons in ranked]), width="stretch", hide_index=True, column_config={
-                "Score": st.column_config.ProgressColumn(min_value=-4, max_value=9, format="%+d"),
-                "Why": st.column_config.TextColumn(width="large")})
+            # Verdicts are kept per vessel-cargo pair for this session, so a broker can review
+            # several cargoes and download everything at the end.
+            verdicts = st.session_state.setdefault("verdicts", {})
+            pairs = []
+            for rank_number, (score, candidate, reasons) in enumerate(ranked, start=1):
+                vessel, cargo = (candidate, target) if direction == "Vessels for a cargo" else (target, candidate)
+                pair = f"{vessel['key']}|{cargo['key']}"
+                verdict, comment = verdicts.get(pair, ("", ""))
+                pairs.append({"pair": pair, "Score": score, "Match": board_label(candidate),
+                              "Why": " · ".join(reasons), "Verdict": verdict, "Comment": comment,
+                              "_record": (rank_number, vessel, cargo, score, reasons)})
+            st.caption("Optional: record a verdict for each suggestion (e.g. with a broker). "
+                       "Verdicts stay in this session until you download them.")
+            edited = st.data_editor(
+                pd.DataFrame([{k: v for k, v in p.items() if k != "_record"} for p in pairs]),
+                width="stretch", hide_index=True, key=f"editor-{target['key']}-{direction}",
+                disabled=["pair", "Score", "Match", "Why"],
+                column_order=["Score", "Match", "Verdict", "Comment", "Why"],
+                column_config={
+                    "Score": st.column_config.ProgressColumn(min_value=-4, max_value=9, format="%+d", width="small"),
+                    "Match": st.column_config.TextColumn(width="medium"),
+                    "Why": st.column_config.TextColumn(width="large"),
+                    "Verdict": st.column_config.SelectboxColumn(options=["Good fit", "Possible", "Not workable"],
+                                                                width="small"),
+                    "Comment": st.column_config.TextColumn(width="medium"),
+                })
+            for pair_info, (_, row) in zip(pairs, edited.iterrows()):
+                verdict = row["Verdict"] if isinstance(row["Verdict"], str) else ""
+                comment = row["Comment"] if isinstance(row["Comment"], str) else ""
+                if verdict or comment:
+                    verdicts[pair_info["pair"]] = (verdict, comment)
+                    st.session_state.setdefault("verdict_rows", {})[pair_info["pair"]] = pair_info["_record"]
+                else:
+                    verdicts.pop(pair_info["pair"], None)
+
+        recorded = st.session_state.get("verdicts", {})
+        if recorded:
+            records_by_pair = st.session_state.get("verdict_rows", {})
+            export = pd.DataFrame([{
+                "Verdict": verdict, "Comment": comment,
+                "Rank": records_by_pair[pair][0], "Score": records_by_pair[pair][3],
+                "Cargo order": board_label(records_by_pair[pair][2]), "Vessel": board_label(records_by_pair[pair][1]),
+                "System's reasons": " · ".join(records_by_pair[pair][4]),
+            } for pair, (verdict, comment) in recorded.items() if pair in records_by_pair])
+            counts = export["Verdict"].value_counts()
+            st.write(f"**{len(export)} verdict{'s' if len(export) != 1 else ''} recorded:** " + ", ".join(f"{v} {counts.get(v, 0)}" for v in
+                                                                         ["Good fit", "Possible", "Not workable"]))
+            st.download_button("Download verdicts CSV", data=export.to_csv(index=False).encode("utf-8-sig"),
+                               file_name="match_verdicts.csv", mime="text/csv")

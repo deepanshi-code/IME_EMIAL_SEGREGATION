@@ -98,6 +98,33 @@ class BoardAndMatching(unittest.TestCase):
         self.assertIn("liquid cargo needs a tanker; check the vessel type", reasons)
 
 
+class MatchingRules(unittest.TestCase):
+    def test_stale_position_left_out(self):
+        score, reasons = matching.score_pair(
+            {"vessel_size": 6000, "start": "2026-09-27", "end": "2026-09-27", "open_port": "Constanta"},
+            {"qty_max": 4000, "start": "2026-11-10", "end": "2026-11-15", "loading_port": "Constanta"})
+        self.assertIsNone(score)
+        self.assertIn("out of date", reasons[0])
+
+    def test_latest_position_per_vessel(self):
+        vessels = [{"vessel_name": "AGN LAGERTHA", "received": "2026-10-19", "open_date": "03-05 NOV"},
+                   {"vessel_name": "agn lagertha", "received": "2026-11-02", "open_date": "05-07 NOV"},
+                   {"vessel_name": "TBN", "received": "2026-10-01"}, {"vessel_name": "TBN", "received": "2026-10-02"}]
+        kept = matching.latest_positions(vessels)
+        self.assertEqual([v["open_date"] for v in kept if v["vessel_name"].upper() == "AGN LAGERTHA"], ["05-07 NOV"])
+        self.assertEqual(sum(v["vessel_name"] == "TBN" for v in kept), 2)
+
+
+class ReviewScoring(unittest.TestCase):
+    def test_wilson_interval(self):
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "eval"))
+        from score_match_review import wilson
+        low, high = wilson(6, 12)
+        self.assertAlmostEqual(low, 0.254, places=2)
+        self.assertAlmostEqual(high, 0.746, places=2)
+        self.assertEqual(wilson(0, 0), (0.0, 0.0))
+
+
 def raw_email(subject, body, day):
     message = EmailMessage()
     message["From"] = "broker@example.com"

@@ -4,8 +4,9 @@ from datetime import date
 from regions import proximity, region_of
 
 # A vessel usually needs a few days to ballast to the load port; earlier than this and it will
-# probably be fixed elsewhere before the cargo is ready.
+# probably be fixed elsewhere before the cargo is ready, and after STALE_DAYS the position is history.
 EARLY_DAYS = 10
+STALE_DAYS = 30
 
 
 def as_date(value):
@@ -23,6 +24,8 @@ def date_fit(vessel, cargo):
         window = f"{open_start:%d %b}" if open_start == open_end else f"{open_start:%d %b}-{open_end:%d %b}"
         return 3, f"open {window}, overlaps the laycan ({lay_start:%d %b}-{lay_end:%d %b})"
     gap = (lay_start - open_end).days
+    if gap > STALE_DAYS:
+        return None, f"position is {gap} days before the laycan (out of date)"
     if gap <= EARLY_DAYS:
         return 2, f"opens {gap} days before the laycan"
     return 0, f"opens {gap} days before the laycan (may be fixed elsewhere first)"
@@ -82,6 +85,18 @@ def score_pair(vessel, cargo):
             return None, reasons
         total += points
     return total, reasons
+
+
+def latest_positions(vessels):
+    """Brokers repost a vessel with new dates; keep only the most recent post of each named vessel."""
+    latest, unnamed = {}, []
+    for vessel in vessels:
+        name = (vessel.get("vessel_name") or "").strip().upper()
+        if not name or name.startswith("TBN"):
+            unnamed.append(vessel)
+        elif name not in latest or (vessel.get("received") or "") > (latest[name].get("received") or ""):
+            latest[name] = vessel
+    return list(latest.values()) + unnamed
 
 
 def rank(target, candidates, target_is_cargo=True, limit=10):

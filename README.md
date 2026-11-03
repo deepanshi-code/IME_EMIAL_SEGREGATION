@@ -69,7 +69,7 @@ labelled laycans/open dates in the real posts; the other one ("Vsl date") has no
 
 | Check | Points | Rule |
 |-------|--------|------|
-| Dates | +3 / +2 / 0 / excluded | open dates overlap the laycan / opens up to 10 days before it / earlier / opens after the laycan ends |
+| Dates | +3 / +2 / 0 / excluded | open dates overlap the laycan / opens up to 10 days before it / 11-30 days before / opens after the laycan ends, or more than 30 days before it (out of date) |
 | Size | +3 / +1 / −1 / excluded | cargo is 70–95% of DWT (or 70–100% of DWCC, the cargo capacity, used when stated) / 40–70% (part cargo) / under 40% / too big |
 | Location | +3 / +2 / +1 / 0 / −2 | open at the load port / same trading region / neighbouring region / unknown / far apart |
 | Vessel type | −3 | liquid cargo (crude, fuel oil, vegoil, chemicals, LPG…) with a vessel not described as a tanker |
@@ -80,10 +80,35 @@ the port/area names brokers use. It covers 109 of the 110 port/area names in the
 it was written with those names in view, so coverage of other inboxes will be lower; unknown ports
 score 0, not a penalty. Weak matches (score 0 or below) are hidden unless switched on.
 
-**Matching is not validated.** There is no ground truth for "the right vessel for this cargo"; the
-rules are standard broker considerations (dates, size, position), but distances, vessel type and
-gear, draft and port restrictions, and commercial terms are not modelled. Treat matches as a
-shortlist to check, and validate them with a broker before claiming accuracy.
+Brokers repost the same vessel with new dates, so matching uses only the latest post of each named
+vessel (`matching.latest_positions()`); unnamed and "TBN" vessels are all kept.
+
+**Matching is not validated yet.** There is no ground truth for "the right vessel for this cargo";
+the rules are standard broker considerations (dates, size, position), but distances, vessel type
+and gear, draft and port restrictions, and commercial terms are not modelled. Treat matches as a
+shortlist to check.
+
+### Broker check (blind review of the matches)
+
+`docs/broker_check.md` is a 40-minute session plan for validating the matches with a broker.
+
+```
+python eval/build_match_review.py          # sheet + hidden key in eval/real/ (not committed)
+python eval/score_match_review.py filled_sheet.xlsx
+```
+
+`build_match_review.py` loads the real shipbroker.gr posts, picks 12 cargo orders with a date,
+quantity and load port, and lists for each the app's **top 3 vessels plus 1 control** (a workable
+vessel ranked well below them), shuffled, with scores hidden. Only vessels with a stated open port
+are used, so every row can be judged. The broker marks each pair Good fit / Possible / Not workable.
+`score_match_review.py` then compares top picks with controls (with 95% intervals; 12 cargoes give
+wide ones) and lists every top pick the broker rejected next to the app's reasons. If top picks are
+not rated clearly above controls, the ranking does not add value yet, and the comments say why.
+
+In the app, the Matches tab can also record a verdict and comment per suggestion during a live
+session and download them as `match_verdicts.csv`.
+
+**Status: no broker has reviewed the matches yet.**
 
 ## Tests
 
