@@ -8,6 +8,8 @@ import streamlit as st
 
 import board as boardstore
 import matching
+import ui
+from classifier import MIN_SCORE, evidence
 from inbox import IMAP_HOSTS, read_imap, read_mbox
 from pipeline import (
     CATEGORY_NAMES, FIELD_NAMES, TEXT_COLUMN_HINTS, decode_text, format_quantity, guess_column, parse_eml,
@@ -70,42 +72,10 @@ def records_frame(records):
     return frame
 
 
-def result_card(result, compact=False):
-    # compact: the card sits in a half-width column, so badges and fields stack instead of sitting side by side.
-    with st.container(border=True):
-        if compact:
-            st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]],
-                     icon=CATEGORY_ICONS[result["category"]])
-            st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]],
-                     icon=CONFIDENCE_ICONS[result["confidence"]])
-        else:
-            badges = st.columns([3, 2], vertical_alignment="center")
-            with badges[0]:
-                st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]],
-                     icon=CATEGORY_ICONS[result["category"]])
-                st.caption(f"Category: {result['category']}")
-            with badges[1]:
-                st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]],
-                     icon=CONFIDENCE_ICONS[result["confidence"]])
-
-        if result["needs_review"]:
-            st.warning(result["reason"], icon=":material/visibility:")
-        else:
-            st.write(result["reason"])
-
-        found = [(name, value) for name, value in result["fields"].items() if value]
-        if found and compact:
-            st.markdown("\n".join(f"- **{name}:** {format_value(name, value)}" for name, value in found))
-        elif found:
-            columns = st.columns(min(len(found), 3))
-            for i, (name, value) in enumerate(found):
-                columns[i % len(columns)].metric(name, format_value(name, value))
-        elif result["category"] != "UNKNOWN":
-            st.info("The category was recognised, but no fields could be extracted.", icon=":material/search_off:")
-
-        if len(result["records"]) > 1:
-            noun = "vessel positions" if result["category"] == "TONNAGE" else "cargo orders"
-            st.caption(f"{len(result['records'])} {noun} found in this email (the first is shown above):")
+def result_card(result):
+    st.html(ui.result_card(result))
+    if len(result["records"]) > 1:
+        with st.expander(f"Show the {len(result['records'])} records as a table"):
             st.dataframe(records_frame(result["records"]), width="stretch")
 
 
@@ -201,6 +171,8 @@ def excel_bytes(frame):
 
 st.set_page_config(page_title="Chartering Email Segregation", page_icon=":material/sailing:", layout="wide")
 
+st.html(ui.STYLE)
+
 with st.sidebar:
     st.subheader(":material/sailing: About")
     st.write("Sorts shipbroker emails, pulls out every vessel and cargo, and suggests which vessels fit "
@@ -214,53 +186,60 @@ with st.sidebar:
     st.subheader(":material/verified: Confidence")
     st.markdown("**High** – clear evidence · **Medium** – probably right · "
                 "**Low** – close call, check it yourself")
-    st.subheader(":material/query_stats: Tested on real emails")
-    st.caption("30 real broker circulars not seen during development")
-    scores = st.columns(2)
-    scores[0].metric("Right type", "83%")
-    scores[1].metric("Right details", "66%")
-    st.caption("1 false alarm in 300 ordinary emails. Matches are suggestions to check, not fixtures.")
+    st.subheader(":material/query_stats: About the numbers")
+    st.caption("The figures at the top come from 30 real broker circulars collected after the rules were "
+               "frozen, and 300 ordinary emails. Matches are suggestions to check, not fixtures.")
     st.markdown(f"[:material/code: Code on GitHub]({REPO_URL}) · [:material/description: How it was tested]"
                 f"({REPO_URL}/blob/main/docs/EVALUATION.md)")
 
-st.title(":material/sailing: Chartering Email Segregation")
-st.caption("Sort shipbroker emails, extract every vessel and cargo, and match open vessels to cargo orders.")
-with st.container(border=True, horizontal=True, gap="medium"):
-    st.markdown(":material/sort: **Sort** each email by type", width="content")
-    st.markdown(":material/table_rows: **Extract** every vessel and cargo", width="content")
-    st.markdown(":material/join_inner: **Match** vessels to cargoes", width="content")
+st.html(ui.hero([("83%", "right type, real emails"), ("96%", "vessels and cargoes counted"),
+                 ("1 / 300", "false alarms, normal email")]))
 
 single_tab, batch_tab, inbox_tab, board_tab, match_tab = st.tabs([
     ":material/mail: Single email", ":material/upload_file: Batch upload", ":material/inbox: Inbox",
     ":material/table_chart: Positions board", ":material/join_inner: Matches"])
 
 with single_tab:
-    st.caption("Try a sample, or paste your own email below.")
-    with st.container(horizontal=True):
-        for name in SAMPLES:
-            st.button(name, on_click=load_sample, args=(name,), width="content", icon=SAMPLE_ICONS[name])
+    left, right = st.columns([5, 6], gap="large")
+    with left:
+        st.markdown("**Try a sample**")
+        with st.container(horizontal=True):
+            for name in SAMPLES:
+                st.button(name, on_click=load_sample, args=(name,), width="content", icon=SAMPLE_ICONS[name])
+        with st.form("single-email"):
+            email_text = st.text_area("Email text", height=260, key="email_text",
+                                      placeholder="Paste a chartering email here…")
+            submitted = st.form_submit_button("Process email", type="primary", icon=":material/bolt:")
+        if submitted or st.session_state.pop("auto_process", False):
+            if email_text.strip():
+                st.session_state["single_result"] = (email_text, process_email(email_text))
+            else:
+                st.session_state.pop("single_result", None)
+                st.warning("Paste an email or pick a sample first.")
 
-    with st.form("single-email"):
-        email_text = st.text_area("Email text", height=220, key="email_text",
-                                  placeholder="Paste a chartering email here…")
-        submitted = st.form_submit_button("Process email", type="primary")
-
-    if submitted or st.session_state.pop("auto_process", False):
-        if email_text.strip():
-            result = process_email(email_text)
+    with right:
+        if "single_result" not in st.session_state:
+            st.html('<div class="ime-panel"><div class="ime-kicker">Result</div>'
+                    '<div class="ime-reason">Pick a sample or paste an email, then press <b>Process email</b>. '
+                    'The type, confidence and every vessel or cargo found will appear here, with the evidence '
+                    'behind the decision.</div></div>')
+        else:
+            text, result = st.session_state["single_result"]
             result_card(result)
-            with st.expander("Technical details"):
+            winner = result["category"] if result["category"] != "UNKNOWN" else max(result["scores"], key=result["scores"].get)
+            st.html(ui.evidence_panel(result["scores"], winner, evidence(text, winner), MIN_SCORE))
+            with st.expander("Technical details (JSON)"):
                 output = {
                     "Category": result["category"],
                     "Confidence": result["confidence"],
                     "Reason": result["reason"],
                     "Scores": result["scores"],
                     "Extracted Data": {name: value for name, value in result["fields"].items() if value},
+                    "Records": [{k: v for k, v in r.items() if v} for r in result["records"]],
                 }
                 st.json(output)
-                st.download_button("Download JSON", data=json.dumps(output, indent=4), file_name="output.json")
-        else:
-            st.warning("Paste an email or pick a sample first.")
+                st.download_button("Download JSON", data=json.dumps(output, indent=4), file_name="output.json",
+                                   icon=":material/download:")
 
 with batch_tab:
     uploads = st.file_uploader(
@@ -286,11 +265,13 @@ with batch_tab:
         table = results_table(sources, results)
 
         counts = table["Category"].value_counts()
-        metrics = st.columns(len(CATEGORIES) + 2)
+        record_count = sum(len(r["records"]) for r in results)
+        metrics = st.columns(4)
         metrics[0].metric("Emails", len(table), border=True)
-        for column, category in zip(metrics[1:], CATEGORIES):
-            column.metric(SHORT_NAMES[category], int(counts.get(category, 0)), border=True)
-        metrics[-1].metric("To review", int(table["Needs Review"].sum()), border=True)
+        metrics[1].metric("Chartering emails", int(len(table) - counts.get("UNKNOWN", 0)), border=True)
+        metrics[2].metric("Vessels and cargoes", record_count, border=True)
+        metrics[3].metric("To review", int(table["Needs Review"].sum()), border=True)
+        st.html(ui.distribution({c: int(counts.get(c, 0)) for c in CATEGORIES}, SHORT_NAMES))
 
         left, middle, right = st.columns([3, 1, 1], vertical_alignment="bottom")
         chosen = left.multiselect("Show", CATEGORIES, default=CATEGORIES, format_func=SHORT_NAMES.get)
@@ -332,7 +313,7 @@ with batch_tab:
                 left, right = st.columns(2)
                 left.text_area("Email", texts[index], height=260, disabled=True, key=f"view-{index}")
                 with right:
-                    result_card(results[index], compact=True)
+                    result_card(results[index])
 
         batch_records = records_table(sources, results).dropna(axis=1, how="all")
         downloads = st.columns(3)
@@ -426,6 +407,21 @@ with board_tab:
     if all_rows.empty:
         st.info("The board is empty. Load the demo board, or add emails from the Batch upload or Inbox tabs.", icon=":material/table_chart:")
     else:
+        overview = st.columns([1, 1, 1, 3], vertical_alignment="center")
+        kinds = all_rows["category"].value_counts()
+        overview[0].metric("Vessels", int(kinds.get("TONNAGE", 0)), border=True)
+        overview[1].metric("Cargo orders", int(kinds.get("CARGO VC", 0)), border=True)
+        region_names = all_rows["region"].fillna("").replace("", "Unknown")
+        overview[2].metric("Regions", int(region_names[region_names != "Unknown"].nunique()), border=True)
+        by_region = (all_rows.assign(kind=all_rows["category"].map({"TONNAGE": "Vessels", "CARGO VC": "Cargo orders"}),
+                                     region=region_names)
+                     .dropna(subset=["kind"]).pivot_table(index="region", columns="kind", aggfunc="size", fill_value=0))
+        for column in ("Vessels", "Cargo orders"):
+            if column not in by_region:
+                by_region[column] = 0
+        with overview[3]:
+            st.bar_chart(by_region[["Vessels", "Cargo orders"]], horizontal=True, height=200,
+                         color=["#2B8CC4", "#2E9E6B"], x_label="", y_label="")
         filters = st.columns([1, 2, 1, 1, 1])
         kind = filters[0].selectbox("Show", ["All", "Vessels", "Cargo orders"])
         text = filters[1].text_input("Search", placeholder="vessel, port, cargo…")
@@ -465,11 +461,13 @@ with match_tab:
         st.info("Matching needs both vessels and cargo orders on the positions board. "
                 "Try **Load demo board** on the Positions board tab.", icon=":material/join_inner:")
     else:
-        st.caption("Each pair scores up to +3 for dates (vessel opens within or just before the laycan), "
-                   "+3 for size (cargo fills 70-95% of DWT, or up to 100% of DWCC) and +3 for location "
-                   "(open at the load port; +2 same region, +1 neighbouring region, −2 far away). Pairs that "
-                   "cannot work (vessel opens after the laycan or over 30 days before it, or cargo too big) "
-                   "are left out; reposted vessels use their latest position. Suggestions to check, not fixtures.")
+        with st.expander("How matches are scored", icon=":material/info:"):
+            st.markdown("Each pair scores up to **+3 for dates** (vessel opens within or just before the laycan), "
+                        "**+3 for size** (cargo fills 70-95% of DWT, or up to 100% of DWCC) and **+3 for location** "
+                        "(open at the load port; +2 same region, +1 neighbouring region, −2 far away). Pairs that "
+                        "cannot work (vessel opens after the laycan or over 30 days before it, or cargo too big) "
+                        "are left out; reposted vessels use their latest position. These are suggestions to "
+                        "check, not fixtures.")
         direction = st.radio("Find", ["Vessels for a cargo", "Cargoes for a vessel"], horizontal=True)
         show_weak = st.toggle("Show weak matches (score 0 or less)")
         if direction == "Vessels for a cargo":
@@ -482,6 +480,15 @@ with match_tab:
         if not ranked:
             st.info("No workable matches on the board for this one.", icon=":material/search_off:")
         else:
+            st.markdown(f"**Best {min(3, len(ranked))} of {len(ranked)} suggestions**")
+            for rank_number, (score, candidate, reasons) in enumerate(ranked[:3], start=1):
+                vessel, cargo = (candidate, target) if direction == "Vessels for a cargo" else (target, candidate)
+                parts = [(name, check(vessel, cargo)[0] or 0) for name, check in
+                         (("Dates", matching.date_fit), ("Size", matching.size_fit), ("Location", matching.place_fit))]
+                if (matching.type_fit(vessel, cargo)[0] or 0) < 0:
+                    parts.append(("Type", matching.type_fit(vessel, cargo)[0]))
+                st.html(ui.match_card(rank_number, score, board_label(candidate), parts, reasons))
+            st.markdown("**All suggestions** · record a verdict for each one (e.g. with a broker)")
             # Verdicts are kept per vessel-cargo pair for this session, so a broker can review
             # several cargoes and download everything at the end.
             verdicts = st.session_state.setdefault("verdicts", {})
@@ -493,8 +500,7 @@ with match_tab:
                 pairs.append({"pair": pair, "Score": score, "Match": board_label(candidate),
                               "Why": " · ".join(reasons), "Verdict": verdict, "Comment": comment,
                               "_record": (rank_number, vessel, cargo, score, reasons)})
-            st.caption("Optional: record a verdict for each suggestion (e.g. with a broker). "
-                       "Verdicts stay in this session until you download them.")
+            st.caption("Verdicts stay in this session until you download them.")
             edited = st.data_editor(
                 pd.DataFrame([{k: v for k, v in p.items() if k != "_record"} for p in pairs]),
                 width="stretch", hide_index=True, key=f"editor-{target['key']}-{direction}",

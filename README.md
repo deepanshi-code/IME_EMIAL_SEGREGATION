@@ -11,7 +11,7 @@ which cargoes**, explaining every decision. Built for the IME Innovation Challen
 **[Try the live demo →](https://ime-email-segregation.streamlit.app/)** Click *Vessel list*, then
 *Positions board → Load demo board → Matches*. The demo uses invented emails.
 
-![The app: sample emails, workflow strip and navigation tabs, with an About sidebar](docs/images/app.png)
+![The app: header with held-out results, sample emails and a vessel list split into three position cards](docs/images/app.png)
 
 ## The problem
 
@@ -39,9 +39,9 @@ the cases it is unsure about for a person to check.
 
 Each tab and field is described in the [app guide](docs/APP_GUIDE.md).
 
-![One email with three vessel positions, each extracted with name, size, open port and date](docs/images/result-card.png)
-![Batch of 42 demo emails sorted, with key details and reasons per email](docs/images/batch.png)
-![Vessels ranked for a cargo order, with score and reasons](docs/images/matches.png)
+![Result card with three vessel positions and a 'How it decided' panel showing the score per type and the evidence found](docs/images/result-card.png)
+![Batch of 42 demo emails: totals, share of each type, and a table with key details and reasons](docs/images/batch.png)
+![Best vessels for a cargo order, each with a score out of 9 split into dates, size and location](docs/images/matches.png)
 
 ## Results
 
@@ -98,8 +98,8 @@ streamlit run app.py
 python -m unittest discover -s tests -v
 ```
 
-The 23 tests cover parsing, classification traps, record splitting, matching, the board, .mbox
-reading and read-only IMAP against a fake server. They also fail if accuracy on the committed
+The 26 tests cover parsing, classification traps, record splitting, matching, the board, .mbox
+reading, read-only IMAP against a fake server, and that email text is escaped in the HTML cards. They also fail if accuracy on the committed
 datasets drops, and they run on every push.
 
 **Privacy:** the positions board is kept in memory, one per browser session. IMAP opens the mailbox
@@ -110,6 +110,7 @@ own computer.
 
 ```
 app.py            Streamlit app: single email, batch, inbox, positions board, matches
+ui.py             HTML cards for the app (all email text escaped)
 classifier.py     category scoring with labelled evidence rules
 extractor.py      field and record extraction
 pipeline.py       confidence, reasons, file parsing, result tables
