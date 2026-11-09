@@ -11,7 +11,7 @@ which cargoes**, explaining every decision. Built for the IME Innovation Challen
 **[Try the live demo →](https://ime-email-segregation.streamlit.app/)** Click *Vessel list*, then
 *Positions board → Load demo board → Matches*. The demo uses invented emails.
 
-![One email with three vessel positions, each extracted with name, size, open port and date](docs/images/result-card.png)
+![The app: sample emails, workflow strip and navigation tabs, with an About sidebar](docs/images/app.png)
 
 ## The problem
 
@@ -39,6 +39,7 @@ the cases it is unsure about for a person to check.
 
 Each tab and field is described in the [app guide](docs/APP_GUIDE.md).
 
+![One email with three vessel positions, each extracted with name, size, open port and date](docs/images/result-card.png)
 ![Batch of 42 demo emails sorted, with key details and reasons per email](docs/images/batch.png)
 ![Vessels ranked for a cargo order, with score and reasons](docs/images/matches.png)
 

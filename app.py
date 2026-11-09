@@ -26,6 +26,14 @@ BOARD_COLUMNS = {
 }
 CATEGORIES = ["TONNAGE", "CARGO VC", "CARGO TC", "UNKNOWN"]
 SHORT_NAMES = {"TONNAGE": "Vessels", "CARGO VC": "Cargo orders", "CARGO TC": "TC enquiries", "UNKNOWN": "Other"}
+REPO_URL = "https://github.com/deepanshi-code/IME_EMIAL_SEGREGATION"
+CATEGORY_ICONS = {"TONNAGE": ":material/directions_boat:", "CARGO VC": ":material/inventory_2:",
+                  "CARGO TC": ":material/schedule:", "UNKNOWN": ":material/mail:"}
+SAMPLE_ICONS = {"Vessel position": ":material/directions_boat:", "Cargo order": ":material/inventory_2:",
+                "Vessel list": ":material/format_list_bulleted:", "Time charter": ":material/schedule:",
+                "Tricky case": ":material/help:", "Normal email": ":material/mail:"}
+CONFIDENCE_ICONS = {"High": ":material/check_circle:", "Medium": ":material/radio_button_partial:",
+                    "Low": ":material/warning:"}
 CATEGORY_COLORS = {"TONNAGE": "blue", "CARGO VC": "green", "CARGO TC": "violet", "UNKNOWN": "gray"}
 CONFIDENCE_COLORS = {"High": "green", "Medium": "orange", "Low": "red"}
 SAMPLES = {
@@ -66,15 +74,19 @@ def result_card(result, compact=False):
     # compact: the card sits in a half-width column, so badges and fields stack instead of sitting side by side.
     with st.container(border=True):
         if compact:
-            st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]])
-            st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]])
+            st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]],
+                     icon=CATEGORY_ICONS[result["category"]])
+            st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]],
+                     icon=CONFIDENCE_ICONS[result["confidence"]])
         else:
             badges = st.columns([3, 2], vertical_alignment="center")
             with badges[0]:
-                st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]])
+                st.badge(CATEGORY_NAMES[result["category"]].capitalize(), color=CATEGORY_COLORS[result["category"]],
+                     icon=CATEGORY_ICONS[result["category"]])
                 st.caption(f"Category: {result['category']}")
             with badges[1]:
-                st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]])
+                st.badge(f"{result['confidence']} confidence", color=CONFIDENCE_COLORS[result["confidence"]],
+                     icon=CONFIDENCE_ICONS[result["confidence"]])
 
         if result["needs_review"]:
             st.warning(result["reason"], icon=":material/visibility:")
@@ -89,7 +101,7 @@ def result_card(result, compact=False):
             for i, (name, value) in enumerate(found):
                 columns[i % len(columns)].metric(name, format_value(name, value))
         elif result["category"] != "UNKNOWN":
-            st.info("The category was recognised, but no fields could be extracted.")
+            st.info("The category was recognised, but no fields could be extracted.", icon=":material/search_off:")
 
         if len(result["records"]) > 1:
             noun = "vessel positions" if result["category"] == "TONNAGE" else "cargo orders"
@@ -187,45 +199,46 @@ def excel_bytes(frame):
     return buffer.getvalue()
 
 
-st.set_page_config(page_title="Email Segregation", page_icon=":material/mail:", layout="wide")
+st.set_page_config(page_title="Chartering Email Segregation", page_icon=":material/sailing:", layout="wide")
 
 with st.sidebar:
-    st.header("About")
-    st.write(
-        "Sorts shipbroker emails into four types and pulls out the key details, "
-        "so a chartering desk can see positions and orders at a glance."
-    )
+    st.subheader(":material/sailing: About")
+    st.write("Sorts shipbroker emails, pulls out every vessel and cargo, and suggests which vessels fit "
+             "which cargoes, so a chartering desk sees positions and orders at a glance.")
     st.markdown(
-        "- **Vessel position** (TONNAGE): a ship looking for cargo – name, DWT, open port\n"
-        "- **Voyage cargo order** (CARGO VC): a cargo looking for a ship – load and discharge port\n"
-        "- **Time-charter enquiry** (CARGO TC): a ship wanted on hire – delivery, redelivery, duration\n"
-        "- **Not chartering** (UNKNOWN): everything else"
+        f"{CATEGORY_ICONS['TONNAGE']} **Vessel position** – a ship looking for cargo\n\n"
+        f"{CATEGORY_ICONS['CARGO VC']} **Voyage cargo order** – a cargo looking for a ship\n\n"
+        f"{CATEGORY_ICONS['CARGO TC']} **Time-charter enquiry** – a ship wanted on hire\n\n"
+        f"{CATEGORY_ICONS['UNKNOWN']} **Not chartering** – everything else"
     )
-    st.subheader("Reading the confidence")
-    st.markdown(
-        "- **High** – strong, unambiguous evidence\n"
-        "- **Medium** – probably right\n"
-        "- **Low** – close call or weak evidence; check it yourself"
-    )
-    st.subheader("How well it works")
-    st.markdown(
-        "On 30 fresh real broker circulars not seen during development: **83%** sorted correctly, "
-        "**66%** of details extracted correctly, **96%** of vessel/cargo counts right. "
-        "On 300 normal emails, 1 was wrongly flagged.\n\n"
-        "Rule-based, so every decision can be explained. Matches are suggestions to check, not fixtures."
-    )
+    st.subheader(":material/verified: Confidence")
+    st.markdown("**High** – clear evidence · **Medium** – probably right · "
+                "**Low** – close call, check it yourself")
+    st.subheader(":material/query_stats: Tested on real emails")
+    st.caption("30 real broker circulars not seen during development")
+    scores = st.columns(2)
+    scores[0].metric("Right type", "83%")
+    scores[1].metric("Right details", "66%")
+    st.caption("1 false alarm in 300 ordinary emails. Matches are suggestions to check, not fixtures.")
+    st.markdown(f"[:material/code: Code on GitHub]({REPO_URL}) · [:material/description: How it was tested]"
+                f"({REPO_URL}/blob/main/docs/EVALUATION.md)")
 
-st.title("Chartering Email Segregation")
-st.caption("IME Innovation Challenge – sort broker emails, build a positions board, and match vessels to cargoes.")
+st.title(":material/sailing: Chartering Email Segregation")
+st.caption("Sort shipbroker emails, extract every vessel and cargo, and match open vessels to cargo orders.")
+with st.container(border=True, horizontal=True, gap="medium"):
+    st.markdown(":material/sort: **Sort** each email by type", width="content")
+    st.markdown(":material/table_rows: **Extract** every vessel and cargo", width="content")
+    st.markdown(":material/join_inner: **Match** vessels to cargoes", width="content")
 
-single_tab, batch_tab, inbox_tab, board_tab, match_tab = st.tabs(
-    ["Single email", "Batch upload", "Inbox", "Positions board", "Matches"])
+single_tab, batch_tab, inbox_tab, board_tab, match_tab = st.tabs([
+    ":material/mail: Single email", ":material/upload_file: Batch upload", ":material/inbox: Inbox",
+    ":material/table_chart: Positions board", ":material/join_inner: Matches"])
 
 with single_tab:
-    st.write("Try a sample:")
-    sample_columns = st.columns(len(SAMPLES))
-    for column, name in zip(sample_columns, SAMPLES):
-        column.button(name, on_click=load_sample, args=(name,), width="stretch")
+    st.caption("Try a sample, or paste your own email below.")
+    with st.container(horizontal=True):
+        for name in SAMPLES:
+            st.button(name, on_click=load_sample, args=(name,), width="content", icon=SAMPLE_ICONS[name])
 
     with st.form("single-email"):
         email_text = st.text_area("Email text", height=220, key="email_text",
@@ -265,7 +278,7 @@ with batch_tab:
     pairs = [(source, text) for source, text in zip(sources, texts) if text and text.strip()]
 
     if not pairs:
-        st.info("Upload emails or switch on the demo emails to see results.")
+        st.info("Upload emails or switch on the demo emails to see results.", icon=":material/upload_file:")
     else:
         sources = [source for source, _ in pairs]
         texts = [text for _, text in pairs]
@@ -274,14 +287,13 @@ with batch_tab:
 
         counts = table["Category"].value_counts()
         metrics = st.columns(len(CATEGORIES) + 2)
-        metrics[0].metric("Emails", len(table))
+        metrics[0].metric("Emails", len(table), border=True)
         for column, category in zip(metrics[1:], CATEGORIES):
-            column.metric(SHORT_NAMES[category], int(counts.get(category, 0)))
-        metrics[-1].metric("To review", int(table["Needs Review"].sum()))
+            column.metric(SHORT_NAMES[category], int(counts.get(category, 0)), border=True)
+        metrics[-1].metric("To review", int(table["Needs Review"].sum()), border=True)
 
         left, middle, right = st.columns([3, 1, 1], vertical_alignment="bottom")
-        chosen = left.multiselect("Show", CATEGORIES, default=CATEGORIES,
-                                  format_func=lambda c: CATEGORY_NAMES[c].capitalize())
+        chosen = left.multiselect("Show", CATEGORIES, default=CATEGORIES, format_func=SHORT_NAMES.get)
         review_only = middle.toggle("Needs review only")
         all_columns = right.toggle("All columns")
 
@@ -297,7 +309,7 @@ with batch_tab:
             view = view.assign(Category=view["Category"].map(lambda c: CATEGORY_NAMES[c].capitalize()))
 
         if view.empty:
-            st.info("No emails match these filters.")
+            st.info("No emails match these filters.", icon=":material/filter_alt_off:")
         else:
             st.caption("Click a row to read the email and its result. Emails that need review are listed first.")
             selection = st.dataframe(
@@ -412,7 +424,7 @@ with board_tab:
         st.rerun()
 
     if all_rows.empty:
-        st.info("The board is empty. Load the demo board, or add emails from the Batch upload or Inbox tabs.")
+        st.info("The board is empty. Load the demo board, or add emails from the Batch upload or Inbox tabs.", icon=":material/table_chart:")
     else:
         filters = st.columns([1, 2, 1, 1, 1])
         kind = filters[0].selectbox("Show", ["All", "Vessels", "Cargo orders"])
@@ -451,7 +463,7 @@ with match_tab:
     cargoes = boardstore.records(boardstore.search(conn, category="CARGO VC"))
     if not vessels or not cargoes:
         st.info("Matching needs both vessels and cargo orders on the positions board. "
-                "Try **Load demo board** on the Positions board tab.")
+                "Try **Load demo board** on the Positions board tab.", icon=":material/join_inner:")
     else:
         st.caption("Each pair scores up to +3 for dates (vessel opens within or just before the laycan), "
                    "+3 for size (cargo fills 70-95% of DWT, or up to 100% of DWCC) and +3 for location "
@@ -468,7 +480,7 @@ with match_tab:
             ranked = matching.rank(target, cargoes, target_is_cargo=False, limit=20)
         ranked = [r for r in ranked if show_weak or r[0] > 0]
         if not ranked:
-            st.info("No workable matches on the board for this one.")
+            st.info("No workable matches on the board for this one.", icon=":material/search_off:")
         else:
             # Verdicts are kept per vessel-cargo pair for this session, so a broker can review
             # several cargoes and download everything at the end.

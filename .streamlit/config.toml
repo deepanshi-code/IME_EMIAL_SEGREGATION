@@ -1,0 +1,49 @@
+# Maritime theme: deep ocean blue accents, light and dark variants.
+[theme]
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap, sans-serif"
+headingFont = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap, sans-serif"
+headingFontWeights = [700, 600, 600]
+headingFontSizes = ["2.3rem", "1.5rem", "1.2rem"]
+metricValueFontSize = "1.6rem"
+metricValueFontWeight = 600
+baseRadius = "0.6rem"
+buttonRadius = "0.5rem"
+showWidgetBorder = true
+showSidebarBorder = true
+linkUnderline = false
+
+[theme.light]
+primaryColor = "#0B6E99"
+backgroundColor = "#F7FAFC"
+secondaryBackgroundColor = "#EAF1F6"
+textColor = "#0F2A3D"
+linkColor = "#0B6E99"
+borderColor = "#D5E1EA"
+dataframeHeaderBackgroundColor = "#EAF1F6"
+
+[theme.light.sidebar]
+backgroundColor = "#0F2A3D"
+secondaryBackgroundColor = "#173A52"
+textColor = "#E6EEF3"
+linkColor = "#7FD0F2"
+borderColor = "#23455E"
+
+[theme.dark]
+# White button text needs >= 4.5:1 contrast; #1A78AD gives 4.9:1 (and 3.8:1 against the background).
+primaryColor = "#1A78AD"
+backgroundColor = "#0B1620"
+secondaryBackgroundColor = "#13222F"
+textColor = "#E6EEF3"
+linkColor = "#7FD0F2"
+borderColor = "#23384A"
+dataframeHeaderBackgroundColor = "#13222F"
+
+[theme.dark.sidebar]
+backgroundColor = "#081018"
+secondaryBackgroundColor = "#13222F"
+textColor = "#E6EEF3"
+linkColor = "#7FD0F2"
+borderColor = "#1C2E3D"
+
+[browser]
+gatherUsageStats = false
