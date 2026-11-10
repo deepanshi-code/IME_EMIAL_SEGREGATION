@@ -54,8 +54,8 @@ def find_route_line(text):
 
 EVIDENCE = {
     "TONNAGE": [
-        (r"\b(?:DWT|DEADWEIGHT)\b", 3, "DWT / deadweight"),
-        (r"\bM[./]?V\b\.?\s+[A-Z]", 2, "vessel name (MV ...)"),
+        (r"\b(?:DWT|DEADWEIGHT)(?![A-Z])", 3, "DWT / deadweight"),
+        (r"\bM[./]?V\b(?:\.[ \t]*|[ \t]+)[A-Z]", 2, "vessel name (MV ...)"),
         (r"\bOPEN\s*(?:AT\s+|:\s*)?[A-Z][A-Z ,'-]*?\s+\d{1,2}\b", 2, "open port with a date"),
         (r"\b(?:OPEN|HOME|EXCLUSIVE|INHOUSE|OWNERS)\s+TONNAGES?\b|\b(?:OPEN|VESSEL)\s+POSITIONS?\b", 2, "open tonnage / vessel positions"),
         (r"\bDWCC\b", 2, "DWCC (cargo capacity)"),
@@ -71,16 +71,16 @@ EVIDENCE = {
         (r"\b(?:LOOKING|NEEDS?|REQUIRED?|PROVIDE)\b[^\n]{0,25}?\b(?:VESSEL|VSL|TONNAGE)\b"
          r"|\bOFFER\s+(?:FIRM\s+)?(?:VESSEL|VSL|TONNAGE)\b", 2, "asks for a vessel"),
         # A required size range is a cargo order ("Any Dwt 6-9,000", "12,000 - 17,000 dwt").
-        (r"\bANY\s+DWT\b|\d[ \t]*[-–][ \t]*\d[\d,.]*[ \t]*K?[ \t]*(?:MT[ \t]*)?DWT\b", 2, "required vessel size range"),
+        (r"\bANY\s+DWT\b|\d[ \t]*[-–/][ \t]*\d[\d,.]*[ \t]*K?[ \t]*(?:MT[ \t]*)?DWT\b", 2, "required vessel size range"),
         # Laytime terms only appear in voyage charters.
         (r"\b(?:S?SHINC|S?SHEX|FSHEX|FHEX|SATSHEX|FSATHEX|PWWD|WWDS?|TTL[ \t]*DAYS|TTDAYS)\b"
          r"|\b\d[\d,.]*[ \t]*[XC][ \t]*/[ \t]*\d[\d,.]*[ \t]*[XC]\b", 2, "laytime terms (SHINC, 1000x/1000x)"),
-        (r"\b(?:LOAD(?:ING)?\s+PORT|(?-i:POL))\b", 3, "load port"),
-        (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISPORT|(?-i:POD))\b", 3, "discharge port"),
+        (r"\b(?:LOAD(?:ING)?\s+PORT|L/PORT|(?-i:POL))\b", 3, "load port"),
+        (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DI[SA]CH\w*\.?\s+PORT|D/PORT|DISPORT|(?-i:POD))\b", 3, "discharge port"),
         (r"^\s*LOAD\s*:", 2, "'Load:' label"),
         (r"\bEX\s+[A-Z][A-Z ]*?\s+TO\s+[A-Z]+", 2, "'ex X to Y' route"),
         (r"\bFROM\s+" + NOT_DATE + r"(?-i:[A-Z][\w'\-]*(?:[ \t]+[A-Z][\w'\-]*)*)\s+TO\s+" + NOT_DATE + r"(?-i:[A-Z])", 2, "'from X to Y' route"),
-        (r"\d[\d,]*\s*K?\s*(?:MT|MTS|METRIC\s+TON(?:NE)?S|TONNES|TONS)\b", 2, "cargo quantity (MT)"),
+        (r"\d[\d,]*\s*K?\s*(?:MT|MTS|MTONS?|METRIC\s+TON(?:NE)?S|TONNES|TONS)\b", 2, "cargo quantity (MT)"),
         (r"(?:\bPER\s+(?:MT|METRIC\s+TON(?:NE)?|TON(?:NE)?)\b|\bPMT\b|/\s*MT\b)", 2, "freight per tonne"),
         (r"\b(?:FOB|CIF|CFR|FAS|DAP|DDP)\b", 1, "Incoterm (FOB, CIF...)"),
         (r"\b(?:FREIGHT|LUMP\s*SUM)\b", 1, "freight / lumpsum"),
@@ -91,14 +91,21 @@ EVIDENCE = {
     "CARGO TC": [
         (r"^\s*DEL(?:IVERY)?\b", 2, "delivery"),
         (r"^\s*REDEL(?:IVERY)?\b", 2, "redelivery"),
-        (r"\b(?:DURATION|PERIOD)\b.*\d+\s*(?:MONTHS?|DAYS)\b", 2, "duration / period"),
+        (r"\b(?:DURATION|PERIOD)\b.*\d+\)?\s*(?:MONTHS?|DAYS|YEARS?)\b", 2, "duration / period"),
         (r"\b(?:TCT|TC TRIP|ON PERIOD|PERIOD ENQUIRY)\b", 2, "TCT / period enquiry"),
+        # "Firm T/C Requirement", "quote your best Time Charter offers", "Charter Type: Time Charter".
+        # A line offering "time charter OR voyage" is left to the other rules.
+        (r"^(?![^\n]*\bVOYAGE\b)[^\n]*\b(?:T/C|TIME[ \t-]*CHARTER)\b[^\n]{0,30}?\b(?:REQUIREMENTS?|REQUESTS?|OFFERS?"
+         r"|ENQUIRY|INQUIRY)\b|^[ \t]*CHARTER[ \t]+TYPE[ \t]*:[ \t]*(?:TC|T/C|TIME)\b", 3, "time-charter request"),
+        (r"\bHIRE[ \t]+(?:IDEA|RATE)\b|\bPDPR\b|\bUSD[ \t]*[\d,.]+[ \t]*(?:PER[ \t]+DAY|/[ \t]*DAY|PD)\b"
+         r"|\b[\d,.]+[ \t]*USD[ \t]+PER[ \t]+DAY\b", 2, "daily hire (USD per day)"),
     ],
 }
 
 
 def normalize_newlines(text):
-    return text.replace("\r\n", "\n").replace("\r", "\n")
+    # Also drops markdown bold markers ("- **Load Port:** Tunis"), which hide labels from the rules.
+    return re.sub(r"\*\*|__", "", text.replace("\r\n", "\n").replace("\r", "\n"))
 
 
 def score_email(text):

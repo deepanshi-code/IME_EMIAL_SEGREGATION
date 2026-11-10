@@ -1,3 +1,4 @@
+import hashlib
 import io
 import json
 import os
@@ -25,6 +26,11 @@ BOARD_COLUMNS = {
     "open_date": "Open date", "loading_port": "Load port", "discharge_port": "Discharge port", "cargo": "Cargo",
     "quantity": "Quantity (t)", "laycan": "Laycan", "start": "From", "end": "To", "region": "Region",
     "confidence": "Confidence", "received": "Received", "source": "Source",
+}
+EDITABLE_COLUMNS = {
+    "Vessel": "Vessel Name", "DWT": "Vessel Size", "DWCC": "Cargo Capacity", "Open port": "Open Port",
+    "Open date": "Open Date", "Load port": "Loading Port", "Discharge port": "Discharge Port", "Cargo": "Cargo",
+    "Quantity (t)": "Quantity", "Laycan": "Laycan",
 }
 CATEGORIES = ["TONNAGE", "CARGO VC", "CARGO TC", "UNKNOWN"]
 SHORT_NAMES = {"TONNAGE": "Vessels", "CARGO VC": "Cargo orders", "CARGO TC": "TC enquiries", "UNKNOWN": "Other"}
@@ -54,6 +60,12 @@ SAMPLES = {
     ),
     "Normal email": "Hi Sarah,\n\nCould we move the budget review to Thursday afternoon?\n\nThanks,\nDaniel",
 }
+
+
+@st.cache_data(show_spinner=False, max_entries=20000)
+def analyse(text):
+    # Same email text, same result: cached so filters and clicks do not re-process a whole batch.
+    return process_email(text)
 
 
 def format_value(name, value):
@@ -148,7 +160,7 @@ def add_to_board(items):
 def load_demo_board():
     with open(DEMO_BOARD_CSV, "rb") as f:
         frame = read_csv(f.read())
-    items = [(row["id"], row["email_text"], process_email(row["email_text"]), date.today())
+    items = [(row["id"], row["email_text"], analyse(row["email_text"]), date.today())
              for _, row in frame.iterrows()]
     boardstore.add(positions(), items)
 
@@ -212,7 +224,7 @@ with single_tab:
             submitted = st.form_submit_button("Process email", type="primary", icon=":material/bolt:")
         if submitted or st.session_state.pop("auto_process", False):
             if email_text.strip():
-                st.session_state["single_result"] = (email_text, process_email(email_text))
+                st.session_state["single_result"] = (email_text, analyse(email_text))
             else:
                 st.session_state.pop("single_result", None)
                 st.warning("Paste an email or pick a sample first.")
@@ -261,7 +273,7 @@ with batch_tab:
     else:
         sources = [source for source, _ in pairs]
         texts = [text for _, text in pairs]
-        results = [process_email(text) for text in texts]
+        results = [analyse(text) for text in texts]
         table = results_table(sources, results)
 
         counts = table["Category"].value_counts()
@@ -378,7 +390,7 @@ with inbox_tab:
 
     items = st.session_state.get("inbox_items")
     if items is not None:
-        results = [process_email(item["text"]) for item in items]
+        results = [analyse(item["text"]) for item in items]
         shipping = sum(r["category"] != "UNKNOWN" for r in results)
         st.subheader(f"{len(items)} emails read · {shipping} chartering emails")
         inbox_table = pd.DataFrame([{
@@ -404,8 +416,21 @@ with board_tab:
         boardstore.clear(conn)
         st.rerun()
 
+    with st.expander("Restore a saved board", icon=":material/restore:"):
+        backup_file = st.file_uploader("Board backup (.json, made with Save board)", type=["json"], key="restore")
+        if backup_file is not None and st.button("Restore board"):
+            try:
+                added = boardstore.restore(conn, json.loads(backup_file.getvalue().decode("utf-8")))
+                st.session_state["restored"] = added
+                st.rerun()
+            except (ValueError, UnicodeDecodeError) as error:
+                st.error(f"Could not restore {backup_file.name}: {error}")
+    if "restored" in st.session_state:
+        st.success(f"Restored {st.session_state.pop('restored')} records.", icon=":material/restore:")
+
     if all_rows.empty:
-        st.info("The board is empty. Load the demo board, or add emails from the Batch upload or Inbox tabs.", icon=":material/table_chart:")
+        st.info("The board is empty. Load the demo board, add emails from the Batch upload or Inbox tabs, "
+                "or restore a saved board.", icon=":material/table_chart:")
     else:
         overview = st.columns([1, 1, 1, 3], vertical_alignment="center")
         kinds = all_rows["category"].value_counts()
@@ -433,21 +458,68 @@ with board_tab:
         if use_dates:
             window = st.date_input("Open date / laycan between", (date.today(), date.today() + timedelta(days=30)))
         start, end = (window if isinstance(window, tuple) and len(window) == 2 else (None, None))
+        hide_reposts = st.toggle("Hide reposts (keep the latest post of each vessel or cargo)",
+                                 help="Brokers circulate the same ship or order to many desks. Vessels: same name. "
+                                      "Cargoes: same load and discharge port, overlapping quantity and dates.")
         rows = boardstore.search(
             conn, category={"Vessels": "TONNAGE", "Cargo orders": "CARGO VC"}.get(kind), text=text.strip(),
             region=None if region == "Any" else region, start=start, end=end,
             min_size=min_size or None, max_size=max_size or None)
+        post_counts, is_latest = boardstore.repost_groups(all_rows)
+        if hide_reposts:
+            rows = rows[rows["key"].map(is_latest)]
         view = rows[list(BOARD_COLUMNS)].rename(columns=BOARD_COLUMNS)
+        view.index = rows["key"]
+        view.insert(view.columns.get_loc("From"), "Posts", [post_counts.get(k, 1) for k in rows["key"]])
         view["Type"] = view["Type"].map({"TONNAGE": "Vessel", "CARGO VC": "Cargo"}).fillna(view["Type"])
-        view = view.dropna(axis=1, how="all")
+        editable = [c for c in EDITABLE_COLUMNS if c in view.columns]
+        view = view.drop(columns=[c for c in view.columns if c not in editable and view[c].isna().all()])
         for column in view.columns:
             if column in ("DWT", "DWCC"):
                 view[column] = [f"{int(v):,}" if pd.notna(v) else "" for v in pd.to_numeric(view[column], errors="coerce")]
-            else:
-                view[column] = view[column].astype(object).where(view[column].notna(), "")
-        st.caption(f"{len(view)} of {len(all_rows)} shown.")
-        st.dataframe(view, width="stretch", hide_index=True)
-        downloads = st.columns(2)
+            elif column != "Posts":
+                view[column] = view[column].astype(object).where(view[column].notna(), "").astype(str)
+        st.caption(f"{len(view)} of {len(all_rows)} shown. **Click a cell to correct a wrong value**: dates, region "
+                   "and matches update, and every correction is kept so it can be used as labelled test data.")
+        signature = hashlib.sha1(view.to_json().encode("utf-8")).hexdigest()[:12]
+        edited = st.data_editor(
+            view, width="stretch", hide_index=True, key=f"board-editor-{signature}",
+            disabled=[c for c in view.columns if c not in editable],
+            column_config={"Posts": st.column_config.NumberColumn(
+                help="How many records on the board look like the same vessel or cargo (reposts)", width="small")})
+        changed = []
+        for key, row in edited.iterrows():
+            for column in editable:
+                new, old = str(row[column] if pd.notna(row[column]) else "").strip(), view.at[key, column]
+                if new != old:
+                    changed.append((key, column, old, new))
+        if changed:
+            try:
+                originals = rows.set_index("key")
+                for key, column, old, new in changed:
+                    field = EDITABLE_COLUMNS[column]
+                    boardstore.update(conn, key, {boardstore.FIELD_COLUMNS[field]: new})
+                    log = st.session_state.setdefault("corrections", {})
+                    entry = log.setdefault((key, field), {
+                        "source": originals.at[key, "source"], "category": originals.at[key, "category"],
+                        "record_key": key, "field": field, "extracted": old, "text": originals.at[key, "text"]})
+                    entry["corrected"] = new
+                st.rerun()
+            except ValueError as error:
+                st.error(f"Not saved: {error}")
+        corrections = [c for c in st.session_state.get("corrections", {}).values() if c["corrected"] != c["extracted"]]
+        if corrections:
+            st.success(f"{len(corrections)} correction{'s' if len(corrections) != 1 else ''} made in this session.",
+                       icon=":material/edit_note:")
+        downloads = st.columns(4)
+        downloads[2].download_button(
+            f"Download corrections ({len(corrections)})", disabled=not corrections, icon=":material/edit_note:",
+            data=json.dumps(corrections, indent=2, ensure_ascii=False), file_name="corrections.json",
+            mime="application/json", help="Each correction with the email text: labelled data for testing the rules")
+        downloads[3].download_button(
+            "Save board (backup)", icon=":material/save:", data=json.dumps(boardstore.backup(conn), ensure_ascii=False),
+            file_name="positions_board_backup.json", mime="application/json",
+            help="The board lives only in this browser session. Save it to your computer and restore it later.")
         downloads[0].download_button("Download board as Excel", data=excel_bytes(view), file_name="positions_board.xlsx",
                                      mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         downloads[1].download_button("Download board as CSV", data=view.to_csv(index=False).encode("utf-8-sig"),
@@ -456,7 +528,8 @@ with board_tab:
 with match_tab:
     conn = positions()
     vessels = matching.latest_positions(boardstore.records(boardstore.search(conn, category="TONNAGE")))
-    cargoes = boardstore.records(boardstore.search(conn, category="CARGO VC"))
+    _, is_latest = boardstore.repost_groups(boardstore.frame(conn))
+    cargoes = [c for c in boardstore.records(boardstore.search(conn, category="CARGO VC")) if is_latest.get(c["key"], True)]
     if not vessels or not cargoes:
         st.info("Matching needs both vessels and cargo orders on the positions board. "
                 "Try **Load demo board** on the Positions board tab.", icon=":material/join_inner:")
@@ -466,7 +539,7 @@ with match_tab:
                         "**+3 for size** (cargo fills 70-95% of DWT, or up to 100% of DWCC) and **+3 for location** "
                         "(open at the load port; +2 same region, +1 neighbouring region, −2 far away). Pairs that "
                         "cannot work (vessel opens after the laycan or over 30 days before it, or cargo too big) "
-                        "are left out; reposted vessels use their latest position. These are suggestions to "
+                        "are left out; reposted vessels and cargoes use their latest post. These are suggestions to "
                         "check, not fixtures.")
         direction = st.radio("Find", ["Vessels for a cargo", "Cargoes for a vessel"], horizontal=True)
         show_weak = st.toggle("Show weak matches (score 0 or less)")

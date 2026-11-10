@@ -15,15 +15,17 @@ PORT_COUNT = r"(?:\d(?:-\d)?[ \t]*S[BP]{1,3}P?[ \t]+)?"
 NUMBER = r"(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?[ \t]*K?)"
 TITLE_PLACE = r"(?-i:([A-Z][\w'\-]*(?:[ \t]+(?:of[ \t]+)?[A-Z][\w'\-]*)*))"
 ROUTE_SEP = r"[ \t]*(?:/|-+>|-|(?i:\bto\b))[ \t]*"
-LOAD_LABEL = r"\b(?:LOAD(?:ING)?\s+PORT|LD\.?\s+PORT|PORT\s+OF\s+LOADING|(?-i:POL))\b"
-DISCHARGE_LABEL = r"\b(?:DISCHARG(?:E|ING)\s+PORT|DISCH\.?\s+PORT|PORT\s+OF\s+DISCHARGE|DISPORT|(?-i:POD))\b"
-NOT_OPEN_PORT = (r"(?!(?:HATCH|HA|VESSEL|VSL|VESSELS|POSITIONS?|TONNAGES?|CARGO|CARGOES|TO|FOR|AROUND|ABOUT"
+LOAD_LABEL = r"\b(?:LOAD(?:ING)?\s+PORT|LD\.?\s+PORT|L/PORT|PORT\s+OF\s+LOADING|(?-i:POL))\b"
+# "Diach port" is a common typo of "Disch port".
+DISCHARGE_LABEL = (r"\b(?:DISCHARG(?:E|ING)\s+PORT|DI[SA]CH\w*\.?\s+PORT|D/PORT|PORT\s+OF\s+DISCHARGE|DISPORT"
+                   r"|(?-i:POD))\b")
+NOT_OPEN_PORT = (r"(?!(?:HATCH|HA|VESSEL|VSL|VESSELS|POSITIONS?|TONNAGES?|CARGO|CARGOES|TO|FOR|AROUND|ABOUT|ROUTE"
                  r"|HOME|OUR|OWNERS|DIRECT|CURRENT|EXCLUSIVE)\b)")
 
 MONTH = (r"(?:JAN(?:UARY)?|FEB(?:RUARY)?|MAR(?:CH)?|APR(?:IL)?|MAY|JUNE?|JULY?|AUG(?:UST)?|SEPT?(?:EMBER)?"
          r"|OCT(?:OBER)?|NOV(?:EMBER)?|DEC(?:EMBER)?)\b\.?")
 DAY = r"\d{1,2}(?:ST|ND|RD|TH)?"
-DATE = (r"(?:" + DAY + r"(?:[ \t]*(?:[-–/_]|TO)[ \t]*" + DAY + r")?[ \t]*/?[ \t]*" + MONTH + r"(?:[ \t]*,?[ \t]*20\d\d)?"
+DATE = (r"(?:" + DAY + r"(?:[ \t]*(?:[-–/_]|TO)[ \t]*" + DAY + r")?[ \t]*[/,]?[ \t]*" + MONTH + r"(?:[ \t]*,?[ \t]*20\d\d)?"
         r"|" + MONTH + r"[ \t]+" + DAY + r"(?:[ \t]*[-–/][ \t]*" + DAY + r")?(?:[ \t]*,?[ \t]*20\d\d)?"
         r"|\b\d{1,2}[-–]\d{1,2}/\d{1,2}\b"
         r"|\b(?:EARLY|MID|END|BEG|LATE|FIRST[ \t]+HALF|SECOND[ \t]+HALF)[ \t-]*(?:OF[ \t]+)?" + MONTH +
@@ -32,13 +34,16 @@ DATE = (r"(?:" + DAY + r"(?:[ \t]*(?:[-–/_]|TO)[ \t]*" + DAY + r")?[ \t]*/?[ \
 TONNE_UNIT = r"(?:MTS?|TS|TONS?|TONNES|T)\b"
 QUANTITY = (r"(?<![\d.,])(\d[\d.,]*)[ \t]*(K)?[ \t]*"
             r"(?:(?:(?:MTS?|TS)\b[ \t]*)?(?:[-–/_]|UP[ \t]*TO|TO)[ \t]*(\d[\d.,]*)[ \t]*(K)?[ \t]*)?"
-            r"(?:\(\+/-[^)]*\)[ \t]*)?(?:(?:MTS?|TS|TONS|TONNES|T)\b|(?<=K)(?=[ \t]+[A-Z])|(?:(?<=\) )|(?<=\)))(?=OF\b))")
+            r"(?:\(\+/-[^)]*\)[ \t]*)?(?:(?:MTS?|MTONS?|TS|TONS|TONNES|T)\b|(?<=K)(?=[ \t]+(?:[A-Z]|\d{1,2}[ \t]*%))"
+            r"|(?:(?<=\) )|(?<=\)))(?=OF\b))")
+# Deadweight next to its number, also run together ("58,000 DWT", "DWT: 58,000", "MV DSX (DWT53k)").
+SIZE = NUMBER + r"[ \t]*(?:MTS?[ \t]*)?DWT\b|\b(?:DWT|DEADWEIGHT)(?![A-Z])[^\d\n]{0,20}?" + NUMBER
 DATE = (r"(?:" + DAY + r"[ \t]*" + MONTH + r"[ \t]*[-–/][ \t]*" + DAY + r"[ \t]*" + MONTH + r"(?:[ \t]*,?[ \t]*20\d\d)?|"
         + DATE[3:])
 # A short trailing number is part of the name ("YONGSHENG 151", "TBN 1"); a long one is the size.
-VESSEL_NAME = (r"\bM[./]?V\b\.?\s+(" + PLACE[1:-1] + r"(?:[ \t]+\d{1,3}\b(?![\d,.]|[ \t]*K\b))?)"
+VESSEL_NAME = (r"\bM[./]?V\b(?:\.[ \t]*|[ \t]+)(" + PLACE[1:-1] + r"(?:[ \t]+\d{1,3}\b(?![\d,.]|[ \t]*K\b))?)"
                r"(?=\s*(?:[/,(:;|]|[-–—]|\d|\bDWT\b|\bDWCC\b|\bOPEN\b|\bSPOT\b|\bBLT\b|\bIMO\b|$))")
-VESSEL_START = re.compile(r"^[ \t]*(?:[•*\-]|\d+[.)])?[ \t]*M[./]?V\b\.?\s", re.IGNORECASE)
+VESSEL_START = re.compile(r"^[ \t]*(?:[•*\-]|\d+[.)])?[ \t]*M[./]?V\b(?:\.[ \t]*(?=[A-Z])|\.?\s)", re.IGNORECASE)
 NOT_CARGO_WORDS = {"or", "up", "to", "upto", "of", "abt", "about", "per", "day", "in", "x", "and", "with"}
 
 
@@ -135,13 +140,14 @@ def parse_quantity(match):
 
 
 def clean_cargo(words):
-    words = re.sub(r"^(?:[\s/,:;(+\-]|\d[\d.,]*\s*(?:K\b)?\s*(?:MTS?|CBM|TS|TONS|PCS|UNITS?(?:\s+OF)?)?\b)+", "",
+    words = re.sub(r"^(?:[\s/,:;(+\-]|\d[\d.,]*\s*(?:K\b)?\s*(?:MTONS?|MTS?|CBM|TS|TONS?|PCS|UNITS?(?:\s+OF)?)?\b)+", "",
                    words, flags=re.IGNORECASE)
     for _ in range(3):
-        words = re.sub(r"^(?:OF|ABT|ABOUT|TOTAL|BLK)\s+|^\d*\s*(?:PCT|%)\s*(?:MOLOO|MOLCO)?\s*", "", words,
-                       flags=re.IGNORECASE)
+        words = re.sub(r"^(?:OF|ABT|ABOUT|TOTAL|BLK)\s+|^\d*\s*(?:PCT|%)\s*\d*\s*(?:MOLOO|MOLCO)?\s*"
+                       r"|^(?:IN\s+)?(?:JUMBO|BIG)\s+BAGS?\s+(?:OF\s+)?", "", words, flags=re.IGNORECASE)
     words = re.split(r"\s*(?:\d|\bSF\b|\bSTF\b|\babt\b|\bup\s*to\b|\bupto\b|\bwog\b|\btotal\b|\bof\b|[(,;:'’=]"
                      r"|\s[-–/]\s|\bu/o\b)", words, maxsplit=1, flags=re.IGNORECASE)[0]
+    words = re.sub(r"\s+IN\s+(?:BBS?|JUMBO\s+BAGS?|BIG\s+BAGS?)\b.*$", "", words, flags=re.IGNORECASE)
     tokens = words.split()[:4]
     if not tokens or tokens[0].lower() in NOT_CARGO_WORDS or not re.search(r"[^\W\d_]", tokens[0]):
         return None
@@ -152,7 +158,7 @@ def find_cargo_quantity(lines):
     for line in lines:
         # Skip vessel sizes ("Any Dwt 6-9,000 Mt"), laytime rates and unit weights.
         if re.search(r"\d[\d,.]*\s*K?\s*(?:MT\s*)?(?:DWT|DWCC)\b|\b(?:DWT|DWCC)\s*:?\s*\d|\bANY\s+DWT\b|\bL/?D\b"
-                     r"|\bRATE\b|PWWD|SHINC|SHEX|\bPER\b|\bEACH\b|\bUNIT", line, re.IGNORECASE):
+                     r"|\bRATE\b|PWWD|SHINC|SHEX|\bPER\b|\bEACH\b|\bUNIT|\bGTEE\b|\bGUARANTEE", line, re.IGNORECASE):
             continue
         match = re.search(QUANTITY, line, re.IGNORECASE)
         if match:
@@ -162,7 +168,9 @@ def find_cargo_quantity(lines):
                 cargo = clean_cargo(before)
             return parse_quantity(match), cargo
     for line in lines:
-        labelled = re.match(r"^\s*(?:QUANTITY|QTY|VOLUME)\b\s*:?\s*(\d[\d.,]*)", line, re.IGNORECASE)
+        # Barrels, cubic metres, containers or units are not tonnes ("Quantity: 2 million barrels").
+        labelled = re.match(r"^\s*(?:QUANTITY|QTY|VOLUME)\b\s*:?\s*(\d[\d.,]*)(?![\d.,]*\s*(?:MILLION|MLN|MN|BBLS?"
+                            r"|BARRELS?|CBM|M3|TEUS?|FEUS?|UNITS?|PCS|TANKERS?|VESSELS?|SHIPS?)\b)", line, re.IGNORECASE)
         if labelled:
             return to_tonnes(labelled.group(1)), None
     return None, None
@@ -170,7 +178,7 @@ def find_cargo_quantity(lines):
 
 def find_labelled_cargo(lines):
     for line in lines:
-        match = re.match(r"^\s*(?:CARGO|CGO|COMMODITY)\b\s*(:)?\s*(.+)$", line, re.IGNORECASE)
+        match = re.match(r"^\s*(?:[-•*][ \t]*)?(?:CARGO|CGO|COMMODITY)\b\s*(:)?\s*(.+)$", line, re.IGNORECASE)
         if match and (match.group(1) or not re.match(r"(?i)(?:is|will|ready|in|to|of)\b", match.group(2))):
             return clean_cargo(match.group(2))
     return None
@@ -245,8 +253,7 @@ def find_dwcc(text):
 
 def tonnage_record(block_text, lines):
     vessel = search(VESSEL_NAME, block_text)
-    size = re.search(NUMBER + r"[ \t]*(?:MTS?[ \t]*)?DWT\b|\b(?:DWT|DEADWEIGHT)\b[^\d\n]{0,20}?" + NUMBER,
-                     block_text, FLAGS)
+    size = re.search(SIZE, block_text, FLAGS)
     record = {
         "Vessel Name": vessel,
         "Vessel Size": to_tonnes(size.group(1) or size.group(2)) if size else None,
@@ -277,7 +284,8 @@ def cargo_details(order, window):
     ordered = [window[i] for i in order]
     quantity, cargo = find_cargo_quantity(ordered)
     details = {
-        "Cargo": find_labelled_cargo(window) if re.search(r"(?im)^\s*(?:CARGO|CGO|COMMODITY)\s*:", "\n".join(window))
+        "Cargo": find_labelled_cargo(window) if re.search(r"(?im)^\s*(?:[-•*][ \t]*)?(?:CARGO|CGO|COMMODITY)\s*:",
+                                                     "\n".join(window))
         else (cargo or find_labelled_cargo(window)),
         "Quantity": quantity,
         "Laycan": find_laycan(ordered),
@@ -321,8 +329,7 @@ def extract_data(text, category):
 
     if category == "TONNAGE":
         vessel = search(VESSEL_NAME, text)
-        size = re.search(NUMBER + r"[ \t]*(?:MTS?[ \t]*)?DWT\b|\b(?:DWT|DEADWEIGHT)\b[^\d\n]{0,20}?" + NUMBER,
-                         text, FLAGS)
+        size = re.search(SIZE, text, FLAGS)
         port = find_open_port(text)
 
         lines = [line for line in text.splitlines() if line.strip()]
@@ -346,6 +353,11 @@ def extract_data(text, category):
     elif category == "CARGO VC":
         load = find_labelled(LOAD_LABEL, text) or search(r"^[ \t]*LOAD[ \t]*:[ \t]*" + PLACE + PLACE_END, text)
         discharge = find_labelled(DISCHARGE_LABEL, text)
+        # The load side ends at a comma or bracket ("Basrah, Iraq"); the country is not part of the port.
+        voyage = re.search(r"^[ \t]*(?:[-•*][ \t]*)?VOYAGE[ \t]*:[ \t]*([A-Z][A-Z' ]*?[A-Z])[ \t]*(?:[,(][^\n–/]*?)?"
+                           r"[ \t]*(?:[–/]|[ \t]-[ \t]|\bTO\b)[ \t]*" + PLACE + PLACE_END, text, FLAGS)
+        if voyage:
+            load, discharge = load or voyage.group(1), discharge or voyage.group(2)
         body = re.sub(r"^SUBJECT:.*$", "", text, count=1, flags=FLAGS)
         routes = ((find_route_line, body), (find_route, body), (find_route, text), (find_subject_route, text))
         for find, source in routes:
@@ -372,7 +384,7 @@ def extract_data(text, category):
     elif category == "CARGO TC":
         delivery = search(r"^[ \t]*DEL(?:IVERY)?\b" + SEP + QUALIFIER + PLACE + PLACE_END, text)
         redelivery = search(r"^[ \t]*REDEL(?:IVERY)?\b" + SEP + QUALIFIER + PLACE + PLACE_END, text)
-        duration = search(r"^[ \t]*(?:DURATION|PERIOD)\b" + SEP + r"(.*\d.*\b(?:MONTHS?|DAYS?|YEARS?)\b.*?)[ \t.]*$", text)
+        duration = search(r"^[ \t]*(?:[-•*][ \t]*)?(?:DURATION|(?:CHARTER[ \t]+)?PERIOD)\b" + SEP + r"(.*\d.*\b(?:MONTHS?|DAYS?|YEARS?)\b.*?)[ \t.]*$", text)
 
         if delivery:
             result["Delivery Port"] = delivery
