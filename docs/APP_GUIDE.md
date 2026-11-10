@@ -51,6 +51,14 @@ measured accuracy):
   free-text search, trading region, date window, DWT/tonnage range) and Excel/CSV downloads.
   **Load demo board** adds invented tonnage lists and cargo orders (`samples/demo_board.csv`) that
   match each other, for demos.
+  - **Correct a value** by clicking its cell (vessel, DWT/DWCC, ports, dates, cargo, quantity,
+    laycan). Dates, region and matches update. **Download corrections** gives every correction with
+    the email text, extracted value and corrected value (JSON), ready to use as labelled test data.
+  - **Posts** counts records that look like the same vessel (same name) or cargo (same route,
+    overlapping quantity and dates) sent by several brokers; **Hide reposts** keeps the latest one.
+    Matching always uses the latest post.
+  - The board lives in the browser session only. **Save board (backup)** downloads it as JSON;
+    **Restore a saved board** loads it back (records already on the board are kept).
 - **Matches** – pick a cargo order to see vessels ranked for it, or a vessel to see cargoes for it.
 
 ## Tests

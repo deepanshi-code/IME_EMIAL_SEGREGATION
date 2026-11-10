@@ -35,6 +35,9 @@ the cases it is unsure about for a person to check.
   "42-4500 MT" = 4,200–4,500 t, "7.331,1 DWT" and "27-28/OCT".
 - **Reads a mailbox**: an exported .mbox file, or a **read-only** IMAP connection.
 - **Keeps a positions board** you can search and filter by region, dates and size, and export to Excel.
+  Wrong values can be **corrected in the table**; every correction is logged with its email and can be
+  downloaded as labelled test data. The same vessel or cargo circulated by several brokers is flagged as
+  a **repost**, and the board can be **saved to a file and restored** later.
 - **Matches vessels to cargoes** by dates, size and location, with reasons for every suggestion.
 
 Each tab and field is described in the [app guide](docs/APP_GUIDE.md).
@@ -49,7 +52,8 @@ Measured on data the rules were **not** developed on ([full evaluation](docs/EVA
 
 | Test set | Result |
 |----------|--------|
-| 30 real broker circulars from a public shipping board, collected after the rules were frozen | **83%** correct type · **66%** of details correct · **96%** of vessel/cargo counts correct |
+| 16 real broker circulars from a public shipping board, collected after the v7 rules were frozen (10 Nov) | **94%** correct type (95% range 72–99%) · **83%** of details correct (73–90%) · **60%** of vessel/cargo counts correct |
+| 30 earlier real circulars, collected after v6 was frozen (3 Nov) | v6: **83%** correct type · **66%** of details · **96%** of counts |
 | 300 ordinary emails (Enron, SpamAssassin) | **1** wrongly flagged as shipping (0.3%) |
 | 150 synthetic chartering emails (MaritimEmails, LREC 2026) | **89%** correct type · **83%** of ports correct |
 | 42 earlier real circulars: rules vs a machine-learning baseline (TF-IDF + logistic regression) | rules **95%** · ML **55%** correct type |
@@ -63,6 +67,10 @@ What the evaluation taught:
   modern prose with shipping and old mailing-list text with "not shipping", so it labelled every
   polite modern email (a budget meeting, a flight booking) as a cargo order. With little real labelled
   data, transparent rules were the safer choice.
+- **Fixing one week's errors did not fix the next week's.** v7 fixed the formats that v6 got wrong on the
+  3 Nov posts (field accuracy there went from 66% to 90%), but on the fresh 10 Nov posts the old v6 rules
+  score almost the same as v7 (82% vs 83% of details). New posts bring new formats, so only the next
+  unseen snapshot shows real progress.
 - **Confidence flags work as a safety net.** On the development data, 14 of 15 category errors were
   flagged *Low confidence*, so reviewing only those emails (about 13%) catches most mistakes.
 
@@ -98,8 +106,9 @@ streamlit run app.py
 python -m unittest discover -s tests -v
 ```
 
-The 26 tests cover parsing, classification traps, record splitting, matching, the board, .mbox
-reading, read-only IMAP against a fake server, and that email text is escaped in the HTML cards. They also fail if accuracy on the committed
+The 44 tests cover parsing, classification traps, record splitting, matching, the board, .mbox
+reading, read-only IMAP against a fake server, board corrections, backup and reposts, and that email text
+is escaped in the HTML cards. They also fail if accuracy on the committed
 datasets drops, and they run on every push.
 
 **Privacy:** the positions board is kept in memory, one per browser session. IMAP opens the mailbox
@@ -127,10 +136,11 @@ samples/          invented demo emails
 
 ## Limitations
 
-- Real-world testing uses 114 posts from **one public board**; a broker's own inbox (replies,
+- Real-world testing uses 130 posts from **one public board**, and the latest unseen set has only 16; a broker's own inbox (replies,
   forwarded threads, larger ships) will differ. Test labels were drafted with AI assistance and have
   not been checked by a domain expert.
-- **Time-charter requests are weak:** 2 of the 3 real ones were missed.
+- **Time-charter requests are barely tested:** only 4 real ones so far (1 in the latest unseen set, missed).
+- **Counting several vessels or cargoes in one email** is the weakest part on the latest unseen posts (60%).
 - Freight and hire rates, commission and vessel gear are not extracted.
 - Matching ignores distance, draft, gear and commercial terms, and is not yet validated.
 - No user study yet: the interview sheet is ready ([docs/user_interview.md](docs/user_interview.md)).

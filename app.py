@@ -199,12 +199,13 @@ with st.sidebar:
     st.markdown("**High** – clear evidence · **Medium** – probably right · "
                 "**Low** – close call, check it yourself")
     st.subheader(":material/query_stats: About the numbers")
-    st.caption("The figures at the top come from 30 real broker circulars collected after the rules were "
-               "frozen, and 300 ordinary emails. Matches are suggestions to check, not fixtures.")
+    st.caption("The figures at the top come from 16 real broker circulars collected after the rules were "
+               "frozen (10 Nov 2026) and 300 ordinary emails. The sample is small: the right type is 72-99% "
+               "with 95% confidence, the right details 73-90%. Matches are suggestions to check, not fixtures.")
     st.markdown(f"[:material/code: Code on GitHub]({REPO_URL}) · [:material/description: How it was tested]"
                 f"({REPO_URL}/blob/main/docs/EVALUATION.md)")
 
-st.html(ui.hero([("83%", "right type, real emails"), ("96%", "vessels and cargoes counted"),
+st.html(ui.hero([("94%", "right type, unseen real emails"), ("83%", "details right, unseen real emails"),
                  ("1 / 300", "false alarms, normal email")]))
 
 single_tab, batch_tab, inbox_tab, board_tab, match_tab = st.tabs([

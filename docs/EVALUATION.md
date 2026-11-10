@@ -46,7 +46,8 @@ Field values are compared case- and whitespace-insensitively; everything else mu
 | `eval/negatives_neg-dev.json` | neg-dev | 300 | Non-shipping emails: 150 Enron ham + 150 SpamAssassin easy_ham |
 | `eval/negatives_neg-test.json` | neg-test | 300 | Same sources, disjoint emails |
 | `eval/real/shipbroker_gr.json` | real-dev / real-test | 42 / 42 | **Real broker circulars** from shipbroker.gr, 26 Oct 2026 (see below); development data since v6 |
-| `eval/real/shipbroker_gr_20261103.json` | real-20261103 | 30 | Fresh shipbroker.gr snapshot, 3 Nov 2026: posts after 26 Oct that are not reposts. **v6 held-out test** |
+| `eval/real/shipbroker_gr_20261103.json` | real-20261103 | 30 | Fresh shipbroker.gr snapshot, 3 Nov 2026: posts after 26 Oct that are not reposts. v6 held-out test; development data since v7 |
+| `eval/real/shipbroker_gr_20261110.json` | real-20261110 | 16 | Fresh snapshot, 10 Nov 2026: posts after 3 Nov, not reposts of any earlier snapshot or of each other. **v7 held-out test** |
 
 **Real broker circulars.** [shipbroker.gr](http://www.ship.gr/shipbroker/cargo.html) publishes
 cargo orders and open-vessel positions that brokers submit, as the circulars they email
@@ -78,6 +79,9 @@ python eval/build_shipbroker_gr.py merge
 python eval/evaluate.py --data eval/real/shipbroker_gr.json --split all --errors
 python eval/build_shipbroker_gr.py parse --snapshot 20261103 --cargo-html cargo.html --vessel-html vessel.html
 python eval/build_shipbroker_gr.py merge --snapshot 20261103
+python eval/build_shipbroker_gr.py parse --snapshot 20261110 --cargo-html cargo.html --vessel-html vessel.html
+python eval/build_shipbroker_gr.py merge --snapshot 20261110
+python eval/evaluate.py --data eval/real/shipbroker_gr_20261110.json --split all --errors
 python eval/evaluate.py --data eval/real/shipbroker_gr_20261103.json --split real-20261103
 ```
 
@@ -108,9 +112,62 @@ and the newest real snapshot are run once per frozen version.
 
 ## Results
 
-**Headline (v6, 30 fresh real broker circulars never seen during development): 83.3% category
-accuracy (25/30), 66.4% field accuracy (79/119, including the new fields), 96.3% exact record
-counts (26/27).** The v5 rules score 76.7% / 31.9% on the same posts.
+**Latest headline (v7, 16 fresh real broker circulars from 10 Nov 2026, never seen during
+development): 93.8% category accuracy (15/16, 95% CI 72-99%), 83.1% field accuracy (59/71, CI
+73-90%), 60.0% exact record counts (9/15, CI 36-80%).** The samples are small, so the ranges are
+wide; quote the ranges, not only the point values.
+
+**The main lesson from v7: in-sample gains did not transfer.** v7 was developed on the 26 Oct and
+3 Nov posts and lifted 3 Nov field accuracy from 66.4% to 89.9%. On the fresh 10 Nov posts the
+frozen **v6 rules score almost the same as v7** (93.8% / 81.7% / 60.0% vs 93.8% / 83.1% / 60.0%):
+the formats fixed in v7 barely occur in the new posts, which bring their own (below). The 10 Nov
+posts are also easier than the 3 Nov ones (v6 field accuracy 81.7% vs 66.4%), so the snapshots
+differ a lot from week to week. Rule fixes from one snapshot are not evidence of improvement; only
+the next snapshot is.
+
+| Version | real 26 Oct + 3 Nov (development) cat / fields / records | **real 10 Nov, 16 (held out)** cat / fields / records | ext-test (150) cat / fields | False positives neg-test (300) |
+|---------|------|------|------|------|
+| v6 | 98.8% / 93.3% / 86.9% and 83.3% / 66.4% / 96.3% | 93.8% / 81.7% / 60.0% | 89.3% / 83.3% | 1 (0.3%) |
+| v7 | 98.8% / 93.3% / 86.9% and 93.3% / 89.9% / 96.3% | **93.8% / 83.1% / 60.0%** | 89.3% / 83.3% | 1 (0.3%) |
+
+v7 changes (developed on 26 Oct and 3 Nov posts only; rules frozen in commit `a396ff2` before the
+10 Nov posts were labelled): time-charter evidence ("Firm T/C Requirement", "Time Charter offers",
+"Charter Type: TC", daily hire "USD 10,000 PDPR", periods in years); a line offering "time charter
+OR voyage" is not forced to TC; a required size "4/5K DWT" counts as a cargo order; labels behind
+markdown bold and bullets ("- **Load Port:**"), "L/Port", "D/port", "Disch/Diach port", "Voyage: X –
+Y" (country dropped); "5k 10% Wheat", "mtons", load/discharge guarantees ("3k load gtee") not taken
+as the quantity, barrels/CBM/units not read as tonnes; sizes run together ("MV DSX (DWT53k)"),
+"MV.SL GOLDEN FORTUNE", "9-10TH,NOV"; packaging words dropped from cargo ("1 ton jumbo bag sulphur",
+"in bb").
+
+Known v7 errors on the 10 Nov posts, left unfixed so the number stays clean (v8 work, to be measured
+on a later snapshot):
+
+- **Record counts (9/15)** are the weak spot: vessels listed with particulars but no open position
+  (5 vessels, 1 record); "On Period" vessels; orders separated only by "==" or blank lines; one COA
+  post split into two records.
+- **Number formats:** apostrophe thousands ("3'000-25'000 mts" read as 0); a COA total (300,000 t)
+  taken instead of the per-shipment quantity (40-45,000 t).
+- **Labels without colons** ("Load port Busan New Port" cut to "Busan New"; "Cargo Power plant
+  equipment parts" missed, "packages" taken instead); "Cargo: abt 5,000 MT Rebars" (cargo after
+  the quantity inside a label) missed.
+- **A time-charter request without labels** ("12 months t/c period", "Delivery: Marmara") read as a
+  voyage order because it also offers a voyage basis.
+- Laycan "Any November dates" shortened to "November"; padded bullet labels ("• Laycan: 1st
+  shipment DEC") missed.
+
+**Two data issues found while building the 10 Nov set.** (1) The same circular is often posted on
+several days. The 3 Nov set contains one such pair (cargo-04 / cargo-22, 91% similar), so the v6
+3 Nov numbers count one post twice; it is kept as published. From the 10 Nov snapshot on, near-
+duplicates within a snapshot are removed (earliest kept; cargo-08 dropped as a 99% repost of
+cargo-12) and posts must not repeat any earlier snapshot, not only the first. (2) The anonymiser
+masks phone numbers and emails but missed a personal name in one signature and masked one
+quantity range as a phone number (cargo-02, so that quantity is not labelled). The real posts stay
+out of the repository for this reason.
+
+**Earlier headline (v6, 30 fresh real broker circulars from 3 Nov): 83.3% category accuracy (25/30,
+CI 66-93%), 66.4% field accuracy (79/119, CI 58-74%), 96.3% exact record counts (26/27).** The v5
+rules score 76.7% / 31.9% on the same posts. Since v7 the 3 Nov posts are development data.
 
 | Version | real 26 Oct, all 84 (development) cat / fields / records | **real 3 Nov, 30 (held out)** cat / fields / records | ext-test (150) cat / fields | False positives neg-test (300) |
 |---------|------|------|------|------|
@@ -240,12 +297,14 @@ Real emails stay on your machine (`eval/real/` and `eval/real.json` are in `.git
 
 ## Limitations
 
-- **Small real sample, one source.** 114 real circulars from one public board (two snapshots),
+- **Small real sample, one source.** 130 real circulars from one public board (three snapshots),
   mostly small general-cargo/bulk trades in the Med, Black Sea and Asia, with AI-drafted labels
   not yet checked by a domain expert. A broker's own inbox (larger ships, replies, forwarded threads)
-  may differ. The held-out snapshot has 30 posts, so one error moves accuracy by about 3.3 points.
-- **CARGO TC is barely tested.** Only 3 real posts are time-charter requests (2 missed by v6); the
-  rest of CARGO TC testing is 10 hand-written emails.
+  may differ. The latest held-out snapshot has only 16 posts, so one error moves category accuracy
+  by about 6 points; the 95% intervals above are the honest summary.
+- **CARGO TC is barely tested.** Only 4 real posts are time-charter requests (3 in the 3 Nov set,
+  now development data, and 1 in the 10 Nov set, missed by v7); the rest of CARGO TC testing is
+  hand-written emails.
 - **Negatives are old and narrow.** Enron (2000-2002) and SpamAssassin (2002-2003) ham;
   no spam, newsletters from shipping companies, or non-chartering logistics email (courier,
   container booking), which are the likeliest real false positives in a broker's inbox.

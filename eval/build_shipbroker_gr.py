@@ -92,8 +92,14 @@ def anonymise(lines):
     return re.split(r"\n(?:ADD SHIP or CARGO|Contact\s*\|)", text)[0].strip()
 
 
+def snapshot_tags():
+    folder = os.path.join(EVAL_DIR, "real")
+    return [m.group(1) for name in os.listdir(folder)
+            for m in [re.fullmatch(r"shipbroker_gr_posts_(\d{8})\.json", name)] if m]
+
+
 def is_new(post, earlier_texts, cutoff):
-    # Later snapshots keep only posts dated after the first snapshot that are not reposts of earlier ones.
+    # Later snapshots keep only posts dated after the previous snapshot that are not reposts of earlier ones.
     if datetime.strptime(post["date"], "%d %B %Y") <= cutoff:
         return False
     return all(difflib.SequenceMatcher(None, post["text"], old).ratio() < 0.9 for old in earlier_texts)
@@ -109,10 +115,26 @@ def parse(args):
                 posts.append({"id": f"{page}-{i:02d}", "page": page, "date": date, "text": text})
     total = len(posts)
     if args.snapshot:
-        with open(paths("")[0], encoding="utf-8") as f:
-            earlier = [p["text"] for p in json.load(f)]
-        cutoff = datetime.strptime(FIRST_SNAPSHOT, "%d %B %Y")
+        # Every earlier snapshot is development data by the time a new one is labelled, so a post must be
+        # dated after the previous snapshot and must not repeat a post from any earlier snapshot.
+        earlier_tags = sorted(tag for tag in snapshot_tags() if tag < args.snapshot)
+        earlier = []
+        for tag in [""] + earlier_tags:
+            with open(paths(tag)[0], encoding="utf-8") as f:
+                earlier += [p["text"] for p in json.load(f)]
+        cutoff = (datetime.strptime(earlier_tags[-1], "%Y%m%d") if earlier_tags
+                  else datetime.strptime(FIRST_SNAPSHOT, "%d %B %Y"))
         posts = [p for p in posts if is_new(p, earlier, cutoff)]
+        if args.snapshot > "20261103":
+            # The same circular is often posted on several days; keep only its earliest post. (Added after the
+            # 3 Nov set, which contains one such pair, cargo-04 / cargo-22, and is kept as published.)
+            unique = []
+            for post in sorted(posts, key=lambda p: datetime.strptime(p["date"], "%d %B %Y")):
+                if all(difflib.SequenceMatcher(None, post["text"], kept["text"]).ratio() < 0.9 for kept in unique):
+                    unique.append(post)
+            posts = [p for p in posts if p in unique]
+        print(f"compared with {len(earlier)} posts from {1 + len(earlier_tags)} earlier snapshots; "
+              f"kept posts dated after {cutoff:%d %b %Y}")
     os.makedirs(os.path.dirname(posts_path), exist_ok=True)
     with open(posts_path, "w", encoding="utf-8") as f:
         json.dump(posts, f, indent=2, ensure_ascii=False)
